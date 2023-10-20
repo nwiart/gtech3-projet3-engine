@@ -14,6 +14,8 @@ public:
 
 	void setTitle(const char* title);
 
+	void getClientSize(int& outWidth, int& outHeight) const;
+
 	inline HWND getHwnd() const { return m_hwnd; }
 
 	inline bool wantsToClose() const { return m_wantsToClose; }

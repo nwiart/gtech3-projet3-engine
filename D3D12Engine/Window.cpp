@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Window.h"
 
-#include "Game.h"
+#include "Graphics.h"
 
 
 
@@ -57,6 +57,15 @@ void Window::setTitle(const char* title)
 	SetWindowText(m_hwnd, title);
 }
 
+void Window::getClientSize(int& outWidth, int& outHeight) const
+{
+	RECT r;
+	GetClientRect(m_hwnd, &r);
+
+	outWidth = r.right - r.left;
+	outHeight = r.bottom - r.top;
+}
+
 
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -70,8 +79,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		break;
 
 	case WM_MOUSEMOVE:
-		Game::getInstance()->cursorX = (lparam & 0xFFFF);
-		Game::getInstance()->cursorY = (lparam >> 16 & 0xFFFF);
+		Graphics::getInstance().cursorX = (lparam & 0xFFFF);
+		Graphics::getInstance().cursorY = (lparam >> 16 & 0xFFFF);
 		break;
 
 		// Prevent Alt key from triggering menu, which freezes the application.

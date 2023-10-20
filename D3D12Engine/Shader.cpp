@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Shader.h"
 
-#include "Game.h"
+#include "Graphics.h"
 
 #include "TestConstantBuffer.h"
 
@@ -34,7 +34,7 @@ void Shader::destroy()
 
 bool Shader::compile()
 {
-	ID3D12Device* device = Game::getInstance()->getDevice();
+	ID3D12Device* device = Graphics::getInstance().getDevice();
 
 	// Our only parameter is a Descriptor table containing one Constant buffer view.
 	CD3DX12_DESCRIPTOR_RANGE table(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 2, 0);

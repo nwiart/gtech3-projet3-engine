@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "D3D12ConstantBuffer.h"
 
-#include "Game.h"
+#include "Graphics.h"
 
 
 
@@ -20,7 +20,7 @@ void D3D12ConstantBufferBase::init(SIZE_T elemSize, SIZE_T numElems)
 	// Round size to higher multiple of 256 (for satisfying hardware requirements).
 	UINT cbSize = ROUND_256(elemSize);
 
-	ID3D12Device* device = Game::getInstance()->getDevice();
+	ID3D12Device* device = Graphics::getInstance().getDevice();
 
 	// Create CBV heap.
 	D3D12_DESCRIPTOR_HEAP_DESC cbvDesc;

@@ -10,7 +10,7 @@ the number of potential causes to this one problem.
 - Shader failed to compile.
 - Pipeline state object not bound.
 - No render target bound.
-- Non-matching input layout and vertex format.
+- Non-matching input layout and vertex format / Malformed input layout.
 - Pipeline state format not matching with swap chain formats.
 - Incorrect vertex / primitive count in draw call.
 - Rendering an object which requires indexing, with a non-indexed draw call.
@@ -21,6 +21,7 @@ the number of potential causes to this one problem.
 - Primitive is culled away.
 - Object is behind camera (or culled by depth test).
 - Depth buffer cleared using the wrong value.
+- Presenting frame too early (e.g. while command queue isn't done executing yet)
 - One or more matrices (world, view, projection) are corrupted.
 - Matrices are stored in one format when the shader program expects the opposite.
 - Mixed coordinate spaces (right-handed / left-handed).

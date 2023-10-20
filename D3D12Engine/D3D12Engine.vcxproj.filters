@@ -9,6 +9,7 @@
     <ClCompile Include="D3D12UploadHelper.cpp" />
     <ClCompile Include="D3D12ResourceTransferUtility.cpp" />
     <ClCompile Include="D3D12ConstantBuffer.cpp" />
+    <ClCompile Include="Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -22,6 +23,7 @@
     <ClInclude Include="D3D12ResourceTransferUtility.h" />
     <ClInclude Include="D3D12ConstantBuffer.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />

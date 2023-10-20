@@ -3,7 +3,7 @@
 
 #include "D3D12UploadHelper.h"
 
-#include "Game.h"
+#include "Graphics.h"
 
 
 
@@ -20,10 +20,10 @@ IndexBuffer::~IndexBuffer()
 
 void IndexBuffer::setData(const void* data, int byteSize)
 {
-	ID3D12Device* device = Game::getInstance()->getDevice();
+	ID3D12Device* device = Graphics::getInstance().getDevice();
 
 	// Create our default heap resource.
-	Game::getInstance()->getDevice()->CreateCommittedResource(
+	device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
@@ -33,7 +33,7 @@ void IndexBuffer::setData(const void* data, int byteSize)
 
 	// Create a resource in the upload heap and fill it with data.
 	ID3D12Resource* uploadBuffer;
-	Game::getInstance()->getDevice()->CreateCommittedResource(
+	device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
@@ -44,7 +44,7 @@ void IndexBuffer::setData(const void* data, int byteSize)
 	D3D12UploadHelper::Upload(uploadBuffer, data, byteSize);
 
 	// Schedule transfer.
-	Game::getInstance()->getResourceTransferUtility().copy(uploadBuffer, m_buffer);
+	Graphics::getInstance().getResourceTransferUtility().copy(uploadBuffer, m_buffer);
 	uploadBuffer->Release();
 
 	// Fill in the vertex buffer view.
