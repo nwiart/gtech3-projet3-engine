@@ -53,7 +53,9 @@ void Game::mainLoop()
 	{
 		m_window.pollEvents();
 
-		Graphics::getInstance().renderFrame();
+		m_timer.tick();
+
+		Graphics::getInstance().renderFrame(m_timer);
 
 		// Display FPS each second.
 		frames++;

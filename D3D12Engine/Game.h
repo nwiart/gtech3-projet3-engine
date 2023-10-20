@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Timer.h"
 #include "Window.h"
 
 
@@ -21,5 +22,6 @@ public:
 
 private:
 
+	Timer m_timer;
 	Window m_window;
 };

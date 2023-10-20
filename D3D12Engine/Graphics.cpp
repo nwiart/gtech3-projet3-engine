@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Graphics.h"
 
+#include "Timer.h"
 #include "Window.h"
 
 #include "../Game/resource.h"
@@ -300,7 +301,9 @@ void Graphics::initTestApp()
 
 
 
-void Graphics::update()
+static float angle = 0.0F;
+
+void Graphics::update(const Timer& timer)
 {
 	TestConstantBuffer cb;
 	{
@@ -324,19 +327,23 @@ void Graphics::update()
 		float pitch = (cursorY - m_renderHeight / 2) * -0.003F;
 
 		XMMATRIX objectTransform;
-		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
+		XMVECTOR axis = XMVectorSet(1, 0.5, 0, 0);
+		objectTransform = XMMatrixRotationAxis(axis, angle);
+		//objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
 
 		ocb.world = objectTransform;
 
 		m_cbObjectData.update(0, ocb);
 	}
+
+	angle += timer.getDeltaTime();
 }
 
 #define SET_CONSTANT_BUFFER(registerSlot, cbv) d3dDevice->CopyDescriptorsSimple(1, CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), registerSlot, cbvDescriptorSize), cbv, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-void Graphics::renderFrame()
+void Graphics::renderFrame(const Timer& timer)
 {
-	update();
+	update(timer);
 
 	this->beginFrame();
 

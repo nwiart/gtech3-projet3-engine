@@ -9,6 +9,7 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
+class Timer;
 class Window;
 
 typedef struct HWND__* HWND;
@@ -30,8 +31,8 @@ public:
 
 	void initTestApp();
 
-	void update();
-	void renderFrame();
+	void update(const Timer& timer);
+	void renderFrame(const Timer& timer);
 
 	void resizeBuffers(int width, int height);
 
