@@ -76,6 +76,10 @@ public:
 	inline ID3D12Resource* getCurrentBackBuffer() const { return m_backBuffers[m_currentBackBuffer]; }
 	inline D3D12_CPU_DESCRIPTOR_HANDLE getCurrentBackBufferView() const { return m_backBufferViews[m_currentBackBuffer]; }
 
+	inline ID3D12DescriptorHeap* getShaderVisibleCBVHeap() const { return m_cbvHeap; }
+
+	inline UINT getCBVDescriptorSize() const { return cbvDescriptorSize; }
+
 	inline D3D12ResourceTransferUtility& getResourceTransferUtility() { return m_resourceTransferUtility; }
 
 
@@ -138,5 +142,5 @@ public:
 	IndexBuffer m_ib;
 
 	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
-	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
+	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData[3];
 };

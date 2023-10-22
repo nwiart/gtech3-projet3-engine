@@ -212,7 +212,9 @@ void Graphics::createCompatiblePSO(Shader* shader)
 
 void Graphics::_shutdown()
 {
-	m_cbObjectData.destroy();
+	for (int i = 0; i < 3; ++i) {
+		m_cbObjectData[i].destroy();
+	}
 	m_cbFrameData.destroy();
 
 	m_vb.destroy();
@@ -296,12 +298,15 @@ void Graphics::initTestApp()
 	m_ib.setData(indices, sizeof(indices));
 
 	m_cbFrameData.init();
-	m_cbObjectData.init();
+	m_cbObjectData[0].init();
+	m_cbObjectData[1].init();
+	m_cbObjectData[2].init();
 }
 
 
 
-static float angle = 0.0F;
+static float angle1 = 0.0F;
+static float angle2 = 0.0F;
 
 void Graphics::update(const Timer& timer)
 {
@@ -309,7 +314,7 @@ void Graphics::update(const Timer& timer)
 	{
 		XMMATRIX view, projection;
 
-		XMVECTOR pos = XMVectorSet(0.0F, 0.0F, -2.0F, 1.0F);
+		XMVECTOR pos = XMVectorSet(0.0F, 0.0F, -4.0F, 1.0F);
 		XMVECTOR target = XMVectorSet(0.0F, 0.0F, 0.0F, 0.0F);
 		XMVECTOR up = XMVectorSet(0.0F, 1.0F, 0.0F, 0.0F);
 		view = XMMatrixLookAtLH(pos, target, up);
@@ -327,19 +332,25 @@ void Graphics::update(const Timer& timer)
 		float pitch = (cursorY - m_renderHeight / 2) * -0.003F;
 
 		XMMATRIX objectTransform;
-		XMVECTOR axis = XMVectorSet(1, 0.5, 0, 0);
-		objectTransform = XMMatrixRotationAxis(axis, angle);
+		XMVECTOR axis = XMVectorSet(1, 1, 0, 0);
+		objectTransform = XMMatrixRotationAxis(axis, angle2);
 		//objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
 
 		ocb.world = objectTransform;
+		m_cbObjectData[1].update(0, ocb);
 
-		m_cbObjectData.update(0, ocb);
+		objectTransform = XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
+		ocb.world = objectTransform;
+		m_cbObjectData[0].update(0, ocb);
+
+		objectTransform = XMMatrixTranslation(2+rand()/(float)RAND_MAX, rand() / (float)RAND_MAX, rand() / (float)RAND_MAX);
+		ocb.world = objectTransform;
+		m_cbObjectData[2].update(0, ocb);
 	}
 
-	angle += timer.getDeltaTime();
+	angle1 += timer.getDeltaTime() * 4.0F;
+	angle2 += timer.getDeltaTime();
 }
-
-#define SET_CONSTANT_BUFFER(registerSlot, cbv) d3dDevice->CopyDescriptorsSimple(1, CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), registerSlot, cbvDescriptorSize), cbv, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 void Graphics::renderFrame(const Timer& timer)
 {
@@ -349,13 +360,10 @@ void Graphics::renderFrame(const Timer& timer)
 
 	d3dCommandList->SetPipelineState(m_defaultPSO);
 
-	SET_CONSTANT_BUFFER(0, m_cbFrameData.getDescriptor());
-	SET_CONSTANT_BUFFER(1, m_cbObjectData.getDescriptor());
-
 	ID3D12DescriptorHeap* dh[] = { m_cbvHeap, m_samplerHeap };
 	d3dCommandList->SetDescriptorHeaps(2, dh);
 	d3dCommandList->SetGraphicsRootSignature(m_shader.getRootSignature());
-	d3dCommandList->SetGraphicsRootDescriptorTable(0, m_cbvHeap->GetGPUDescriptorHandleForHeapStart());
+	m_shader.setConstantBuffer(0, 0);
 
 	// Render object.
 	d3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -363,6 +371,34 @@ void Graphics::renderFrame(const Timer& timer)
 	d3dCommandList->IASetVertexBuffers(0, 1, &m_vb.getVertexBufferView());
 	d3dCommandList->IASetIndexBuffer(&m_ib.getIndexBufferView());
 
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 0, cbvDescriptorSize),
+		m_cbFrameData.getDescriptor(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 1, cbvDescriptorSize),
+		m_cbObjectData[0].getDescriptor(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
+		m_cbObjectData[1].getDescriptor(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 3, cbvDescriptorSize),
+		m_cbObjectData[2].getDescriptor(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	m_shader.setConstantBuffer(1, 1);
+	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
+
+	m_shader.setConstantBuffer(1, 2);
+	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
+
+	m_shader.setConstantBuffer(1, 3);
 	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
 
 	this->endFrame();
