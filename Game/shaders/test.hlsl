@@ -1,6 +1,7 @@
 struct VS_INPUT
 {
 	float3 pos : POSITION;
+	float3 normal : NORMAL;
 	float2 texCoord : TEXCOORD0;
 	uint4 color : COLOR;
 };
@@ -8,8 +9,11 @@ struct VS_INPUT
 struct PS_INPUT
 {
 	float4 pos : SV_POSITION;
+	float3 normal : NORMAL;
 	float2 texCoord : TEXCOORD0;
 	float4 color : COLOR;
+	
+    float3 pixelWorldPos : TEXCOORD1;
 };
 
 
@@ -29,6 +33,12 @@ cbuffer cb_materialData : register(b1)
 cbuffer cb_frameData : register(b2)
 {
 	row_major float4x4 viewProjection;
+	
+    float4 cameraPos;
+    float4 cameraDir;
+	
+    //float4 dirLightDir;
+    //float4 dirLightColor;
 };
 
 Texture2D textureDiffuse : register(t0);
@@ -44,7 +54,11 @@ PS_INPUT vs_main(VS_INPUT input)
 	output.pos = float4(input.pos, 1.0F);
 
 	output.pos = mul(output.pos, world);
+    output.pixelWorldPos = output.pos.xyz;
 	output.pos = mul(output.pos, viewProjection);
+
+    float4 rotatedNormal = mul(float4(input.normal, 0.0F), world);
+    output.normal = normalize(rotatedNormal.xyz);
 
 	output.texCoord = input.texCoord;
 
@@ -55,9 +69,21 @@ PS_INPUT vs_main(VS_INPUT input)
 
 float4 ps_main(PS_INPUT input) : SV_TARGET
 {
-	float4 finalColor = input.color;
+	float4 finalColor = float4(0.0F, 0.0F, 0.0F, 1.0F);
 
-	finalColor *= textureDiffuse.Sample(samplerLinear, input.texCoord);
+    float3 normal = normalize(input.normal);
+	
+	float4 albedo = textureDiffuse.Sample(samplerLinear, input.texCoord);
+	finalColor += albedo;
 
+    float3 dirLightDir = normalize(float3(-1, -1, 1));
+    float brightness = max(0.2F, dot(normal, -dirLightDir));
+	finalColor.rgb *= brightness;
+	
+    float3 V = normalize(cameraPos - input.pixelWorldPos).xyz;
+    float3 R = reflect(dirLightDir, normal);
+	
+    finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F;
+	
 	return finalColor;
 }

@@ -5,10 +5,13 @@
 
 struct TestConstantBuffer
 {
-	DirectX::XMMATRIX viewProjection; /// Combined view & projection matrices (camera).
+	DirectX::XMFLOAT4X4 viewProjection; /// Combined view & projection matrices (camera).
+
+	DirectX::XMFLOAT4 cameraPos;
+	DirectX::XMFLOAT4 cameraDir;
 };
 
 struct ObjectConstantBuffer
 {
-	DirectX::XMMATRIX world;   /// World space transform of the object.
+	DirectX::XMFLOAT4X4 world;   /// World space transform of the object.
 };

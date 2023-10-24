@@ -179,8 +179,9 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 3 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 5 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 3 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 6 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 8 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc; ZeroMemory(&desc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
@@ -246,6 +247,8 @@ void Graphics::_shutdown()
 
 
 
+#include "Quantum/Generate/SphereGenerator.h"
+
 void Graphics::initTestApp(UINT shaderResID)
 {
 	// Load our shader and our PSO.
@@ -257,17 +260,17 @@ void Graphics::initTestApp(UINT shaderResID)
 	m_shader.compile();
 	this->createCompatiblePSO(&m_shader);
 
-	struct MyVertex { float pos[3]; float uv[2]; UINT32 color; };
+	struct MyVertex { float pos[3]; float normal[3]; float uv[2]; UINT32 color; };
 
 	MyVertex verts[] = {
-		{ {-0.5F, -0.5F, -0.5F}, {0, 0}, 0xFF000000 },
-		{ {-0.5F, +0.5F, -0.5F}, {0, 1}, 0xFF00FF00 },
-		{ {+0.5F, +0.5F, -0.5F}, {1, 1}, 0xFF00FFFF },
-		{ {+0.5F, -0.5F, -0.5F}, {1, 0}, 0xFF0000FF },
-		{ {-0.5F, -0.5F, +0.5F}, {0, 0}, 0xFFFF0000 },
-		{ {-0.5F, +0.5F, +0.5F}, {0, 1}, 0xFFFFFF00 },
-		{ {+0.5F, +0.5F, +0.5F}, {1, 1}, 0xFFFFFFFF },
-		{ {+0.5F, -0.5F, +0.5F}, {1, 0}, 0xFFFF00FF },
+		{ {-0.5F, -0.5F, -0.5F}, {-1, -1, -1}, {0, 0}, 0xFF000000 },
+		{ {-0.5F, +0.5F, -0.5F}, {-1,  1, -1}, {0, 1}, 0xFF00FF00 },
+		{ {+0.5F, +0.5F, -0.5F}, { 1,  1, -1}, {1, 1}, 0xFF00FFFF },
+		{ {+0.5F, -0.5F, -0.5F}, { 1, -1, -1}, {1, 0}, 0xFF0000FF },
+		{ {-0.5F, -0.5F, +0.5F}, {-1, -1,  1}, {0, 0}, 0xFFFF0000 },
+		{ {-0.5F, +0.5F, +0.5F}, {-1,  1,  1}, {0, 1}, 0xFFFFFF00 },
+		{ {+0.5F, +0.5F, +0.5F}, { 1,  1,  1}, {1, 1}, 0xFFFFFFFF },
+		{ {+0.5F, -0.5F, +0.5F}, { 1, -1,  1}, {1, 0}, 0xFFFF00FF },
 	};
 	UINT indices[] = {
 		// front face
@@ -290,15 +293,17 @@ void Graphics::initTestApp(UINT shaderResID)
 		4, 3, 7
 	};
 
-	m_vb.setData(verts, sizeof(verts));
-	m_ib.setData(indices, sizeof(indices));
+	//m_vb.setData(verts, sizeof(verts));
+	//m_ib.setData(indices, sizeof(indices));
+
+	Quantum::SphereGenerator::generate(m_vb, m_ib);
 
 	m_cbFrameData.init();
 	m_cbObjectData[0].init();
 	m_cbObjectData[1].init();
 	m_cbObjectData[2].init();
 
-	m_texture.loadFromDisk("awesome.dds");
+	m_texture.loadFromDisk("awesome_sphere.dds");
 }
 
 
@@ -315,34 +320,40 @@ void Graphics::update(const Timer& timer)
 		XMVECTOR pos = XMVectorSet(0.0F, 0.0F, -4.0F, 1.0F);
 		XMVECTOR target = XMVectorSet(0.0F, 0.0F, 0.0F, 0.0F);
 		XMVECTOR up = XMVectorSet(0.0F, 1.0F, 0.0F, 0.0F);
-		view = XMMatrixLookAtLH(pos, target, up);
+		XMVECTOR dir;
+		dir = XMVectorSubtract(target, pos);
+		dir = XMVector3Normalize(dir);
 
+		view = XMMatrixLookAtLH(pos, target, up);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(70.0F), m_renderWidth / (float) m_renderHeight, 0.05F, 1000.0F);
 
-		cb.viewProjection = view * projection;
+		// Combined view and projection matrices.
+		XMStoreFloat4x4(&cb.viewProjection, view * projection);
+
+		// Camera info.
+		XMStoreFloat4(&cb.cameraPos, pos);
+		XMStoreFloat4(&cb.cameraDir, dir);
 
 		m_cbFrameData.update(0, cb);
 	}
 
 	ObjectConstantBuffer ocb;
 	{
-		float yaw = (cursorX - m_renderWidth / 2) * -0.003F;
-		float pitch = (cursorY - m_renderHeight / 2) * -0.003F;
+		float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
+		float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
 
 		XMMATRIX objectTransform;
-		XMVECTOR axis = XMVectorSet(1, 1, 0, 0);
-		objectTransform = XMMatrixRotationAxis(axis, angle2);
-		//objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
 
-		ocb.world = objectTransform;
+		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
+		XMStoreFloat4x4(&ocb.world, objectTransform);
 		m_cbObjectData[1].update(0, ocb);
 
-		objectTransform = XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
-		ocb.world = objectTransform;
+		objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
+		XMStoreFloat4x4(&ocb.world, objectTransform);
 		m_cbObjectData[0].update(0, ocb);
 
-		objectTransform = XMMatrixTranslation(2+rand()/(float)RAND_MAX, rand() / (float)RAND_MAX, rand() / (float)RAND_MAX);
-		ocb.world = objectTransform;
+		objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
+		XMStoreFloat4x4(&ocb.world, objectTransform);
 		m_cbObjectData[2].update(0, ocb);
 	}
 
@@ -401,13 +412,13 @@ void Graphics::renderFrame(const Timer& timer)
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	m_shader.setConstantBuffer(0, 1);
-	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
+	d3dCommandList->DrawIndexedInstanced(32*16*2*3, 1, 0, 0, 0);
 
 	m_shader.setConstantBuffer(0, 2);
-	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
+	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
 
 	m_shader.setConstantBuffer(0, 3);
-	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
+	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
 
 	this->endFrame();
 	this->swapBuffers();
