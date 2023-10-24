@@ -2,8 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by Resource.rc
 //
-#define ID_SHADER_TEST_VS               101
-#define ID_SHADER_TEST_PS               102
+#define ID_SHADER_TEST               101
 
 // Next default values for new objects
 // 

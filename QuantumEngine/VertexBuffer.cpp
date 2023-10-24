@@ -50,7 +50,7 @@ void VertexBuffer::setData(const void* data, int byteSize)
 	// Fill in the vertex buffer view.
 	m_bufferView.BufferLocation = m_buffer->GetGPUVirtualAddress();
 	m_bufferView.SizeInBytes = byteSize;
-	m_bufferView.StrideInBytes = 4 * sizeof(float);
+	m_bufferView.StrideInBytes = 6 * sizeof(float);
 }
 
 void VertexBuffer::destroy()

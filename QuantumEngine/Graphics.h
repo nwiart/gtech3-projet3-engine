@@ -30,10 +30,12 @@ public:
 
 public:
 
-	void initTestApp();
+	void initTestApp(UINT shaderResID);
 
 	void update(const Timer& timer);
 	void renderFrame(const Timer& timer);
+
+	void flushCommandQueue();
 
 	void resizeBuffers(int width, int height);
 
@@ -58,7 +60,6 @@ private:
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
 	void createCompatiblePSO(Shader* shader);
-	void flushCommandQueue();
 
 	void _shutdown();
 	
@@ -73,6 +74,8 @@ public:
 
 	inline ID3D12Device* getDevice() const { return d3dDevice; }
 	inline ID3D12GraphicsCommandList* getCommandList() const { return d3dCommandList; }
+	inline ID3D12CommandAllocator* getCommandAllocator() const { return d3dCommandAllocator; }
+	inline ID3D12CommandQueue* getCommandQueue() const { return d3dCommandQueue; }
 
 	inline ID3D12Resource* getCurrentBackBuffer() const { return m_backBuffers[m_currentBackBuffer]; }
 	inline D3D12_CPU_DESCRIPTOR_HANDLE getCurrentBackBufferView() const { return m_backBufferViews[m_currentBackBuffer]; }

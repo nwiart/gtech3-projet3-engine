@@ -4,8 +4,6 @@
 #include "Timer.h"
 #include "Window.h"
 
-#include "../Game/resource.h"
-
 
 
 // Loading resources from the executable.
@@ -86,18 +84,16 @@ int Graphics::_init(Window* window)
 
 	// Shader-bound descriptor heaps.
 	D3D12_DESCRIPTOR_HEAP_DESC spDesc;
-	spDesc.NumDescriptors = 16;
+	spDesc.NumDescriptors = 65536;
 	spDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	spDesc.NodeMask = 0;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_cbvHeap));
 
+	spDesc.NumDescriptors = 256;
 	spDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
-
-
-	this->initTestApp();
 
 	return 0;
 }
@@ -182,8 +178,9 @@ void Graphics::createCompatiblePSO(Shader* shader)
 
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UINT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 3 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 5 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc; ZeroMemory(&desc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
@@ -249,29 +246,28 @@ void Graphics::_shutdown()
 
 
 
-void Graphics::initTestApp()
+void Graphics::initTestApp(UINT shaderResID)
 {
 	// Load our shader and our PSO.
-	std::string vs_source, ps_source;
-	loadResource(vs_source, ID_SHADER_TEST_VS);
-	loadResource(ps_source, ID_SHADER_TEST_PS);
+	std::string source;
+	loadResource(source, shaderResID);
 
-	m_shader.setShaderSource<Shader::SHADER_VS>(vs_source.c_str(), vs_source.length());
-	m_shader.setShaderSource<Shader::SHADER_PS>(ps_source.c_str(), ps_source.length());
+	m_shader.setShaderSource<Shader::SHADER_VS>(source.c_str(), source.length());
+	m_shader.setShaderSource<Shader::SHADER_PS>(source.c_str(), source.length());
 	m_shader.compile();
 	this->createCompatiblePSO(&m_shader);
 
-	struct MyVertex { float pos[3]; UINT32 color; };
+	struct MyVertex { float pos[3]; float uv[2]; UINT32 color; };
 
 	MyVertex verts[] = {
-		{ {-0.5F, -0.5F, -0.5F}, 0xFF000000 },
-		{ {-0.5F, +0.5F, -0.5F}, 0xFF00FF00 },
-		{ {+0.5F, +0.5F, -0.5F}, 0xFF00FFFF },
-		{ {+0.5F, -0.5F, -0.5F}, 0xFF0000FF },
-		{ {-0.5F, -0.5F, +0.5F}, 0xFFFF0000 },
-		{ {-0.5F, +0.5F, +0.5F}, 0xFFFFFF00 },
-		{ {+0.5F, +0.5F, +0.5F}, 0xFFFFFFFF },
-		{ {+0.5F, -0.5F, +0.5F}, 0xFFFF00FF },
+		{ {-0.5F, -0.5F, -0.5F}, {0, 0}, 0xFF000000 },
+		{ {-0.5F, +0.5F, -0.5F}, {0, 1}, 0xFF00FF00 },
+		{ {+0.5F, +0.5F, -0.5F}, {1, 1}, 0xFF00FFFF },
+		{ {+0.5F, -0.5F, -0.5F}, {1, 0}, 0xFF0000FF },
+		{ {-0.5F, -0.5F, +0.5F}, {0, 0}, 0xFFFF0000 },
+		{ {-0.5F, +0.5F, +0.5F}, {0, 1}, 0xFFFFFF00 },
+		{ {+0.5F, +0.5F, +0.5F}, {1, 1}, 0xFFFFFFFF },
+		{ {+0.5F, -0.5F, +0.5F}, {1, 0}, 0xFFFF00FF },
 	};
 	UINT indices[] = {
 		// front face
@@ -302,7 +298,7 @@ void Graphics::initTestApp()
 	m_cbObjectData[1].init();
 	m_cbObjectData[2].init();
 
-	//m_texture.create();
+	m_texture.loadFromDisk("awesome.dds");
 }
 
 
@@ -365,7 +361,22 @@ void Graphics::renderFrame(const Timer& timer)
 	ID3D12DescriptorHeap* dh[] = { m_cbvHeap, m_samplerHeap };
 	d3dCommandList->SetDescriptorHeaps(2, dh);
 	d3dCommandList->SetGraphicsRootSignature(m_shader.getRootSignature());
-	m_shader.setConstantBuffer(0, 0);
+
+	// Frame data.
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 0, cbvDescriptorSize),
+		m_cbFrameData.getDescriptor(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_shader.setConstantBuffer(2, 0);
+
+	// Material data.
+	d3dDevice->CopyDescriptorsSimple(
+		1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 5, cbvDescriptorSize),
+		m_texture.getShaderResourceView(),
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_shader.setTexture2D(0, 4);
 
 	// Render object.
 	d3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -373,11 +384,6 @@ void Graphics::renderFrame(const Timer& timer)
 	d3dCommandList->IASetVertexBuffers(0, 1, &m_vb.getVertexBufferView());
 	d3dCommandList->IASetIndexBuffer(&m_ib.getIndexBufferView());
 
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 0, cbvDescriptorSize),
-		m_cbFrameData.getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	d3dDevice->CopyDescriptorsSimple(
 		1,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 1, cbvDescriptorSize),
@@ -394,13 +400,13 @@ void Graphics::renderFrame(const Timer& timer)
 		m_cbObjectData[2].getDescriptor(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	m_shader.setConstantBuffer(1, 1);
+	m_shader.setConstantBuffer(0, 1);
 	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
 
-	m_shader.setConstantBuffer(1, 2);
+	m_shader.setConstantBuffer(0, 2);
 	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
 
-	m_shader.setConstantBuffer(1, 3);
+	m_shader.setConstantBuffer(0, 3);
 	d3dCommandList->DrawIndexedInstanced(6 * 6, 1, 0, 0, 0);
 
 	this->endFrame();

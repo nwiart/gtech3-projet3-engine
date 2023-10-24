@@ -3,12 +3,46 @@
 
 #include "Graphics.h"
 
+#include "DDS/DDSTextureLoader.h"
+
 
 
 D3D12Texture::D3D12Texture()
 	: m_resource(0), m_srvHeap(0)
 {
 
+}
+
+void D3D12Texture::loadFromDisk(const char* path)
+{
+	ID3D12Device* device = Graphics::getInstance().getDevice();
+	ID3D12CommandQueue* cmdQueue = Graphics::getInstance().getCommandQueue();
+	ID3D12CommandAllocator* cmdAllocator = Graphics::getInstance().getCommandAllocator();
+	ID3D12GraphicsCommandList* cmdList = Graphics::getInstance().getCommandList();
+	
+	cmdAllocator->Reset();
+	cmdList->Reset(cmdAllocator, 0);
+
+
+	wchar_t widePath[MAX_PATH];
+	mbstowcs_s(0, widePath, path, MAX_PATH);
+
+	ComPtr<ID3D12Resource> res;
+	ComPtr<ID3D12Resource> upload;
+	DirectX::CreateDDSTextureFromFile12(device, cmdList, widePath, res, upload);
+
+
+	cmdList->Close();
+	ID3D12CommandList* lists[] = { cmdList };
+	cmdQueue->ExecuteCommandLists(1, lists);
+
+	Graphics::getInstance().flushCommandQueue();
+
+
+	m_resource = res.Get();
+	m_resource->AddRef();
+
+	this->createHeapAndView(m_resource->GetDesc().Format);
 }
 
 void D3D12Texture::create()
@@ -38,23 +72,7 @@ void D3D12Texture::create()
 
 	m_resource->Unmap(0, 0);
 
-	// CPU descriptor heap and view.
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = { };
-	srvHeapDesc.NumDescriptors = 1;
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvHeap));
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = { };
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = format;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = 1;
-	srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
-	device->CreateShaderResourceView(m_resource, &srvDesc, m_srvHeap->GetCPUDescriptorHandleForHeapStart());
-
-	m_shaderResourceView = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
+	this->createHeapAndView(format);
 }
 
 void D3D12Texture::destroy()
@@ -66,4 +84,28 @@ void D3D12Texture::destroy()
 		m_srvHeap->Release();
 		m_srvHeap = 0;
 	}
+}
+
+
+void D3D12Texture::createHeapAndView(DXGI_FORMAT fmt)
+{
+	ID3D12Device* device = Graphics::getInstance().getDevice();
+
+	// CPU descriptor heap and view.
+	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = { };
+	srvHeapDesc.NumDescriptors = 1;
+	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvHeap));
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = { };
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = fmt;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = 2;
+	srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
+	device->CreateShaderResourceView(m_resource, &srvDesc, m_srvHeap->GetCPUDescriptorHandleForHeapStart());
+
+	m_shaderResourceView = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
 }

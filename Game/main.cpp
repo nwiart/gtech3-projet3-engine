@@ -6,6 +6,9 @@
 using namespace Microsoft::WRL;
 
 #include "Game.h"
+#include "Graphics.h"
+
+#include "resource.h"
 
 
 
@@ -21,6 +24,8 @@ int main()
 	if ( res != 0 ) {
 		return res;
 	}
+
+	Graphics::getInstance().initTestApp(ID_SHADER_TEST);
 
 	game.mainLoop();
 

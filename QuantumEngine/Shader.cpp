@@ -15,11 +15,8 @@
 
 static void getOffset(INT* outRangeOffset, INT* outTableParam, ShaderParameter* rootParams, int shaderRegister, ShaderParameterType paramType)
 {
-	UINT numRangesInDescriptorTable = 0;
 	UINT numDescsInRange = 0;
 	UINT numDescsTotal = 0;
-	UINT numTables = 0;
-	UINT baseRange = 0;
 
 	ShaderParameterType type = rootParams[0].type;
 	ShaderParameterUpdate update = rootParams[0].updatePolicy;
@@ -27,41 +24,29 @@ static void getOffset(INT* outRangeOffset, INT* outTableParam, ShaderParameter* 
 
 	while (rootParams->type != TYPE_UNKNOWN) {
 
-		// New range.
-		if (rootParams->slot != baseSlot + numDescsInRange || type != rootParams->type || update != rootParams->updatePolicy) {
-
-			numRangesInDescriptorTable++;
-
-			numDescsInRange = 0;
-			type = rootParams->type;
-			baseSlot = rootParams->slot;
-		}
-
-		// New table (which means new parameter).
-		if (type != rootParams->type || update != rootParams->updatePolicy) {
-
-			baseRange += numRangesInDescriptorTable;
-			numRangesInDescriptorTable = 0;
-			update = rootParams->updatePolicy;
-
-			numDescsInRange = 0;
-			numTables++;
-			type = rootParams->type;
-			baseSlot = rootParams->slot;
-		}
-
+		// Found it.
 		if (rootParams->slot == shaderRegister && rootParams->type == paramType) {
 			*outRangeOffset = numDescsTotal;
-			*outTableParam = numTables;
+			*outTableParam = rootParams->updatePolicy;
 			return;
+		}
+
+		rootParams++;
+		numDescsInRange++;
+
+		// Need a new range.
+		if (rootParams->slot != baseSlot + numDescsInRange || type != rootParams->type || update != rootParams->updatePolicy) {
+
+			numDescsInRange = 0;
+			type = rootParams->type;
+			baseSlot = rootParams->slot;
+
+			update = rootParams->updatePolicy;
 		}
 
 		if (rootParams->type == TYPE_UNKNOWN) break;
 
-		numDescsInRange++;
 		numDescsTotal++;
-
-		rootParams++;
 	}
 
 	*outRangeOffset = -1;
@@ -70,14 +55,14 @@ static void getOffset(INT* outRangeOffset, INT* outTableParam, ShaderParameter* 
 
 static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlob** outRootSig)
 {
-	std::vector<CD3DX12_DESCRIPTOR_RANGE> ranges;
-	UINT numRangesInDescriptorTable = 0;
+	std::vector<D3D12_ROOT_PARAMETER> params;
+	std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTables[UPDATE_NUM_UPDATES];
 	UINT numDescsInRange = 0;
 	UINT baseRange = 0;
-	std::vector<CD3DX12_ROOT_PARAMETER> params;
-	UINT numParams = 0;
 
-	ranges.reserve(256);
+	for (int i = 0; i < UPDATE_NUM_UPDATES; ++i) {
+		descriptorTables[i].reserve(64);
+	}
 	params.reserve(64);
 
 	ShaderParameterType type = rootParams[0].type;
@@ -86,7 +71,10 @@ static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlo
 
 	while (true) {
 
-		// New range.
+		rootParams++;
+		numDescsInRange++;
+
+		// Need a new range.
 		if (rootParams->slot != baseSlot + numDescsInRange || type != rootParams->type || update != rootParams->updatePolicy) {
 
 			D3D12_DESCRIPTOR_RANGE_TYPE rangeType;
@@ -95,39 +83,31 @@ static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlo
 			case TYPE_TEXTURE_2D: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; break;
 			}
 
-			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot);
-			ranges.push_back(r);
-			numRangesInDescriptorTable++;
+			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot, numDescsInRange - 1);
+			descriptorTables[update].push_back(r);
 
 			numDescsInRange = 0;
 			type = rootParams->type;
 			baseSlot = rootParams->slot;
-		}
 
-		// New table (which means new parameter).
-		if (type != rootParams->type || update != rootParams->updatePolicy) {
+			// Need a new descriptor table.
+			if (update != rootParams->updatePolicy) {
+				CD3DX12_ROOT_PARAMETER p; p.InitAsDescriptorTable(descriptorTables[update].size(), descriptorTables[update].data());
+				params.push_back(p);
+			}
 
-			CD3DX12_ROOT_PARAMETER param; param.InitAsDescriptorTable(numRangesInDescriptorTable, ranges.data() + baseRange);
-			params.push_back(param);
-
-			baseRange += numRangesInDescriptorTable;
-			numRangesInDescriptorTable = 0;
 			update = rootParams->updatePolicy;
-
-			numDescsInRange = 0;
-			type = rootParams->type;
-			baseSlot = rootParams->slot;
 		}
 
 		if (rootParams->type == TYPE_UNKNOWN) break;
-
-		numDescsInRange++;
-
-		rootParams++;
 	}
 
 	// Create the signature description.
 	CD3DX12_ROOT_SIGNATURE_DESC desc(params.size(), params.data(), 0, 0, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	CD3DX12_STATIC_SAMPLER_DESC ssDesc; ssDesc.Init(0);
+	desc.NumStaticSamplers = 1;
+	desc.pStaticSamplers = &ssDesc;
 
 	D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, outRootSig, 0);
 }
@@ -139,10 +119,11 @@ Shader::Shader()
 {
 	ZeroMemory(m_shaderBytecodes, SHADER_NUM_TYPES * sizeof(ID3DBlob*));
 
-	m_parameters.push_back({ "cb_frameData",   0, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
-	m_parameters.push_back({ "cb_objectData",  1, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
-	//m_parameters.push_back({ "textureDiffuse", 0, TYPE_TEXTURE_2D,      UPDATE_PER_FRAME });
-	m_parameters.push_back({ 0,                0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
+	m_parameters.push_back({ "cb_objectData",   0, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
+	m_parameters.push_back({ "cb_materialData", 1, TYPE_CONSTANT_BUFFER, UPDATE_PER_MATERIAL });
+	m_parameters.push_back({ "textureDiffuse",  0, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
+	m_parameters.push_back({ "cb_frameData",    2, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
+	m_parameters.push_back({ 0,                 0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
 }
 
 Shader::~Shader()
