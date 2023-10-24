@@ -11,6 +11,8 @@
     <ClCompile Include="D3D12ConstantBuffer.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="D3D12Texture.cpp" />
+    <ClCompile Include="Quantum\Math\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -26,6 +28,9 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="D3D12Texture.h" />
+    <ClInclude Include="Quantum\Math\Transform.h" />
+    <ClInclude Include="Quantum\World\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />

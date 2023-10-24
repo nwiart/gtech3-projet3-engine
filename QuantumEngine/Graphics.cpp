@@ -301,6 +301,8 @@ void Graphics::initTestApp()
 	m_cbObjectData[0].init();
 	m_cbObjectData[1].init();
 	m_cbObjectData[2].init();
+
+	//m_texture.create();
 }
 
 

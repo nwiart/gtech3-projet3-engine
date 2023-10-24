@@ -10,7 +10,7 @@ enum ShaderParameterType
 {
 	TYPE_UNKNOWN = 0,
 	TYPE_CONSTANT_BUFFER,
-	TYPE_SHADER_RESOURCE,
+	TYPE_TEXTURE_2D,
 };
 
 enum ShaderParameterUpdate
@@ -54,6 +54,7 @@ public:
 	bool isReady() const;
 
 	void setConstantBuffer(int shaderRegister, int offset);
+	void setTexture2D(int shaderRegister, int offset);
 
 
 	inline ID3D12RootSignature* getRootSignature() const { return m_rootSignature; }

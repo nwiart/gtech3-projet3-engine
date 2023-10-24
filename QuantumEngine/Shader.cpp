@@ -89,7 +89,13 @@ static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlo
 		// New range.
 		if (rootParams->slot != baseSlot + numDescsInRange || type != rootParams->type || update != rootParams->updatePolicy) {
 
-			CD3DX12_DESCRIPTOR_RANGE r; r.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, numDescsInRange, baseSlot);
+			D3D12_DESCRIPTOR_RANGE_TYPE rangeType;
+			switch (type) {
+			case TYPE_CONSTANT_BUFFER: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV; break;
+			case TYPE_TEXTURE_2D: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; break;
+			}
+
+			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot);
 			ranges.push_back(r);
 			numRangesInDescriptorTable++;
 
@@ -133,9 +139,10 @@ Shader::Shader()
 {
 	ZeroMemory(m_shaderBytecodes, SHADER_NUM_TYPES * sizeof(ID3DBlob*));
 
-	m_parameters.push_back({ "cb_frameData",  0, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
-	m_parameters.push_back({ "cb_objectData", 1, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
-	m_parameters.push_back({ 0,               0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
+	m_parameters.push_back({ "cb_frameData",   0, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
+	m_parameters.push_back({ "cb_objectData",  1, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
+	//m_parameters.push_back({ "textureDiffuse", 0, TYPE_TEXTURE_2D,      UPDATE_PER_FRAME });
+	m_parameters.push_back({ 0,                0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
 }
 
 Shader::~Shader()
@@ -178,6 +185,21 @@ void Shader::setConstantBuffer(int shaderRegister, int offset)
 
 	INT descriptorOffset, tableIndex;
 	getOffset(&descriptorOffset, &tableIndex, m_parameters.data(), shaderRegister, TYPE_CONSTANT_BUFFER);
+
+	cmdList->SetGraphicsRootDescriptorTable(
+		tableIndex,
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart(), offset, cbvDescriptorSize));
+}
+
+void Shader::setTexture2D(int shaderRegister, int offset)
+{
+	ID3D12Device* device = Graphics::getInstance().getDevice();
+	ID3D12DescriptorHeap* cbvHeap = Graphics::getInstance().getShaderVisibleCBVHeap();
+	ID3D12GraphicsCommandList* cmdList = Graphics::getInstance().getCommandList();
+	UINT cbvDescriptorSize = Graphics::getInstance().getCBVDescriptorSize();
+
+	INT descriptorOffset, tableIndex;
+	getOffset(&descriptorOffset, &tableIndex, m_parameters.data(), shaderRegister, TYPE_TEXTURE_2D);
 
 	cmdList->SetGraphicsRootDescriptorTable(
 		tableIndex,

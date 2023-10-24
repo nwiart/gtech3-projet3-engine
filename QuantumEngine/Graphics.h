@@ -6,6 +6,7 @@
 
 #include "TestConstantBuffer.h"
 #include "D3D12ConstantBuffer.h"
+#include "D3D12Texture.h"
 
 #include "D3D12ResourceTransferUtility.h"
 
@@ -143,4 +144,6 @@ public:
 
 	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
 	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData[3];
+
+	D3D12Texture m_texture;
 };

@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="D3D12ConstantBuffer.cpp" />
     <ClCompile Include="D3D12ResourceTransferUtility.cpp" />
+    <ClCompile Include="D3D12Texture.cpp" />
     <ClCompile Include="D3D12UploadHelper.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="Quantum\Math\Transform.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -33,11 +35,14 @@
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
     <ClInclude Include="D3D12ResourceTransferUtility.h" />
+    <ClInclude Include="D3D12Texture.h" />
     <ClInclude Include="D3D12UploadHelper.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Quantum\Math\Transform.h" />
+    <ClInclude Include="Quantum\World\World.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />
