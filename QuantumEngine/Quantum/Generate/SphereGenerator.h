@@ -14,7 +14,9 @@ class SphereGenerator
 {
 public:
 
-	static void generate(VertexBuffer& outVB, IndexBuffer& outIB);
+	static UINT generate(VertexBuffer& outVB, IndexBuffer& outIB);
+
+private:
 };
 
 

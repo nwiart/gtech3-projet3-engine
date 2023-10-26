@@ -199,7 +199,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
 
-	d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
+	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
 }
 
 
@@ -210,9 +210,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 
 void Graphics::_shutdown()
 {
-	for (int i = 0; i < 3; ++i) {
-		m_cbObjectData[i].destroy();
-	}
+	m_cbObjectData.destroy();
 	m_cbFrameData.destroy();
 
 	m_vb.destroy();
@@ -296,12 +294,18 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	Quantum::SphereGenerator::generate(m_vb, m_ib);
+	
+
+	Model test =
+	{
+		Quantum::SphereGenerator::generate(m_vb, m_ib),
+		m_vb,
+		m_ib,
+	};
+		
 
 	m_cbFrameData.init();
-	m_cbObjectData[0].init();
-	m_cbObjectData[1].init();
-	m_cbObjectData[2].init();
+	m_cbObjectData.init(3);
 
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }
@@ -344,17 +348,18 @@ void Graphics::update(const Timer& timer)
 
 		XMMATRIX objectTransform;
 
-		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[1].update(0, ocb);
 
 		objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
 		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[0].update(0, ocb);
+		m_cbObjectData.update(0, ocb);
+
+		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
+		XMStoreFloat4x4(&ocb.world, objectTransform);
+		m_cbObjectData.update(1, ocb);
 
 		objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
 		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[2].update(0, ocb);
+		m_cbObjectData.update(2, ocb);
 	}
 
 	angle1 += timer.getDeltaTime() * 4.0F;
@@ -398,17 +403,17 @@ void Graphics::renderFrame(const Timer& timer)
 	d3dDevice->CopyDescriptorsSimple(
 		1,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 1, cbvDescriptorSize),
-		m_cbObjectData[0].getDescriptor(),
+		m_cbObjectData.getDescriptor(0),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	d3dDevice->CopyDescriptorsSimple(
 		1,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
-		m_cbObjectData[1].getDescriptor(),
+		m_cbObjectData.getDescriptor(1),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	d3dDevice->CopyDescriptorsSimple(
 		1,
 		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 3, cbvDescriptorSize),
-		m_cbObjectData[2].getDescriptor(),
+		m_cbObjectData.getDescriptor(2),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	m_shader.setConstantBuffer(0, 1);
@@ -497,4 +502,25 @@ void Graphics::executePendingTransfers()
 		this->flushCommandQueue();
 		m_resourceTransferUtility.clear();
 	}
+}
+
+void Graphics::addRenderModel(Model model, DirectX::FXMMATRIX worldMatrix)
+{
+	RenderModel renderModel =
+	{
+		&model,
+		nEntries,
+	};
+	renderList.push_back(renderModel);
+	ObjectConstantBuffer constbuff;
+	XMStoreFloat4x4(&constbuff.world, worldMatrix);
+	m_cbObjectData.update(nEntries, constbuff);
+	nEntries++;
+
+
+}
+
+void Graphics::freeRenderModel()
+{
+	nEntries = 0;
 }
