@@ -41,6 +41,7 @@
     <ClInclude Include="QuEntity.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
+    <ClInclude Include="d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
