@@ -171,6 +171,10 @@ public:
 
 
 
+
+
 	private:
 	int nEntries = 0;
+
+	Model m_sphere;
 };
