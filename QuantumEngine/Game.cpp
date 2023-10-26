@@ -2,7 +2,7 @@
 #include "Game.h"
 
 #include "Graphics.h"
-
+#include "QuEntityLightDirectional.h"
 
 
 #include "TestConstantBuffer.h"
@@ -49,12 +49,14 @@ void Game::mainLoop()
 
 	int frames = 0;
 
+	QuEntityLightDirectional DirectionnalLight;
+
 	while (!m_window.wantsToClose())
 	{
 		m_window.pollEvents();
 
 		m_timer.tick();
-
+		DirectionnalLight.ExecuteProcedure();
 		Graphics::getInstance().renderFrame(m_timer);
 
 		// Display FPS each second.
