@@ -28,6 +28,7 @@ class Graphics
 public:
 
 	void UpdateDirectionalLight(QuEntityLightDirectional*Entity);
+	void UpdateSkybox(D3D12Texture* tex);
 
 	static inline Graphics& getInstance() { static Graphics g_graphics; return g_graphics; }
 
