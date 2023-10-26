@@ -4,9 +4,9 @@
 
 QuEntityLightDirectional::QuEntityLightDirectional()
 {
-	m_ColorR = 1.0F;
-	m_ColorG = .0F;
-	m_ColorB = .0F;
+	m_ColorR = 0.8F;
+	m_ColorG = 0.4F;
+	m_ColorB = 0.2F;
 	m_Intensity = 1.0F;
 
 }
