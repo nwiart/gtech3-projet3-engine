@@ -33,6 +33,11 @@ void Graphics::UpdateDirectionalLight(QuEntityLightDirectional* Entity)
 	LightEntity = Entity;
 }
 
+void Graphics::UpdateSkybox(D3D12Texture* tex)
+{
+	m_skyboxTexture = tex;
+}
+
 int Graphics::initialize(Window* window)
 {
 	return Graphics::getInstance()._init(window);

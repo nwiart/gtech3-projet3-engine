@@ -19,6 +19,8 @@
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="QuEntityRenderSkybox.cpp" />
+    <ClCompile Include="TextureCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -44,6 +46,8 @@
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="QuEntityRenderSkybox.h" />
+    <ClInclude Include="TextureCube.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />

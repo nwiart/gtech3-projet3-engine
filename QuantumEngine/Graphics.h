@@ -176,10 +176,8 @@ public:
 	void freeRenderModel();
 
 
-
-
-
-	private:
+private:
 	int nEntries = 0;
 
+	D3D12Texture* m_skyboxTexture;
 };
