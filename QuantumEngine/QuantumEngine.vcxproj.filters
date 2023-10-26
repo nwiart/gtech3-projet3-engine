@@ -15,6 +15,9 @@
     <ClCompile Include="Quantum\Math\Transform.cpp" />
     <ClCompile Include="DDS\DDSTextureLoader.cpp" />
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
+    <ClCompile Include="QuEntity.cpp" />
+    <ClCompile Include="QuEntityRenderModel.cpp" />
+    <ClCompile Include="QuEntityLightDirectional.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -35,6 +38,9 @@
     <ClInclude Include="Quantum\World\World.h" />
     <ClInclude Include="DDS\DDSTextureLoader.h" />
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
+    <ClInclude Include="QuEntity.h" />
+    <ClInclude Include="QuEntityRenderModel.h" />
+    <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="d3dx12.h" />
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,11 @@ void Transform::setIdentity()
 	m_scale    = { 1.0F, 1.0F, 1.0F };
 }
 
+DirectX::XMVECTOR Quantum::Transform::getForwardVector() const
+{
+	return XMVector3Rotate(XMVectorSet(0, 0, 1, 0), XMLoadFloat4(&m_rotation));
+}
+
 const XMFLOAT4X4& Transform::toMatrix()
 {
 	static XMVECTOR zero = XMVectorZero();
@@ -35,4 +40,10 @@ const XMFLOAT4X4& Transform::toMatrix()
 	}
 
 	return m_cachedLocalTransform;
+}
+
+void Transform::ApplyRotation(XMVECTOR Q)
+{
+	Q = XMQuaternionMultiply(XMLoadFloat4(&m_rotation), Q);
+	XMStoreFloat4(&m_rotation, Q);
 }

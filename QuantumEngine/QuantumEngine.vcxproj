@@ -29,6 +29,9 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Transform.cpp" />
+    <ClCompile Include="QuEntity.cpp" />
+    <ClCompile Include="QuEntityLightDirectional.cpp" />
+    <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -48,6 +51,9 @@
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
     <ClInclude Include="Quantum\Math\Transform.h" />
     <ClInclude Include="Quantum\World\World.h" />
+    <ClInclude Include="QuEntity.h" />
+    <ClInclude Include="QuEntityLightDirectional.h" />
+    <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />

@@ -19,11 +19,15 @@ public:
 		/// Set this transform as identity.
 	void setIdentity();
 
+	DirectX::XMVECTOR getForwardVector() const;
+
 	inline const DirectX::XMFLOAT3& getPosition() const { return m_position; }
 	inline const DirectX::XMFLOAT4& getRotation() const { return m_rotation; }
 	inline const DirectX::XMFLOAT3& getScale()    const { return m_scale; }
 
 	const DirectX::XMFLOAT4X4& toMatrix();
+
+	void ApplyRotation(DirectX::XMVECTOR Q);
 
 
 private:

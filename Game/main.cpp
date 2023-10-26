@@ -18,6 +18,7 @@ const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
 int main()
 {
+
 	Game& game = Game::getInstance();
 
 	int res = game.init();

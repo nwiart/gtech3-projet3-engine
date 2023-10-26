@@ -9,6 +9,9 @@ struct TestConstantBuffer
 
 	DirectX::XMFLOAT4 cameraPos;
 	DirectX::XMFLOAT4 cameraDir;
+
+	DirectX::XMFLOAT4 DirColors;
+	DirectX::XMFLOAT4 DirDirection;
 };
 
 struct ObjectConstantBuffer

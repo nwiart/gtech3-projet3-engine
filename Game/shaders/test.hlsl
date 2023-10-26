@@ -37,8 +37,8 @@ cbuffer cb_frameData : register(b2)
     float4 cameraPos;
     float4 cameraDir;
 	
-    //float4 dirLightDir;
-    //float4 dirLightColor;
+    float4 dirLightColor;
+    float4 dirLightDir;
 };
 
 Texture2D textureDiffuse : register(t0);
@@ -76,14 +76,18 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 	float4 albedo = textureDiffuse.Sample(samplerLinear, input.texCoord);
 	finalColor += albedo;
 
-    float3 dirLightDir = normalize(float3(-1, -1, 1));
+    
     float brightness = max(0.2F, dot(normal, -dirLightDir));
-	finalColor.rgb *= brightness;
+	finalColor.rgb *= brightness * dirLightColor.rgb;
 	
     float3 V = normalize(cameraPos - input.pixelWorldPos).xyz;
     float3 R = reflect(dirLightDir, normal);
-	
-    finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F;
-	
+	float3 F = pow(1- dot(normal, V),2) * 0.6F;
+
+
+
+    finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F * dirLightColor.rgb;
+	finalColor.rgb += F;
+
 	return finalColor;
 }
