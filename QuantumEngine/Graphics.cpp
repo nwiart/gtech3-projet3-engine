@@ -206,7 +206,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
 
-	d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
+	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
 }
 
 
@@ -217,9 +217,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 
 void Graphics::_shutdown()
 {
-	for (int i = 0; i < 3; ++i) {
-		m_cbObjectData[i].destroy();
-	}
+	m_cbObjectData.destroy();
 	m_cbFrameData.destroy();
 
 	m_vb.destroy();
@@ -303,12 +301,18 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	Quantum::SphereGenerator::generate(m_vb, m_ib);
+	
+
+	m_sphere =
+	{
+		Quantum::SphereGenerator::generate(m_vb, m_ib),
+		m_vb,
+		m_ib,
+	};
+		
 
 	m_cbFrameData.init();
-	m_cbObjectData[0].init();
-	m_cbObjectData[1].init();
-	m_cbObjectData[2].init();
+	m_cbObjectData.init(3);
 
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }
@@ -360,26 +364,6 @@ void Graphics::update(const Timer& timer)
 		m_cbFrameData.update(0, cb);
 	}
 
-	ObjectConstantBuffer ocb;
-	{
-		float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
-		float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
-
-		XMMATRIX objectTransform;
-
-		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[1].update(0, ocb);
-
-		objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[0].update(0, ocb);
-
-		objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[2].update(0, ocb);
-	}
-
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
 }
@@ -387,6 +371,22 @@ void Graphics::update(const Timer& timer)
 void Graphics::renderFrame(const Timer& timer)
 {
 	update(timer);
+
+	this->freeRenderModel();
+	float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
+	float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
+
+	XMMATRIX objectTransform;
+
+
+	objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1) * 0.5F, 0.0F);
+	this->addRenderModel(m_sphere, objectTransform);
+
+	objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
+	this->addRenderModel(m_sphere, objectTransform);
+
+	objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
+	this->addRenderModel(m_sphere, objectTransform);
 
 	this->beginFrame();
 
@@ -403,45 +403,37 @@ void Graphics::renderFrame(const Timer& timer)
 		m_cbFrameData.getDescriptor(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	m_shader.setConstantBuffer(2, 0);
+	nEntries++;
 
 	// Material data.
 	d3dDevice->CopyDescriptorsSimple(
 		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 5, cbvDescriptorSize),
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
 		m_texture.getShaderResourceView(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	m_shader.setTexture2D(0, 4);
+	m_shader.setTexture2D(0, 1);
+	nEntries++;
+	nEntries++;
 
 	// Render object.
 	d3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	d3dCommandList->IASetVertexBuffers(0, 1, &m_vb.getVertexBufferView());
-	d3dCommandList->IASetIndexBuffer(&m_ib.getIndexBufferView());
 
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 1, cbvDescriptorSize),
-		m_cbObjectData[0].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
-		m_cbObjectData[1].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 3, cbvDescriptorSize),
-		m_cbObjectData[2].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	for (int i = 0; i < renderList.size(); i++) 
+	{
+		d3dCommandList->IASetVertexBuffers(0, 1, &renderList[i].model->VB.getVertexBufferView());
+		d3dCommandList->IASetIndexBuffer(&renderList[i].model->IB.getIndexBufferView());
+		d3dDevice->CopyDescriptorsSimple(
+			1,
+			CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), nEntries, cbvDescriptorSize),
+			m_cbObjectData.getDescriptor(i),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	m_shader.setConstantBuffer(0, 1);
-	d3dCommandList->DrawIndexedInstanced(32*16*2*3, 1, 0, 0, 0);
+		m_shader.setConstantBuffer(0, nEntries);
 
-	m_shader.setConstantBuffer(0, 2);
-	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
-
-	m_shader.setConstantBuffer(0, 3);
-	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
+		nEntries++;
+		d3dCommandList->DrawIndexedInstanced(renderList[i].model->numTris * 3, 1, 0, 0, 0);
+	}
 
 	this->endFrame();
 	this->swapBuffers();
@@ -520,4 +512,25 @@ void Graphics::executePendingTransfers()
 		this->flushCommandQueue();
 		m_resourceTransferUtility.clear();
 	}
+}
+
+void Graphics::addRenderModel(Model model, DirectX::FXMMATRIX worldMatrix)
+{
+	RenderModel renderModel =
+	{
+		&model,
+		renderList.size(),
+	};	
+	ObjectConstantBuffer constbuff;
+	XMStoreFloat4x4(&constbuff.world, worldMatrix);
+	m_cbObjectData.update(renderList.size(), constbuff);
+	renderList.push_back(renderModel);
+
+
+}
+
+void Graphics::freeRenderModel()
+{
+	nEntries = 0;
+	renderList.clear();
 }

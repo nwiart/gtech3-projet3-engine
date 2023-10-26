@@ -15,7 +15,7 @@ IndexBuffer::IndexBuffer()
 
 IndexBuffer::~IndexBuffer()
 {
-
+	
 }
 
 void IndexBuffer::setData(const void* data, int byteSize)
