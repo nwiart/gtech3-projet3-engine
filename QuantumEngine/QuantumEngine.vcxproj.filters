@@ -35,6 +35,7 @@
     <ClInclude Include="Quantum\World\World.h" />
     <ClInclude Include="DDS\DDSTextureLoader.h" />
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
+    <ClInclude Include="d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
