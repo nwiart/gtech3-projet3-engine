@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include "InputCallback.h"
 
 class InputSystem
 {
@@ -11,6 +13,8 @@ public:
 	void KeyDown(WPARAM wparam);
 	void MouseDown(int button);
 
+	void RegisterCallback(InputCallback* callback);
+	void ExecuteCallbacks();
 private:
-
+	std::vector <InputCallback*> m_callbacks;
 };

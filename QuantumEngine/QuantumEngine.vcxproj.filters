@@ -18,6 +18,9 @@
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -42,6 +45,8 @@
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="InputCallback.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
@@ -69,9 +74,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">

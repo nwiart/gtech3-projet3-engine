@@ -1,16 +1,13 @@
 #include "stdafx.h"
 #include "InputSystem.h"
 
-InputSystem::InputSystem()
-{
-}
-
+InputSystem::InputSystem() {}
 InputSystem::~InputSystem() {}
 
 void InputSystem::KeyDown(WPARAM wparam) {
 	switch (wparam) {
 	case VK_UP:
-		std::cout << "up";
+		ExecuteCallbacks();
 		break;
 	case VK_DOWN:
 		std::cout << "down";
@@ -37,5 +34,18 @@ void InputSystem::MouseDown(int button)
 		break;
 	default:
 		break;
+	}
+}
+
+void InputSystem::RegisterCallback(InputCallback* callback)
+{
+	m_callbacks.push_back(callback);
+}
+
+void InputSystem::ExecuteCallbacks()
+{
+	for (auto& callback : m_callbacks)
+	{
+		callback->RegisterInput();
 	}
 }
