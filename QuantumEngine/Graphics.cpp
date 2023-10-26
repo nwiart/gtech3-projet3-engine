@@ -5,6 +5,7 @@
 #include "Window.h"
 
 #include "QuEntityLightDirectional.h"
+#include "InputSystem.h"
 
 
 
@@ -102,7 +103,28 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
+	InputSystem::Get().RegisterCallback(this);
+
 	return 0;
+}
+
+void Graphics::RegisterInput() {
+	switch (InputSystem::Get().m_wparam) {
+	case VK_UP:
+		cameraY += 0.1F;
+		break;
+	case VK_DOWN:
+		cameraY -= 0.1F;
+		break;
+	case VK_LEFT:
+		cameraX -= 0.1F;
+		break;
+	case VK_RIGHT:
+		cameraX += 0.1F;
+		break;
+	default:
+		break;
+	}
 }
 
 void Graphics::createCommandList()
@@ -324,8 +346,8 @@ void Graphics::update(const Timer& timer)
 	{
 		XMMATRIX view, projection;
 
-		XMVECTOR pos = XMVectorSet(0.0F, 0.0F, -4.0F, 1.0F);
-		XMVECTOR target = XMVectorSet(0.0F, 0.0F, 0.0F, 0.0F);
+		XMVECTOR pos = XMVectorSet(0, 0, -4.0F, 1.0F);
+		XMVECTOR target = XMVectorSet(cameraX, cameraY, cameraZ, cameraW);	
 		XMVECTOR up = XMVectorSet(0.0F, 1.0F, 0.0F, 0.0F);
 		XMVECTOR dir;
 		dir = XMVectorSubtract(target, pos);
@@ -333,6 +355,8 @@ void Graphics::update(const Timer& timer)
 
 		view = XMMatrixLookAtLH(pos, target, up);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(70.0F), m_renderWidth / (float) m_renderHeight, 0.05F, 1000.0F);
+
+
 
 		// Combined view and projection matrices.
 		XMStoreFloat4x4(&cb.viewProjection, view * projection);

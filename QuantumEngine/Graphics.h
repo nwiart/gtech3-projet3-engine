@@ -10,7 +10,7 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
-
+#include "InputCallback.h"
 
 class Timer;
 class Window;
@@ -21,7 +21,7 @@ typedef struct HWND__* HWND;
 
 
 
-class Graphics
+class Graphics : public InputCallback
 {
 public:
 
@@ -62,6 +62,8 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
+
+	void RegisterInput();
 
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
@@ -148,6 +150,11 @@ public:
 
 	int cursorX;
 	int cursorY;
+
+	float cameraX = 0;
+	float cameraY = 0;
+	float cameraZ = 0;
+	float cameraW = 0;
 
 	Shader m_shader;
 	VertexBuffer m_vb;

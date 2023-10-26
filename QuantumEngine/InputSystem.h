@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "InputCallback.h"
+#include "stdafx.h"
 
 class InputSystem
 {
@@ -15,6 +16,8 @@ public:
 
 	void RegisterCallback(InputCallback* callback);
 	void ExecuteCallbacks();
+	std::vector <InputCallback*> m_callbacklist;
+
+	WPARAM m_wparam;
 private:
-	std::vector <InputCallback*> m_callbacks;
 };

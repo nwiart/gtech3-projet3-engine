@@ -20,7 +20,7 @@
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="InputCallback.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="TestInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -47,6 +47,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="TestInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

@@ -4,7 +4,6 @@
 class InputCallback
 {
 	public:
-
-	virtual void RegisterInput();
+		virtual void RegisterInput();
 };
 
