@@ -301,14 +301,9 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	
+	this->m_sphere = new Model();
 
-	m_sphere =
-	{
-		Quantum::SphereGenerator::generate(m_vb, m_ib),
-		m_vb,
-		m_ib,
-	};
+	Quantum::SphereGenerator::generate(this->m_sphere);
 		
 
 	m_cbFrameData.init();
@@ -380,13 +375,13 @@ void Graphics::renderFrame(const Timer& timer)
 
 
 	objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1) * 0.5F, 0.0F);
-	this->addRenderModel(m_sphere, objectTransform);
+	this->addRenderModel(this->m_sphere, objectTransform);
 
 	objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-	this->addRenderModel(m_sphere, objectTransform);
+	this->addRenderModel(this->m_sphere, objectTransform);
 
 	objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
-	this->addRenderModel(m_sphere, objectTransform);
+	this->addRenderModel(this->m_sphere, objectTransform);
 
 	this->beginFrame();
 
@@ -421,8 +416,8 @@ void Graphics::renderFrame(const Timer& timer)
 
 	for (int i = 0; i < renderList.size(); i++) 
 	{
-		d3dCommandList->IASetVertexBuffers(0, 1, &renderList[i].model->VB.getVertexBufferView());
-		d3dCommandList->IASetIndexBuffer(&renderList[i].model->IB.getIndexBufferView());
+		d3dCommandList->IASetVertexBuffers(0, 1, &renderList[i].model->GetVertexBuffer()->getVertexBufferView());
+		d3dCommandList->IASetIndexBuffer(&renderList[i].model->GetIndexBuffer()->getIndexBufferView());
 		d3dDevice->CopyDescriptorsSimple(
 			1,
 			CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), nEntries, cbvDescriptorSize),
@@ -432,7 +427,7 @@ void Graphics::renderFrame(const Timer& timer)
 		m_shader.setConstantBuffer(0, nEntries);
 
 		nEntries++;
-		d3dCommandList->DrawIndexedInstanced(renderList[i].model->numTris * 3, 1, 0, 0, 0);
+		d3dCommandList->DrawIndexedInstanced(renderList[i].model->GetNumberTriangle() * 3, 1, 0, 0, 0);
 	}
 
 	this->endFrame();
@@ -514,11 +509,11 @@ void Graphics::executePendingTransfers()
 	}
 }
 
-void Graphics::addRenderModel(Model model, DirectX::FXMMATRIX worldMatrix)
+void Graphics::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
 {
 	RenderModel renderModel =
 	{
-		&model,
+		model,
 		renderList.size(),
 	};	
 	ObjectConstantBuffer constbuff;

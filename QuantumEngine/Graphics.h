@@ -10,6 +10,8 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
+#include "Model.h"
+
 
 
 class Timer;
@@ -158,12 +160,7 @@ public:
 
 	D3D12Texture m_texture;
 
-	struct Model
-	{
-		UINT numTris;
-		VertexBuffer VB;
-		IndexBuffer IB;
-	}; 
+	Model* m_sphere;
 
 	struct RenderModel
 	{
@@ -171,7 +168,7 @@ public:
 		int cbID;
 	};
 
-	void addRenderModel(Model model, DirectX::FXMMATRIX worldMatrix);
+	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
 
 	std::vector<RenderModel> renderList;
 
@@ -184,5 +181,4 @@ public:
 	private:
 	int nEntries = 0;
 
-	Model m_sphere;
 };

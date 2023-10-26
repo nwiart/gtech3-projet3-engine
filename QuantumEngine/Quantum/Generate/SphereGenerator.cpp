@@ -4,6 +4,8 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
+#include "Model.h"
+
 using namespace Quantum;
 
 #include <vector>
@@ -14,7 +16,7 @@ using namespace std;
 
 
 
-UINT SphereGenerator::generate(VertexBuffer& outVB, IndexBuffer& outIB)
+void SphereGenerator::generate(Model* outModel)
 {
 	struct Vertex { float pos[3]; float normal[3]; float uv[2]; UINT color; };
 
@@ -78,8 +80,8 @@ UINT SphereGenerator::generate(VertexBuffer& outVB, IndexBuffer& outIB)
 	}
 
 
-	outVB.setData(vertices.data(), vertices.size() * sizeof(Vertex));
-	outIB.setData(indices.data(), indices.size() * sizeof(UINT));
+	outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex));
+	outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
 
-	return m_axisSubdivs * m_heightSubdivs * 2;
+	outModel->SetNumTriangle(m_axisSubdivs* m_heightSubdivs * 2);
 }
