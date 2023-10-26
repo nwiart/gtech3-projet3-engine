@@ -4,6 +4,8 @@
 #include "Timer.h"
 #include "Window.h"
 
+#include "QuEntityLightDirectional.h"
+
 
 
 // Loading resources from the executable.
@@ -25,6 +27,11 @@ static void loadResource(std::string& out, UINT id)
 //
 // Public API.
 //
+
+void Graphics::UpdateDirectionalLight(QuEntityLightDirectional* Entity)
+{
+	LightEntity = Entity;
+}
 
 int Graphics::initialize(Window* window)
 {
@@ -333,6 +340,22 @@ void Graphics::update(const Timer& timer)
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, pos);
 		XMStoreFloat4(&cb.cameraDir, dir);
+
+		if (LightEntity == NULL)
+		{
+			cb.DirColors.x = 0;
+			cb.DirColors.z = 0;
+			cb.DirColors.y = 0;
+			cb.DirColors.w = 0;
+		}
+		else
+		{
+
+			XMStoreFloat4(&cb.DirDirection, LightEntity->GetTransform().getForwardVector());
+			cb.DirColors.x = LightEntity->getIntensity() * LightEntity->getColorR();
+			cb.DirColors.y = LightEntity->getIntensity() * LightEntity->getColorG();
+			cb.DirColors.z = LightEntity->getIntensity() * LightEntity->getColorB();
+		}
 
 		m_cbFrameData.update(0, cb);
 	}

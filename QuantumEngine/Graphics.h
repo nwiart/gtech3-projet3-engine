@@ -10,8 +10,12 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
+
+
 class Timer;
 class Window;
+
+class QuEntityLightDirectional;
 
 typedef struct HWND__* HWND;
 
@@ -20,6 +24,8 @@ typedef struct HWND__* HWND;
 class Graphics
 {
 public:
+
+	void UpdateDirectionalLight(QuEntityLightDirectional*Entity);
 
 	static inline Graphics& getInstance() { static Graphics g_graphics; return g_graphics; }
 
@@ -89,6 +95,8 @@ public:
 
 
 private:
+
+	QuEntityLightDirectional* LightEntity;
 
 	static const int NUM_BACK_BUFFERS = 2;
 
