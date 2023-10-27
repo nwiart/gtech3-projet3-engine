@@ -34,6 +34,7 @@
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityRenderSkybox.cpp" />
+    <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderSkybox.cpp" />
     <ClCompile Include="TextureCube.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityRenderSkybox.h" />
+    <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderSkybox.h" />
     <ClInclude Include="stdafx.h" />

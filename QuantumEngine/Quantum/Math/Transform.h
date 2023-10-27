@@ -25,6 +25,11 @@ public:
 	inline const DirectX::XMFLOAT4& getRotation() const { return m_rotation; }
 	inline const DirectX::XMFLOAT3& getScale()    const { return m_scale; }
 
+	inline const void setPosition(DirectX::XMFLOAT3 position) { m_position = position; }
+	inline const void setRotation(DirectX::XMFLOAT4 rotation) { m_rotation = rotation ; }
+	inline const void setScale(DirectX::XMFLOAT3 scale) { m_scale = scale; }
+
+
 	const DirectX::XMFLOAT4X4& toMatrix();
 
 	void ApplyRotation(DirectX::XMVECTOR Q);
@@ -41,7 +46,7 @@ private:
 	DirectX::XMFLOAT3 m_scale;
 
 		/// Dirty flag (should the cached matrix be rebuilt?)
-	bool m_dirty;
+	bool m_dirty = true;
 };
 
 

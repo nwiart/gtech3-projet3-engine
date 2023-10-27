@@ -45,4 +45,9 @@ void QuEntity::DetachFromParent()
 	
 }
 
+void QuEntity::setPosition(DirectX::XMFLOAT3 positon) 
+{
+	GetTransform().setPosition(positon);
+}
+
 

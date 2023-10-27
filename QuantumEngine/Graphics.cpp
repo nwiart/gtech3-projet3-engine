@@ -178,7 +178,17 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 	resDesc.Format = m_depthBufferFormat;
 	resDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
-	d3dDevice->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &CD3DX12_CLEAR_VALUE(m_depthBufferFormat, 1.0F, 0), IID_PPV_ARGS(&m_depthBuffer));
+	d3dDevice->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COMMON, &CD3DX12_CLEAR_VALUE(m_depthBufferFormat, 1.0F, 0), IID_PPV_ARGS(&m_depthBuffer));
+
+	d3dCommandAllocator->Reset();
+	d3dCommandList->Reset(d3dCommandAllocator, 0);
+
+	d3dCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_depthBuffer,D3D12_RESOURCE_STATE_COMMON,D3D12_RESOURCE_STATE_DEPTH_WRITE));
+
+	d3dCommandList->Close();
+	ID3D12CommandList* lists[] = { d3dCommandList };
+	d3dCommandQueue->ExecuteCommandLists(1, lists);
+	flushCommandQueue();
 
 	m_depthBufferView = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dDevice->CreateDepthStencilView(m_depthBuffer, 0, m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
@@ -187,6 +197,8 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 void Graphics::createCompatiblePSO(Shader* shader)
 {
 	assert(shader->isReady());
+
+
 
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
@@ -210,6 +222,8 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	desc.DSVFormat = m_depthBufferFormat;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
+
+	desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
 	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
 }
@@ -306,13 +320,8 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	this->m_sphere = new Model();
-
-	Quantum::SphereGenerator::generate(this->m_sphere);
-		
-
 	m_cbFrameData.init();
-	m_cbObjectData.init(3);
+	m_cbObjectData.init(65000);
 
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }
@@ -372,7 +381,6 @@ void Graphics::renderFrame(const Timer& timer)
 {
 	update(timer);
 
-	this->freeRenderModel();
 	float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
 	float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
 
@@ -380,13 +388,10 @@ void Graphics::renderFrame(const Timer& timer)
 
 
 	objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1) * 0.5F, 0.0F);
-	this->addRenderModel(this->m_sphere, objectTransform);
 
 	objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-	this->addRenderModel(this->m_sphere, objectTransform);
 
 	objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
-	this->addRenderModel(this->m_sphere, objectTransform);
 
 	this->beginFrame();
 
@@ -437,6 +442,7 @@ void Graphics::renderFrame(const Timer& timer)
 
 	this->endFrame();
 	this->swapBuffers();
+	this->freeRenderModel();
 }
 
 void Graphics::resizeBuffers(int width, int height)

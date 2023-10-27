@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QuEntity.h"
+#include "Model.h"
 
 class QuEntityRenderModel : public QuEntity
 {
@@ -9,7 +10,13 @@ class QuEntityRenderModel : public QuEntity
 		QuEntityRenderModel();
 		~QuEntityRenderModel();
 
+		inline void SetModel(Model* model) { m_model = model; }
+		inline Model* GetModel() { return m_model; }
+
+		virtual void ExecuteProcedure();
+
 	private :
+		Model* m_model;
 
 
 };
