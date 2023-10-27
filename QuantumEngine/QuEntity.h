@@ -4,6 +4,8 @@
 
 class QuEntity
 {
+	friend class Game;
+
 	public:
 		QuEntity();
 		~QuEntity();
@@ -13,7 +15,9 @@ class QuEntity
 
 		Quantum::Transform& GetTransform() { return m_Transform; }
 
-	private:
+		void setPosition(DirectX::XMFLOAT3 positon);
+
+	protected:
 		QuEntity *m_Parent;
 		QuEntity *m_FirstChild;
 		QuEntity *m_Sibling;

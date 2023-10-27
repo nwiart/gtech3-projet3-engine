@@ -21,6 +21,8 @@ public:
 
 	void openWorld(QuWorld* wolrd);
 
+	void visitEntity(QuEntity* entity);
+
 
 
 private:

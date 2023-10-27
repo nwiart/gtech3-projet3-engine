@@ -33,6 +33,7 @@
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
+    <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="QuEntity.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
+    <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />

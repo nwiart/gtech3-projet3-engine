@@ -53,9 +53,12 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
+		visitEntity(m_world);
+
 		m_window.pollEvents();
 
 		m_timer.tick();
+
 		DirectionnalLight.ExecuteProcedure();
 		Graphics::getInstance().renderFrame(m_timer);
 
@@ -80,4 +83,15 @@ void Game::mainLoop()
 void Game::openWorld(QuWorld* wolrd)
 {
 	m_world = wolrd;
+}
+
+void Game::visitEntity(QuEntity* entity)
+{
+	if (entity == nullptr) return;
+	
+	entity->ExecuteProcedure();
+	for (QuEntity* child = entity->m_FirstChild; child != nullptr; child = child->m_Sibling)
+	{
+		visitEntity(child);
+	}
 }

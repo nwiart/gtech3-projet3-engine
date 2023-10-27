@@ -35,12 +35,18 @@ int main()
 
 	Quantum::SphereGenerator::generate(sphere);
 
-	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-	sphereEntity->SetModel(sphere);
-
 	QuWorld* world = new QuWorld();
 
-	world->AttachToParent(sphereEntity);
+	for (int i = 0; i < 100; i++) 
+	{
+		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+		sphereEntity->setPosition(DirectX::XMFLOAT3(rand()/1000.f, rand() / 1000.f, rand() / 1000.f));
+		sphereEntity->SetModel(sphere);
+		sphereEntity->AttachToParent(world);
+	}
+	//sphereEntity->GetTransform().ApplyRotation(DirectX::XMQuaternionRotationRollPitchYaw(0, 1.57f, 0));
+
+
 
 	game.openWorld(world);
 
