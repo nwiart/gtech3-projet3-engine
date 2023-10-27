@@ -46,6 +46,7 @@
     <ClInclude Include="RessourceManager.h" />
     <ClInclude Include="Ressource.h" />
     <ClInclude Include="Prerequisites.h" />
+    <ClInclude Include="d3dx12.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
