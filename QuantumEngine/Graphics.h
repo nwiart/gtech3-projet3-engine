@@ -65,6 +65,8 @@ private:
 
 	void OnKeyDown(WPARAM wparam) override;
 
+	void CameraFollow();
+
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
 	void createCompatiblePSO(Shader* shader);
@@ -150,6 +152,12 @@ public:
 
 	int cursorX;
 	int cursorY;
+
+	int mouseLastStateX;
+	int mouseLastStateY;
+
+	float camYaw = 0.0f;
+	float camPitch = 0.0f;
 
 	float cameraX = 0;
 	float cameraY = 0;
