@@ -4,6 +4,5 @@
 class InputCallback
 {
 	public:
-		virtual void RegisterInput();
+		virtual void OnKeyDown(WPARAM wparam);
 };
-

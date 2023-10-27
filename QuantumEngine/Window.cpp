@@ -78,7 +78,10 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		window->setWantsToClose(true);
 		break;
 	case WM_KEYDOWN:
-		InputSystem::Get().KeyDown(wparam);
+		InputSystem::Get().FireKeyDown(wparam);
+		break;
+	case WM_KEYUP:
+		InputSystem::Get().FireKeyUp(wparam);
 		break;
 	case WM_LBUTTONDOWN:
 		InputSystem::Get().MouseDown(1);

@@ -1,4 +1,4 @@
-
+#include "stdafx.h"
 #include "InputSystem.h"
 #include <iostream>
 #include "TestInput.h"
@@ -8,9 +8,15 @@ Test test;
 InputSystem::InputSystem() {}
 InputSystem::~InputSystem() {}
 
-void InputSystem::KeyDown(WPARAM wparam) {
-		m_wparam = wparam;
-		ExecuteCallbacks();
+void InputSystem::FireKeyDown(WPARAM wparam) {
+	m_keyState[wparam] = true;
+	ExecuteCallbacks(wparam);
+}
+
+void InputSystem::FireKeyUp(WPARAM wparam)
+{
+	m_keyState[wparam] = false;
+	ExecuteCallbacks(wparam);
 }
 
 void InputSystem::MouseDown(int button)
@@ -32,10 +38,10 @@ void InputSystem::RegisterCallback(InputCallback* callback)
 	m_callbacklist.push_back(callback);
 }
 
-void InputSystem::ExecuteCallbacks()
+void InputSystem::ExecuteCallbacks(WPARAM wparam)
 {
 	for (auto& callback : m_callbacklist)
 	{
-		callback->RegisterInput();
+		callback->OnKeyDown(wparam);
 	}
 }

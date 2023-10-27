@@ -6,5 +6,5 @@ class Test : public InputCallback
 public:
 	Test();
 	virtual ~Test();
-	void RegisterInput() override;
+	void OnKeyDown(WPARAM wparam) override;
 };

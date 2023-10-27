@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "InputCallback.h"
-#include "stdafx.h"
 
 class InputSystem
 {
@@ -9,15 +8,19 @@ public:
 	InputSystem();
 	~InputSystem();
 
+	void FireKeyDown(WPARAM wparam);
+	void FireKeyUp(WPARAM wparam);
+
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
-	void KeyDown(WPARAM wparam);
 	void MouseDown(int button);
 
 	void RegisterCallback(InputCallback* callback);
-	void ExecuteCallbacks();
+	void ExecuteCallbacks(WPARAM wparam);
 	std::vector <InputCallback*> m_callbacklist;
 
 	WPARAM m_wparam;
 private:
+
+	bool m_keyState[256];
 };

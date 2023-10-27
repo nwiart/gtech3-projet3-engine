@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "InputSystem.h"
 #include <iostream>
 #include "TestInput.h"
@@ -13,9 +14,9 @@ Test::~Test()
 {
 }
 
-void Test::RegisterInput()
+void Test::OnKeyDown(WPARAM wparam)
 {
-	switch (InputSystem::Get().m_wparam) {
+	switch (wparam) {
 	case VK_UP:
 		std::cout << "up";
 		break;

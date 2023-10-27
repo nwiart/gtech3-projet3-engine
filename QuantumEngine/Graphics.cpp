@@ -108,13 +108,13 @@ int Graphics::_init(Window* window)
 	return 0;
 }
 
-void Graphics::RegisterInput() {
-	switch (InputSystem::Get().m_wparam) {
+void Graphics::OnKeyDown(WPARAM wparam) {
+	switch (wparam) {
 	case VK_UP:
-		cameraY += 0.1F;
+		cameraZ += 0.1F;
 		break;
 	case VK_DOWN:
-		cameraY -= 0.1F;
+		cameraZ -= 0.1F;
 		break;
 	case VK_LEFT:
 		cameraX -= 0.1F;
@@ -346,9 +346,12 @@ void Graphics::update(const Timer& timer)
 	{
 		XMMATRIX view, projection;
 
-		XMVECTOR pos = XMVectorSet(0, 0, -4.0F, 1.0F);
-		XMVECTOR target = XMVectorSet(cameraX, cameraY, cameraZ, cameraW);	
+		XMVECTOR pos = XMVectorSet(cameraX, cameraY, cameraZ, cameraW);
+		XMVECTOR target = XMVectorSet(0, 0, 0, 0);	
 		XMVECTOR up = XMVectorSet(0.0F, 1.0F, 0.0F, 0.0F);
+		
+		target = XMVectorAdd(pos, XMVectorSet(0,0,1,0));
+
 		XMVECTOR dir;
 		dir = XMVectorSubtract(target, pos);
 		dir = XMVector3Normalize(dir);

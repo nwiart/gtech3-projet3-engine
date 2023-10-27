@@ -63,7 +63,7 @@ private:
 
 	int _init(Window* w);
 
-	void RegisterInput();
+	void OnKeyDown(WPARAM wparam) override;
 
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
@@ -153,8 +153,8 @@ public:
 
 	float cameraX = 0;
 	float cameraY = 0;
-	float cameraZ = 0;
-	float cameraW = 0;
+	float cameraZ = -4.F;
+	float cameraW = 1.F;
 
 	Shader m_shader;
 	VertexBuffer m_vb;

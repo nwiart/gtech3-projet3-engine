@@ -1,8 +1,8 @@
+#include "stdafx.h"
 #include "InputCallback.h"
 #include <iostream>
 
 
-void InputCallback::RegisterInput()
+void InputCallback::OnKeyDown(WPARAM wparam)
 {
 }
-
