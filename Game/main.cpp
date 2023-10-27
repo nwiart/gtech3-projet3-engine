@@ -31,7 +31,7 @@ int main()
 
 	QuWorld* world = new QuWorld();
 
-	world->AttachToParent();
+	//world->AttachToParent();
 
 	game.mainLoop();
 
