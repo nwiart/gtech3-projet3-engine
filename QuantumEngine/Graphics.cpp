@@ -316,7 +316,7 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_ib.setData(indices, sizeof(indices));
 
 	m_cbFrameData.init();
-	m_cbObjectData.init(100);
+	m_cbObjectData.init(65000);
 
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }

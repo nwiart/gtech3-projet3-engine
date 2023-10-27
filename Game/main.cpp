@@ -37,7 +37,7 @@ int main()
 
 	QuWorld* world = new QuWorld();
 
-	for (int i = 0; i < 100; i++) 
+	for (int i = 0; i < 1000; i++) 
 	{
 		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
 		sphereEntity->setPosition(DirectX::XMFLOAT3(rand()/1000.f, rand() / 1000.f, rand() / 1000.f));
