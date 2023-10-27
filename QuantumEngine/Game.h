@@ -19,14 +19,13 @@ public:
 
 	void mainLoop();
 
-	QuWorld openWorld();
+	void openWorld(QuWorld* wolrd);
 
 
 
 private:
-
 	Timer m_timer;
 	Window m_window;
 
-	QuWorld* world;
+	QuWorld* m_world;
 };

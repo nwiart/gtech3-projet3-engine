@@ -77,7 +77,7 @@ void Game::mainLoop()
 	}
 }
 
-QuWorld Game::openWorld()
+void Game::openWorld(QuWorld* wolrd)
 {
-	return world;
+	m_world = wolrd;
 }

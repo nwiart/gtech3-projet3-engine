@@ -8,6 +8,6 @@ public:
 	QuWorld();
 	~QuWorld();
 
-	virtual void ExecuteProcedure();
+	//virtual void ExecuteProcedure();
 };
 

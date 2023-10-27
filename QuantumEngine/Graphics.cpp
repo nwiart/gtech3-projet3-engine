@@ -301,11 +301,6 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	this->m_sphere = new Model();
-
-	Quantum::SphereGenerator::generate(this->m_sphere);
-		
-
 	m_cbFrameData.init();
 	m_cbObjectData.init(3);
 
