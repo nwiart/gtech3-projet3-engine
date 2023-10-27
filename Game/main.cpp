@@ -7,6 +7,7 @@ using namespace Microsoft::WRL;
 
 #include "Game.h"
 #include "Graphics.h"
+#include "QuWorld.h"
 
 #include "resource.h"
 
@@ -27,6 +28,10 @@ int main()
 	}
 
 	Graphics::getInstance().initTestApp(ID_SHADER_TEST);
+
+	QuWorld* world = new QuWorld();
+
+	world->AttachToParent();
 
 	game.mainLoop();
 

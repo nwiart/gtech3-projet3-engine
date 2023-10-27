@@ -2,6 +2,7 @@
 
 #include "Timer.h"
 #include "Window.h"
+#include "QuWorld.h"
 
 
 
@@ -18,10 +19,14 @@ public:
 
 	void mainLoop();
 
+	QuWorld openWorld();
+
 
 
 private:
 
 	Timer m_timer;
 	Window m_window;
+
+	QuWorld* world;
 };

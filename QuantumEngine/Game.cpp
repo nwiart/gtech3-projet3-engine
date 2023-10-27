@@ -76,3 +76,8 @@ void Game::mainLoop()
 		}
 	}
 }
+
+QuWorld Game::openWorld()
+{
+	return world;
+}

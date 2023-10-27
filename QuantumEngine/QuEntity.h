@@ -25,6 +25,5 @@ class QuEntity
 		bool m_Static;
 
 		virtual void ExecuteProcedure(){}
-
 };
 
