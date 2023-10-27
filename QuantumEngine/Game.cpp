@@ -49,14 +49,14 @@ void Game::mainLoop()
 
 	int frames = 0;
 
-	QuEntityLightDirectional DirectionnalLight;
+	QuEntityLightDirectional DirectionalLight = QuEntityLightDirectional(1.0F,.0F,.0F,0.9f);
 
 	while (!m_window.wantsToClose())
 	{
 		m_window.pollEvents();
 
 		m_timer.tick();
-		DirectionnalLight.ExecuteProcedure();
+		DirectionalLight.ExecuteProcedure();
 		Graphics::getInstance().renderFrame(m_timer);
 
 		// Display FPS each second.

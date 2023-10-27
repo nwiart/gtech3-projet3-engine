@@ -9,6 +9,8 @@ class QuEntityRenderModel : public QuEntity
 		QuEntityRenderModel();
 		~QuEntityRenderModel();
 
+		virtual void ExecuteProcedure();
+
 	private :
 
 

@@ -2,12 +2,12 @@
 #include "stdafx.h"
 #include "Graphics.h"
 
-QuEntityLightDirectional::QuEntityLightDirectional()
+QuEntityLightDirectional::QuEntityLightDirectional(float R, float G, float B, float I)
 {
-	m_ColorR = 1.0F;
-	m_ColorG = .0F;
-	m_ColorB = .0F;
-	m_Intensity = 1.0F;
+	m_ColorR = R;
+	m_ColorG = G;
+	m_ColorB = B;
+	m_Intensity = I;
 
 }
 
@@ -18,6 +18,6 @@ QuEntityLightDirectional::~QuEntityLightDirectional()
 void QuEntityLightDirectional::ExecuteProcedure()
 {
 	Graphics::getInstance().UpdateDirectionalLight(this);
-	this->GetTransform().ApplyRotation(XMQuaternionRotationRollPitchYaw(0, 0.1, 0));
+	this->GetTransform().ApplyRotation(XMQuaternionRotationRollPitchYaw(0, 0, 0));
 
 }

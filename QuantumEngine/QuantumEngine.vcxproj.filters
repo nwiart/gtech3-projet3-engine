@@ -18,6 +18,8 @@
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
+    <ClCompile Include="RessourceManager.cpp" />
+    <ClCompile Include="Ressource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -41,6 +43,9 @@
     <ClInclude Include="QuEntity.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
+    <ClInclude Include="RessourceManager.h" />
+    <ClInclude Include="Ressource.h" />
+    <ClInclude Include="Prerequisites.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />

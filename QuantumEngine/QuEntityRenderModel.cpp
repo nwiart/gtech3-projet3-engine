@@ -8,4 +8,9 @@ QuEntityRenderModel::~QuEntityRenderModel()
 {
 }
 
+void QuEntityRenderModel::ExecuteProcedure()
+{
+
+}
+
 

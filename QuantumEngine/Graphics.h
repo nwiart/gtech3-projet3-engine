@@ -10,12 +10,12 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
+#include "Prerequisites.h"
 
 
-class Timer;
-class Window;
 
-class QuEntityLightDirectional;
+
+
 
 typedef struct HWND__* HWND;
 

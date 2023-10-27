@@ -6,7 +6,7 @@ class QuEntityLightDirectional : public QuEntity
 {
 
 public:
-	QuEntityLightDirectional();
+	QuEntityLightDirectional(float,float,float,float);
 	~QuEntityLightDirectional();
 
 	float getColorR() { return m_ColorR; }

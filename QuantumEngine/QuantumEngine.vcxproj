@@ -32,6 +32,8 @@
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
+    <ClCompile Include="Ressource.cpp" />
+    <ClCompile Include="RessourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -47,12 +49,15 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
     <ClInclude Include="Quantum\Math\Transform.h" />
     <ClInclude Include="Quantum\World\World.h" />
     <ClInclude Include="QuEntity.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
+    <ClInclude Include="Ressource.h" />
+    <ClInclude Include="RessourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />
@@ -153,6 +158,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
