@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
     <ClCompile Include="D3D12ConstantBuffer.cpp" />
     <ClCompile Include="D3D12ResourceTransferUtility.cpp" />
     <ClCompile Include="D3D12Texture.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
     <ClInclude Include="D3D12ConstantBuffer.h" />
     <ClInclude Include="D3D12ResourceTransferUtility.h" />
     <ClInclude Include="D3D12Texture.h" />

@@ -209,6 +209,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	desc.PS = shader->getShaderBytecode<Shader::SHADER_PS>();
 	desc.InputLayout = { inputLayout, sizeof(inputLayout) / sizeof(inputLayout[0]) };
 	desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	desc.SampleMask = UINT_MAX;
 	desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

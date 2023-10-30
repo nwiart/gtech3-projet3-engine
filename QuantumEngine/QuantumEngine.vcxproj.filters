@@ -20,6 +20,7 @@
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="QuWorld.cpp" />
+    <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="QuWorld.h" />
+    <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
