@@ -190,10 +190,6 @@ public:
 
 	void freeRenderModel();
 
-
-
-
-
 	private:
 	int nEntries = 0;
 
