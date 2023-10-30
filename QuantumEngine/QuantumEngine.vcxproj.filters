@@ -18,9 +18,9 @@
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
-    <ClCompile Include="InputSystem.cpp" />
-    <ClCompile Include="InputCallback.cpp" />
-    <ClCompile Include="TestInput.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="QuWorld.cpp" />
+    <ClCompile Include="Quantum\Math\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -45,9 +45,9 @@
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="InputCallback.h" />
-    <ClInclude Include="TestInput.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="QuWorld.h" />
+    <ClInclude Include="Quantum\Math\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

@@ -219,7 +219,17 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 	resDesc.Format = m_depthBufferFormat;
 	resDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
-	d3dDevice->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &CD3DX12_CLEAR_VALUE(m_depthBufferFormat, 1.0F, 0), IID_PPV_ARGS(&m_depthBuffer));
+	d3dDevice->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE, &resDesc, D3D12_RESOURCE_STATE_COMMON, &CD3DX12_CLEAR_VALUE(m_depthBufferFormat, 1.0F, 0), IID_PPV_ARGS(&m_depthBuffer));
+
+	d3dCommandAllocator->Reset();
+	d3dCommandList->Reset(d3dCommandAllocator, 0);
+
+	d3dCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_depthBuffer,D3D12_RESOURCE_STATE_COMMON,D3D12_RESOURCE_STATE_DEPTH_WRITE));
+
+	d3dCommandList->Close();
+	ID3D12CommandList* lists[] = { d3dCommandList };
+	d3dCommandQueue->ExecuteCommandLists(1, lists);
+	flushCommandQueue();
 
 	m_depthBufferView = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dDevice->CreateDepthStencilView(m_depthBuffer, 0, m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
@@ -228,6 +238,8 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 void Graphics::createCompatiblePSO(Shader* shader)
 {
 	assert(shader->isReady());
+
+
 
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
 	{
@@ -252,7 +264,9 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
 
-	d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
+	desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+
+	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
 }
 
 //
@@ -261,9 +275,7 @@ void Graphics::createCompatiblePSO(Shader* shader)
 
 void Graphics::_shutdown()
 {
-	for (int i = 0; i < 3; ++i) {
-		m_cbObjectData[i].destroy();
-	}
+	m_cbObjectData.destroy();
 	m_cbFrameData.destroy();
 
 	m_vb.destroy();
@@ -345,12 +357,8 @@ void Graphics::initTestApp(UINT shaderResID)
 	//m_vb.setData(verts, sizeof(verts));
 	//m_ib.setData(indices, sizeof(indices));
 
-	Quantum::SphereGenerator::generate(m_vb, m_ib);
-
 	m_cbFrameData.init();
-	m_cbObjectData[0].init();
-	m_cbObjectData[1].init();
-	m_cbObjectData[2].init();
+	m_cbObjectData.init(65000);
 
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }
@@ -407,26 +415,6 @@ void Graphics::update(const Timer& timer)
 		m_cbFrameData.update(0, cb);
 	}
 
-	ObjectConstantBuffer ocb;
-	{
-		float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
-		float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
-
-		XMMATRIX objectTransform;
-
-		objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[1].update(0, ocb);
-
-		objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1)*0.5F, 0.0F);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[0].update(0, ocb);
-
-		objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
-		XMStoreFloat4x4(&ocb.world, objectTransform);
-		m_cbObjectData[2].update(0, ocb);
-	}
-
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
 
@@ -436,6 +424,18 @@ void Graphics::update(const Timer& timer)
 void Graphics::renderFrame(const Timer& timer)
 {
 	update(timer);
+
+	float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
+	float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
+
+	XMMATRIX objectTransform;
+
+
+	objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1) * 0.5F, 0.0F);
+
+	objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
+
+	objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
 
 	this->beginFrame();
 
@@ -452,48 +452,41 @@ void Graphics::renderFrame(const Timer& timer)
 		m_cbFrameData.getDescriptor(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	m_shader.setConstantBuffer(2, 0);
+	nEntries++;
 
 	// Material data.
 	d3dDevice->CopyDescriptorsSimple(
 		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 5, cbvDescriptorSize),
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
 		m_texture.getShaderResourceView(),
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	m_shader.setTexture2D(0, 4);
+	m_shader.setTexture2D(0, 1);
+	nEntries++;
+	nEntries++;
 
 	// Render object.
 	d3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	d3dCommandList->IASetVertexBuffers(0, 1, &m_vb.getVertexBufferView());
-	d3dCommandList->IASetIndexBuffer(&m_ib.getIndexBufferView());
 
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 1, cbvDescriptorSize),
-		m_cbObjectData[0].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
-		m_cbObjectData[1].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 3, cbvDescriptorSize),
-		m_cbObjectData[2].getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	for (int i = 0; i < renderList.size(); i++) 
+	{
+		d3dCommandList->IASetVertexBuffers(0, 1, &renderList[i].model->GetVertexBuffer()->getVertexBufferView());
+		d3dCommandList->IASetIndexBuffer(&renderList[i].model->GetIndexBuffer()->getIndexBufferView());
+		d3dDevice->CopyDescriptorsSimple(
+			1,
+			CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), nEntries, cbvDescriptorSize),
+			m_cbObjectData.getDescriptor(i),
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	m_shader.setConstantBuffer(0, 1);
-	d3dCommandList->DrawIndexedInstanced(32*16*2*3, 1, 0, 0, 0);
+		m_shader.setConstantBuffer(0, nEntries);
 
-	m_shader.setConstantBuffer(0, 2);
-	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
-
-	m_shader.setConstantBuffer(0, 3);
-	d3dCommandList->DrawIndexedInstanced(32 * 16 * 2 * 3, 1, 0, 0, 0);
+		nEntries++;
+		d3dCommandList->DrawIndexedInstanced(renderList[i].model->GetNumberTriangle() * 3, 1, 0, 0, 0);
+	}
 
 	this->endFrame();
 	this->swapBuffers();
+	this->freeRenderModel();
 }
 
 void Graphics::resizeBuffers(int width, int height)
@@ -563,4 +556,23 @@ void Graphics::executePendingTransfers()
 		this->flushCommandQueue();
 		m_resourceTransferUtility.clear();
 	}
+}
+
+void Graphics::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
+{
+	RenderModel renderModel =
+	{
+		model,
+		renderList.size(),
+	};	
+	ObjectConstantBuffer constbuff;
+	XMStoreFloat4x4(&constbuff.world, worldMatrix);
+	m_cbObjectData.update(renderList.size(), constbuff);
+	renderList.push_back(renderModel);
+}
+
+void Graphics::freeRenderModel()
+{
+	nEntries = 0;
+	renderList.clear();
 }

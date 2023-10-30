@@ -2,7 +2,7 @@
 
 class VertexBuffer;
 class IndexBuffer;
-
+class Model;
 
 
 namespace Quantum
@@ -14,7 +14,9 @@ class SphereGenerator
 {
 public:
 
-	static void generate(VertexBuffer& outVB, IndexBuffer& outIB);
+	static void generate(Model* outModel);
+
+private:
 };
 
 

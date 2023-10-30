@@ -11,6 +11,9 @@
 #include "D3D12ResourceTransferUtility.h"
 
 #include "InputCallback.h"
+#include "Model.h"
+
+
 
 class Timer;
 class Window;
@@ -169,7 +172,29 @@ public:
 	IndexBuffer m_ib;
 
 	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
-	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData[3];
+	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
 
 	D3D12Texture m_texture;
+
+	Model* m_sphere;
+
+	struct RenderModel
+	{
+		Model* model;
+		int cbID;
+	};
+
+	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
+
+	std::vector<RenderModel> renderList;
+
+	void freeRenderModel();
+
+
+
+
+
+	private:
+	int nEntries = 0;
+
 };

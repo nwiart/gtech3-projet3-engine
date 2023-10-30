@@ -25,7 +25,7 @@ public:
 		/// Resource expose for use in rendering.
 	inline ID3D12Resource* getResource() const { return m_cbResource; }
 	inline ID3D12DescriptorHeap* getDescriptorHeap() const { return m_cbvHeap; }
-	inline D3D12_CPU_DESCRIPTOR_HANDLE& getDescriptor() { return m_cbView; }
+	D3D12_CPU_DESCRIPTOR_HANDLE getDescriptor(int id = 0);
 
 
 private:
@@ -33,6 +33,8 @@ private:
 	ID3D12Resource* m_cbResource;
 	ID3D12DescriptorHeap* m_cbvHeap;
 	D3D12_CPU_DESCRIPTOR_HANDLE m_cbView;
+
+	UINT m_cbSize;
 };
 
 
