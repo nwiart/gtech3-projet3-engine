@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Quantum/Math/Transform.h"
+#include "Timer.h"
 
 class QuEntity
 {
@@ -29,5 +30,9 @@ class QuEntity
 		bool m_Static;
 
 		virtual void ExecuteProcedure(){}
+		
+		virtual void OnSpawn(){}
+		virtual void OnUpdate(Timer timer){}
+		virtual void OnDestroy(){}
 };
 

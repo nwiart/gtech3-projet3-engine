@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QuEntity.h"
+#include "QuWorld.h"
 #include "Model.h"
 
 class QuEntityRenderModel : public QuEntity
