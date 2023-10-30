@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EntityController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
   </ItemGroup>
@@ -26,6 +27,7 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EntityController.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

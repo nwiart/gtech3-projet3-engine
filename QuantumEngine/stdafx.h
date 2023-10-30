@@ -10,6 +10,7 @@ using namespace Microsoft::WRL;
 #include <dxgi.h>
 #include "d3dx12.h"
 #include <d3dcompiler.h>
+#include <iostream>
 
 #include <DirectXMath.h>
 using namespace DirectX;
