@@ -18,7 +18,9 @@ using namespace Microsoft::WRL;
 #include <stdlib.h>
 #include <time.h>
 
+#include "EntityController.h"
 
+//EntityController entityController;
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 

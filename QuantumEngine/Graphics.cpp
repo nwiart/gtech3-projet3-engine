@@ -5,7 +5,6 @@
 #include "Window.h"
 
 #include "QuEntityLightDirectional.h"
-#include "InputSystem.h"
 
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
@@ -109,54 +108,27 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
-	InputSystem::Get().RegisterCallback(this);
-
 	return 0;
 }
 
-void Graphics::OnKeyDown(WPARAM wparam) {
-	switch (wparam) {
-	case VK_UP:
-		pos += camForward * 0.05f;
-		break;
-	case VK_DOWN:
-		pos += camForward * -0.05f;
-		break;
-	case VK_LEFT:
-		pos += camRight * -0.05f;
-		break;
-	case VK_RIGHT:
-		pos += camRight * 0.05f;
-		break;
-	default:
-		break;
-	}
-}
-
-void Graphics::CameraFollow() {
-	int mouseCurrStateX = cursorX;
-	int mouseCurrStateY = cursorY;
-	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
-	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
-
-	int deadZoneX = (m_renderWidth * 5) / 100;
-	int deadZoneY = (m_renderHeight * 5) / 100;
-
-	mouseLastStateX = mouseCurrStateX;
-	mouseLastStateY = mouseCurrStateY;
-	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
-		return;
-	else {
-		camYaw += mouseLastStateX * 0.0001f;
-		camPitch += mouseLastStateY * 0.0001f;
-
-		// Limit pitch to straight up or straight down. To Remove
-		if (camPitch > 1.570796f)
-			camPitch = 1.570796f;
-		if (camPitch < -1.570796f)
-			camPitch = -1.570796f;
-	}
-}
+//void Graphics::OnKeyDown(WPARAM wparam) {
+//	switch (wparam) {
+//	case VK_UP:
+//		pos += camForward * 0.05f;
+//		break;
+//	case VK_DOWN:
+//		pos += camForward * -0.05f;
+//		break;
+//	case VK_LEFT:
+//		pos += camRight * -0.05f;
+//		break;
+//	case VK_RIGHT:
+//		pos += camRight * 0.05f;
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
 void Graphics::createCommandList()
 {
@@ -423,8 +395,6 @@ void Graphics::update(const Timer& timer)
 
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
-
-	CameraFollow();
 }
 
 void Graphics::renderFrame(const Timer& timer)

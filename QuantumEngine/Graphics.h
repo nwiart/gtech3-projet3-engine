@@ -24,7 +24,7 @@ typedef struct HWND__* HWND;
 
 
 
-class Graphics : public InputCallback
+class Graphics
 {
 public:
 
@@ -65,8 +65,6 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
-
-	void OnKeyDown(WPARAM wparam) override;
 
 	void CameraFollow();
 
@@ -142,16 +140,15 @@ private:
 #endif
 
 	UINT rtvDescriptorSize, dsvDescriptorSize, cbvDescriptorSize, samplerDescriptorSize;
-
-	int m_renderWidth;
-	int m_renderHeight;
-
 	int m_currentBackBuffer;
 
 
 
 	/// Cube test.
 public:
+
+	int m_renderWidth;
+	int m_renderHeight;
 
 	int cursorX;
 	int cursorY;
