@@ -18,6 +18,6 @@ QuEntityLightDirectional::~QuEntityLightDirectional()
 void QuEntityLightDirectional::ExecuteProcedure()
 {
 	Graphics::getInstance().UpdateDirectionalLight(this);
-	this->GetTransform().ApplyRotation(XMQuaternionRotationRollPitchYaw(0, 0.1, 0));
+	this->applyRotation(XMQuaternionRotationRollPitchYaw(0, 0.06F, 0));
 
 }
