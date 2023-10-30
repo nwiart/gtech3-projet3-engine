@@ -1,13 +1,13 @@
 struct VS_INPUT
 {
-	float3 pos : POSITION;
-}
+    float3 pos : POSITION;
+};
 
 struct PS_INPUT
 {
-	float4 pos : SV_POSITION;
-	float3 dir : TEXCOORD0;
-}
+    float4 pos : SV_POSITION;
+    float3 dir : TEXCOORD0;
+};
 
 cbuffer cb_frameData : register(b2)
 {

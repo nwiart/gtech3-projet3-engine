@@ -9,7 +9,7 @@
 
 
 // Loading resources from the executable.
-static void loadResource(std::string& out, UINT id)
+void loadResource(std::string& out, UINT id)
 {
 	HINSTANCE hinstance = GetModuleHandle(0);
 
@@ -271,59 +271,22 @@ void Graphics::_shutdown()
 
 
 
-#include "Quantum/Generate/SphereGenerator.h"
-
 void Graphics::initTestApp(UINT shaderResID)
 {
 	// Load our shader and our PSO.
 	std::string source;
 	loadResource(source, shaderResID);
 
-	m_shader.setShaderSource<Shader::SHADER_VS>(source.c_str(), source.length());
-	m_shader.setShaderSource<Shader::SHADER_PS>(source.c_str(), source.length());
+	m_shader.compileShaderSource<Shader::SHADER_VS>(source.c_str(), source.length());
+	m_shader.compileShaderSource<Shader::SHADER_PS>(source.c_str(), source.length());
 	m_shader.compile();
 	this->createCompatiblePSO(&m_shader);
 
-	struct MyVertex { float pos[3]; float normal[3]; float uv[2]; UINT32 color; };
-
-	MyVertex verts[] = {
-		{ {-0.5F, -0.5F, -0.5F}, {-1, -1, -1}, {0, 0}, 0xFF000000 },
-		{ {-0.5F, +0.5F, -0.5F}, {-1,  1, -1}, {0, 1}, 0xFF00FF00 },
-		{ {+0.5F, +0.5F, -0.5F}, { 1,  1, -1}, {1, 1}, 0xFF00FFFF },
-		{ {+0.5F, -0.5F, -0.5F}, { 1, -1, -1}, {1, 0}, 0xFF0000FF },
-		{ {-0.5F, -0.5F, +0.5F}, {-1, -1,  1}, {0, 0}, 0xFFFF0000 },
-		{ {-0.5F, +0.5F, +0.5F}, {-1,  1,  1}, {0, 1}, 0xFFFFFF00 },
-		{ {+0.5F, +0.5F, +0.5F}, { 1,  1,  1}, {1, 1}, 0xFFFFFFFF },
-		{ {+0.5F, -0.5F, +0.5F}, { 1, -1,  1}, {1, 0}, 0xFFFF00FF },
-	};
-	UINT indices[] = {
-		// front face
-		0, 1, 2,
-		0, 2, 3,
-		// back face
-		4, 6, 5,
-		4, 7, 6,
-		// left face
-		4, 5, 1,
-		4, 1, 0,
-		// right face
-		3, 2, 6,
-		3, 6, 7,
-		// top face
-		1, 5, 6,
-		1, 6, 2,
-		// bottom face
-		4, 0, 3,
-		4, 3, 7
-	};
-
-	//m_vb.setData(verts, sizeof(verts));
-	//m_ib.setData(indices, sizeof(indices));
 
 	m_cbFrameData.init();
 	m_cbObjectData.init(65000);
 
-	m_texture.loadFromDisk("awesome_sphere.dds");
+	m_texture.loadFromDisk("awesome_sphere.dds", D3D12_SRV_DIMENSION_TEXTURE2D);
 }
 
 
@@ -486,7 +449,7 @@ void Graphics::beginFrame()
 	d3dCommandList->OMSetRenderTargets(1, &this->getCurrentBackBufferView(), false, &this->m_depthBufferView);
 
 	float clearColor[4] = { 0.5F,0.5F,0.8F,1 };
-	d3dCommandList->ClearRenderTargetView(this->getCurrentBackBufferView(), clearColor, 0, 0);
+	//d3dCommandList->ClearRenderTargetView(this->getCurrentBackBufferView(), clearColor, 0, 0);
 	d3dCommandList->ClearDepthStencilView(this->m_depthBufferView, D3D12_CLEAR_FLAG_DEPTH, 1.0F, 0, 0, 0);
 }
 

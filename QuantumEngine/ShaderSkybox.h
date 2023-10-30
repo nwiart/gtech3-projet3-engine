@@ -9,4 +9,6 @@ class ShaderSkybox : public Shader
 public:
 
 	ShaderSkybox();
+
+	void init();
 };

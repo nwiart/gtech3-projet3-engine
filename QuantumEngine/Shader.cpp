@@ -187,7 +187,7 @@ void Shader::setTexture2D(int shaderRegister, int offset)
 		CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart(), offset, cbvDescriptorSize));
 }
 
-void Shader::setShaderSource(Type shaderType, const char* source, SIZE_T size)
+void Shader::compileShaderSource(Type shaderType, const char* source, SIZE_T size)
 {
 	if (m_shaderBytecodes[shaderType]) return;
 

@@ -3,6 +3,7 @@
 // Used by Resource.rc
 //
 #define ID_SHADER_TEST               101
+#define ID_SHADER_SKYBOX             102
 
 // Next default values for new objects
 // 

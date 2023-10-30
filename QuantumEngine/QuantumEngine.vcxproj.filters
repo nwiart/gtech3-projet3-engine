@@ -24,6 +24,7 @@
     <ClCompile Include="ShaderSkybox.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
+    <ClCompile Include="SkyboxRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -54,6 +55,8 @@
     <ClInclude Include="ShaderSkybox.h" />
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
+    <ClInclude Include="SkyboxRenderer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />

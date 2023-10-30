@@ -12,5 +12,5 @@ QuEntityRenderSkybox::QuEntityRenderSkybox()
 
 void QuEntityRenderSkybox::ExecuteProcedure()
 {
-	Graphics::getInstance().setSkybox();
+	//Graphics::getInstance().setSkybox();
 }

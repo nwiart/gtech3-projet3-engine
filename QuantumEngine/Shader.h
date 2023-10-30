@@ -50,7 +50,7 @@ public:
 
 	void destroy();
 
-	template<Type T> inline void setShaderSource(const char* source, SIZE_T size) { setShaderSource(T, source, size); }
+	template<Type T> inline void compileShaderSource(const char* source, SIZE_T size) { compileShaderSource(T, source, size); }
 
 	bool compile();
 
@@ -69,7 +69,7 @@ public:
 
 private:
 
-	void setShaderSource(Type shaderType, const char* source, SIZE_T size);
+	void compileShaderSource(Type shaderType, const char* source, SIZE_T size);
 
 
 private:
