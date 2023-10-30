@@ -531,8 +531,6 @@ void Graphics::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
 	XMStoreFloat4x4(&constbuff.world, worldMatrix);
 	m_cbObjectData.update(renderList.size(), constbuff);
 	renderList.push_back(renderModel);
-
-
 }
 
 void Graphics::freeRenderModel()

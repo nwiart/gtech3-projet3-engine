@@ -46,4 +46,6 @@ void Transform::ApplyRotation(XMVECTOR Q)
 {
 	Q = XMQuaternionMultiply(XMLoadFloat4(&m_rotation), Q);
 	XMStoreFloat4(&m_rotation, Q);
+
+	m_dirty = true;
 }

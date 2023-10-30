@@ -23,6 +23,7 @@
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="ShaderSkybox.cpp" />
     <ClCompile Include="QuWorld.cpp" />
+    <ClCompile Include="Quantum\Math\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="ShaderSkybox.h" />
     <ClInclude Include="QuWorld.h" />
+    <ClInclude Include="Quantum\Math\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
