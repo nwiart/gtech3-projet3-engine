@@ -54,12 +54,18 @@ public:
 
 	bool compile();
 
+	void createPSOs();
+
 		/// Root signature must be valid, and shader must have at least a vertex and a pixel shader.
 	bool isReady() const;
+
+	void getDefaultPipelineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& outDesc) const;
 
 	void setConstantBuffer(int shaderRegister, int offset);
 	void setTexture2D(int shaderRegister, int offset);
 
+
+	inline ID3D12PipelineState* getPipelineStateObject() const { return m_pso; }
 
 	inline ID3D12RootSignature* getRootSignature() const { return m_rootSignature; }
 
@@ -72,9 +78,16 @@ private:
 	void compileShaderSource(Type shaderType, const char* source, SIZE_T size);
 
 
-private:
+protected:
+
+	ID3D12PipelineState* m_pso;
 
 	std::vector<ShaderParameter> m_parameters;
+
+	static const D3D12_GRAPHICS_PIPELINE_STATE_DESC m_defaultPipelineState;
+	static const D3D12_INPUT_ELEMENT_DESC m_defaultInputLayout[];
+
+private:
 
 		/// Root signature.
 	ID3D12RootSignature* m_rootSignature;

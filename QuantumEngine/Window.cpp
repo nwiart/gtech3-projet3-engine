@@ -2,7 +2,7 @@
 #include "Window.h"
 
 #include "Graphics.h"
-
+#include "InputSystem.h"
 
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -77,15 +77,27 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 	case WM_CLOSE:
 		window->setWantsToClose(true);
 		break;
-
+	case WM_KEYDOWN:
+		InputSystem::Get().FireKeyDown(wparam);
+		break;
+	case WM_KEYUP:
+		InputSystem::Get().FireKeyUp(wparam);
+		break;
+	case WM_LBUTTONDOWN:
+		InputSystem::Get().MouseDown(1);
+		break;
+	case WM_RBUTTONDOWN:
+		InputSystem::Get().MouseDown(2);
+		break;
 	case WM_MOUSEMOVE:
 		Graphics::getInstance().cursorX = (lparam & 0xFFFF);
 		Graphics::getInstance().cursorY = (lparam >> 16 & 0xFFFF);
 		break;
-
 		// Prevent Alt key from triggering menu, which freezes the application.
 	case WM_SYSCOMMAND:
 		if (wparam == SC_KEYMENU) return 0;
+		break;
+	default:
 		break;
 	}
 

@@ -5,6 +5,8 @@
 
 #include "ShaderSkybox.h"
 
+class D3D12Texture;
+
 
 
 class SkyboxRenderer
@@ -13,6 +15,11 @@ public:
 
 	void init();
 
+	void setTexture(D3D12Texture* tex);
+
+	void render(ID3D12GraphicsCommandList* cmdList, int resourceID);
+
+
 	
 private:
 
@@ -20,4 +27,6 @@ private:
 	IndexBuffer m_boxIB;
 
 	ShaderSkybox m_shader;
+
+	D3D12Texture* m_textureCube;
 };

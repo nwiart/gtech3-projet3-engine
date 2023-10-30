@@ -103,7 +103,7 @@ void D3D12Texture::createHeapAndView(DXGI_FORMAT fmt, D3D12_SRV_DIMENSION dims)
 	srvDesc.Format = fmt;
 	srvDesc.ViewDimension = dims;
 	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = 2;
+	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
 	device->CreateShaderResourceView(m_resource, &srvDesc, m_srvHeap->GetCPUDescriptorHandleForHeapStart());
 

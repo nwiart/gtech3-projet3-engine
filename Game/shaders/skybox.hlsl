@@ -39,5 +39,6 @@ PS_INPUT vs_main(VS_INPUT input)
 
 float4 ps_main(PS_INPUT input) : SV_TARGET
 {
-	return textureSkybox.Sample(samplerLinear, input.dir);
+    //return float4(1, 1, 1, 1);
+    return textureSkybox.Sample(samplerLinear, input.dir);
 }

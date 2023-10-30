@@ -77,11 +77,11 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 	finalColor += albedo;
 
 
-	float brightness = max(0.2F, dot(normal, -dirLightDir));
+	float brightness = max(0.2F, dot(normal, -dirLightDir.xyz));
 	finalColor.rgb *= brightness * dirLightColor.rgb;
 
-	float3 V = normalize(cameraPos - input.pixelWorldPos).xyz;
-	float3 R = reflect(dirLightDir, normal);
+	float3 V = normalize(cameraPos.xyz - input.pixelWorldPos).xyz;
+	float3 R = reflect(dirLightDir.xyz, normal);
 	float3 F = pow(1- dot(normal, V),2) * 0.6F;
 
 

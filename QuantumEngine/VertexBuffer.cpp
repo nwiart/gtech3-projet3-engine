@@ -18,7 +18,7 @@ VertexBuffer::~VertexBuffer()
 	
 }
 
-void VertexBuffer::setData(const void* data, int byteSize)
+void VertexBuffer::setData(const void* data, int byteSize, int stride)
 {
 	ID3D12Device* device = Graphics::getInstance().getDevice();
 
@@ -50,7 +50,7 @@ void VertexBuffer::setData(const void* data, int byteSize)
 	// Fill in the vertex buffer view.
 	m_bufferView.BufferLocation = m_buffer->GetGPUVirtualAddress();
 	m_bufferView.SizeInBytes = byteSize;
-	m_bufferView.StrideInBytes = 9 * sizeof(float);
+	m_bufferView.StrideInBytes = stride;
 }
 
 void VertexBuffer::destroy()
