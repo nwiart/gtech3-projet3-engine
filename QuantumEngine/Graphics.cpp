@@ -341,14 +341,19 @@ void Graphics::update(const Timer& timer)
 			cb.DirColors.z = 0;
 			cb.DirColors.y = 0;
 			cb.DirColors.w = 0;
+
+			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
 		}
 		else
 		{
-
 			XMStoreFloat4(&cb.DirDirection, LightEntity->GetTransform().getForwardVector());
 			cb.DirColors.x = LightEntity->getIntensity() * LightEntity->getColorR();
 			cb.DirColors.y = LightEntity->getIntensity() * LightEntity->getColorG();
 			cb.DirColors.z = LightEntity->getIntensity() * LightEntity->getColorB();
+
+			unsigned int a = LightEntity->getAmbientColor();
+			unsigned char* ab = (unsigned char*) &a;
+			cb.AmbientColor = XMFLOAT4(ab[2] / 255.0F, ab[1] / 255.0F, ab[0] / 255.0F, 0.0F);
 		}
 
 		m_cbFrameData.update(0, cb);
