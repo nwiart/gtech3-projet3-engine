@@ -25,9 +25,11 @@ public:
 	inline const DirectX::XMFLOAT4& getRotation() const { return m_rotation; }
 	inline const DirectX::XMFLOAT3& getScale()    const { return m_scale; }
 
-	inline const void setPosition(DirectX::XMFLOAT3 position) { m_position = position; }
-	inline const void setRotation(DirectX::XMFLOAT4 rotation) { m_rotation = rotation ; }
-	inline const void setScale(DirectX::XMFLOAT3 scale) { m_scale = scale; }
+	inline bool isDirty() const { return m_dirty; }
+
+	inline const void setPosition(DirectX::XMFLOAT3 position) { m_position = position; m_dirty = true; }
+	inline const void setRotation(DirectX::XMFLOAT4 rotation) { m_rotation = rotation ; m_dirty = true; }
+	inline const void setScale(DirectX::XMFLOAT3 scale) { m_scale = scale; m_dirty = true; }
 
 
 	const DirectX::XMFLOAT4X4& toMatrix();
