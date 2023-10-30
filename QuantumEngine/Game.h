@@ -19,7 +19,7 @@ public:
 
 	void mainLoop();
 
-	void openWorld(QuWorld* wolrd);
+	void openWorld(QuWorld* world);
 
 	void visitEntity(QuEntity* entity);
 

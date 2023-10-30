@@ -80,15 +80,16 @@ void Game::mainLoop()
 	}
 }
 
-void Game::openWorld(QuWorld* wolrd)
+void Game::openWorld(QuWorld* world)
 {
-	m_world = wolrd;
+	m_world = world;
 }
 
 void Game::visitEntity(QuEntity* entity)
 {
 	if (entity == nullptr) return;
 	
+	entity->OnUpdate(m_timer);
 	entity->ExecuteProcedure();
 	for (QuEntity* child = entity->m_FirstChild; child != nullptr; child = child->m_Sibling)
 	{
