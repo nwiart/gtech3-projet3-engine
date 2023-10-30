@@ -21,6 +21,9 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidget.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetButton.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -48,6 +51,9 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
+    <ClInclude Include="Quantum\UI\QuWidget.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetButton.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetText.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rcdata1.bin" />
