@@ -56,7 +56,7 @@ public:
 	void beginFrame();
 	void endFrame();
 	void swapBuffers();
-
+	void OnKeyDown(WPARAM wparam);
 
 
 	/// Initialization methods.
@@ -65,9 +65,7 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
-
 	void CameraFollow();
-
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
 	void createCompatiblePSO(Shader* shader);

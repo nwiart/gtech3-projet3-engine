@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Graphics.h"
 #include "EntityController.h"
+#include "TestConstantBuffer.h"
 #include "InputSystem.h"
 
 EntityController::EntityController()
@@ -11,22 +12,7 @@ EntityController::EntityController()
 
 void EntityController::OnKeyDown(WPARAM wparam)
 {
-	switch (wparam) {
-	case VK_UP:
-		std::cout << "up";
-		break;
-	case VK_DOWN:
-		std::cout << "down";
-		break;
-	case VK_LEFT:
-		std::cout << "left";
-		break;
-	case VK_RIGHT:
-		std::cout << "right";
-		break;
-	default:
-		break;
-	}
+	m_graphics->OnKeyDown(wparam);
 }
 
 void EntityController::SetCamera(Graphics* graphics)

@@ -111,24 +111,24 @@ int Graphics::_init(Window* window)
 	return 0;
 }
 
-//void Graphics::OnKeyDown(WPARAM wparam) {
-//	switch (wparam) {
-//	case VK_UP:
-//		pos += camForward * 0.05f;
-//		break;
-//	case VK_DOWN:
-//		pos += camForward * -0.05f;
-//		break;
-//	case VK_LEFT:
-//		pos += camRight * -0.05f;
-//		break;
-//	case VK_RIGHT:
-//		pos += camRight * 0.05f;
-//		break;
-//	default:
-//		break;
-//	}
-//}
+void Graphics::OnKeyDown(WPARAM wparam) {
+	switch (wparam) {
+	case VK_UP:
+		pos += camForward * 0.05f;
+		break;
+	case VK_DOWN:
+		pos += camForward * -0.05f;
+		break;
+	case VK_LEFT:
+		pos += camRight * -0.05f;
+		break;
+	case VK_RIGHT:
+		pos += camRight * 0.05f;
+		break;
+	default:
+		break;
+	}
+}
 
 void Graphics::createCommandList()
 {
@@ -370,6 +370,12 @@ void Graphics::update(const Timer& timer)
 
 		// Combined view and projection matrices.
 		XMStoreFloat4x4(&cb.viewProjection, view * projection);
+
+		// Forward Vector
+		XMStoreFloat4(&cb.cameraDir, camForward);
+
+		// Right Vector
+		XMStoreFloat4(&cb.cameraRight, camRight);
 
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, pos);
