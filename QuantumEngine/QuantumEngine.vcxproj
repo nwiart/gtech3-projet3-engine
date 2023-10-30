@@ -27,6 +27,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
@@ -36,6 +38,7 @@
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="TestInput.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -51,6 +54,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
@@ -62,13 +67,11 @@
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TestInput.h" />
     <ClInclude Include="TestConstantBuffer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\rcdata1.bin" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -5,8 +5,14 @@
 #include "Window.h"
 
 #include "QuEntityLightDirectional.h"
+#include "InputSystem.h"
 
-
+XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+XMVECTOR pos = XMVectorSet(0.0f, 0.0f, -4.0f, 1.0f);
 
 // Loading resources from the executable.
 static void loadResource(std::string& out, UINT id)
@@ -102,7 +108,47 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
+	InputSystem::Get().RegisterCallback(this);
+
 	return 0;
+}
+
+void Graphics::OnKeyDown(WPARAM wparam) {
+	switch (wparam) {
+	case VK_UP:
+		pos += camForward * 0.05f;
+		break;
+	case VK_DOWN:
+		pos += camForward * -0.05f;
+		break;
+	case VK_LEFT:
+		pos += camRight * -0.05f;
+		break;
+	case VK_RIGHT:
+		pos += camRight * 0.05f;
+		break;
+	default:
+		break;
+	}
+}
+
+void Graphics::CameraFollow() {
+	int mouseCurrStateX = cursorX;
+	int mouseCurrStateY = cursorY;
+	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
+	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
+
+	int deadZoneX = (m_renderWidth * 5) / 100;
+	int deadZoneY = (m_renderHeight * 5) / 100;
+
+	mouseLastStateX = mouseCurrStateX;
+	mouseLastStateY = mouseCurrStateY;
+	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
+		return;
+	else {
+		camYaw += mouseLastStateX * 0.0001f;
+		camPitch += mouseLastStateY * 0.0001f;
+	}
 }
 
 void Graphics::createCommandList()
@@ -223,8 +269,6 @@ void Graphics::createCompatiblePSO(Shader* shader)
 	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
 }
 
-
-
 //
 // Shutdown.
 //
@@ -263,8 +307,6 @@ void Graphics::_shutdown()
 	d3dDevice->Release();
 	dxgiFactory->Release();
 }
-
-
 
 #include "Quantum/Generate/SphereGenerator.h"
 
@@ -321,8 +363,6 @@ void Graphics::initTestApp(UINT shaderResID)
 	m_texture.loadFromDisk("awesome_sphere.dds");
 }
 
-
-
 static float angle1 = 0.0F;
 static float angle2 = 0.0F;
 
@@ -330,16 +370,24 @@ void Graphics::update(const Timer& timer)
 {
 	TestConstantBuffer cb;
 	{
-		XMMATRIX view, projection;
+		XMMATRIX view, projection, RotateYTempMatrix, camRotationMatrix;
 
-		XMVECTOR pos = XMVectorSet(0.0F, 0.0F, -4.0F, 1.0F);
-		XMVECTOR target = XMVectorSet(0.0F, 0.0F, 0.0F, 0.0F);
-		XMVECTOR up = XMVectorSet(0.0F, 1.0F, 0.0F, 0.0F);
-		XMVECTOR dir;
-		dir = XMVectorSubtract(target, pos);
-		dir = XMVector3Normalize(dir);
+		XMVECTOR camTarget;
+		XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		
+		camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
+		camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
+		camTarget = XMVector3Normalize(camTarget);
 
-		view = XMMatrixLookAtLH(pos, target, up);
+		RotateYTempMatrix = XMMatrixRotationY(camYaw);
+
+		camRight = XMVector3TransformCoord(DefaultRight, RotateYTempMatrix);
+		camUp = XMVector3TransformCoord(camUp, RotateYTempMatrix);
+		camForward = XMVector3TransformCoord(DefaultForward, RotateYTempMatrix);
+
+		camTarget = pos + camTarget;
+
+		view = XMMatrixLookAtLH(pos, camTarget, camUp);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(70.0F), m_renderWidth / (float) m_renderHeight, 0.05F, 1000.0F);
 
 		// Combined view and projection matrices.
@@ -347,7 +395,6 @@ void Graphics::update(const Timer& timer)
 
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, pos);
-		XMStoreFloat4(&cb.cameraDir, dir);
 
 		if (LightEntity == NULL)
 		{
@@ -370,6 +417,8 @@ void Graphics::update(const Timer& timer)
 
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
+
+	CameraFollow();
 }
 
 void Graphics::renderFrame(const Timer& timer)
@@ -446,8 +495,6 @@ void Graphics::resizeBuffers(int width, int height)
 	m_renderHeight = height;
 }
 
-
-
 void Graphics::flushCommandQueue()
 {
 	m_currentFenceValue++;
@@ -460,8 +507,6 @@ void Graphics::flushCommandQueue()
 		WaitForSingleObject(m_fenceEvent, INFINITE);
 	}
 }
-
-
 
 void Graphics::beginFrame()
 {
@@ -504,8 +549,6 @@ void Graphics::swapBuffers()
 
 	m_currentBackBuffer = (m_currentBackBuffer + 1) % NUM_BACK_BUFFERS;
 }
-
-
 
 void Graphics::executePendingTransfers()
 {
