@@ -12,6 +12,7 @@ XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+XMVECTOR pos = XMVectorSet(0.0f, 0.0f, -4.0f, 1.0f);
 
 // Loading resources from the executable.
 static void loadResource(std::string& out, UINT id)
@@ -115,16 +116,16 @@ int Graphics::_init(Window* window)
 void Graphics::OnKeyDown(WPARAM wparam) {
 	switch (wparam) {
 	case VK_UP:
-		cameraZ += 0.1F;
+		pos += camForward * 0.05f;
 		break;
 	case VK_DOWN:
-		cameraZ -= 0.1F;
+		pos += camForward * -0.05f;
 		break;
 	case VK_LEFT:
-		cameraX -= 0.1F;
+		pos += camRight * -0.05f;
 		break;
 	case VK_RIGHT:
-		cameraX += 0.1F;
+		pos += camRight * 0.05f;
 		break;
 	default:
 		break;
@@ -137,13 +138,18 @@ void Graphics::CameraFollow() {
 	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
 	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
 
-	if ((mouseCurrStateX != mouseLastStateX) || (mouseCurrStateY != mouseLastStateY))
-	{
-		camYaw += mouseLastStateX * 0.0001f;
-		camPitch += mouseCurrStateY * 0.0001f;
+	std::cout << mouseCurrStateX << " " << mouseCurrStateY << std::endl;
 
-		mouseLastStateX = mouseCurrStateX;
-		mouseLastStateY = mouseCurrStateY;
+	int deadZoneX = (m_renderWidth * 5) / 100;
+	int deadZoneY = (m_renderHeight * 5) / 100;
+
+	mouseLastStateX = mouseCurrStateX;
+	mouseLastStateY = mouseCurrStateY;
+	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
+		return;
+	else {
+		camYaw += mouseLastStateX * 0.0001f;
+		camPitch += mouseLastStateY * 0.0001f;
 	}
 }
 
@@ -362,9 +368,6 @@ void Graphics::update(const Timer& timer)
 
 		XMVECTOR camTarget;
 		XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-		XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-
-		XMVECTOR pos = XMVectorSet(cameraX, cameraY, cameraZ, cameraW);
 		
 		camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
 		camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
