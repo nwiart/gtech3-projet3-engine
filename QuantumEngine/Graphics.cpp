@@ -139,8 +139,8 @@ void Graphics::CameraFollow() {
 	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
 	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
 
-	int deadZoneX = (m_renderWidth * 5) / 100;
-	int deadZoneY = (m_renderHeight * 5) / 100;
+	int deadZoneX = (m_renderWidth * 20) / 100;
+	int deadZoneY = (m_renderHeight * 20) / 100;
 
 	mouseLastStateX = mouseCurrStateX;
 	mouseLastStateY = mouseCurrStateY;

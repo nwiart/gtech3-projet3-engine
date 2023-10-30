@@ -15,7 +15,7 @@ namespace Quantum
 	{
 	public:
 
-		static void generate(Model* outModel);
+		static void generate(Model* outModel, float size);
 
 	private:
 	};

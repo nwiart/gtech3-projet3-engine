@@ -13,7 +13,7 @@ using namespace Quantum;
 using namespace std;
 
 
-void Quantum::BoxGenerator::generate(Model* outModel)
+void Quantum::BoxGenerator::generate(Model* outModel, float size)
 {
     struct Vertex { float pos[3]; float normal[3]; float uv[2]; UINT color; };
         // create the vertices using the CUSTOMVERTEX struct
@@ -48,40 +48,40 @@ void Quantum::BoxGenerator::generate(Model* outModel)
 
 		Vertex v;
 		// Top face
-		vertices.push_back({ {-3.0f, 3.0f, -3.0f }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-3.0f, 3.0f,  3.0f }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });    
-		vertices.push_back({ { 3.0f, 3.0f,  3.0f }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });    
-		vertices.push_back({ { 3.0f, 3.0f, -3.0f }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });    
+		vertices.push_back({ {-size, size, -size }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size, size,  size }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, size,  size }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, size, -size }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 		// Bottom face
-		vertices.push_back({ {-3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size, -size, -size }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size, -size,  size }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, -size,  size }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, -size, -size }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 		//back face
-		vertices.push_back({ { -3.0f, -3.0f, 3.0f }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {  3.0f, -3.0f, 3.0f }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {  3.0f,  3.0f, 3.0f }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { -3.0f,  3.0f, 3.0f }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ { -size, -size, size }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {  size, -size, size }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ {  size,  size, size }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { -size,  size, size }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
 
 		//front face
-		vertices.push_back({ { -3.0f, -3.0f, -3.0f }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {  3.0f, -3.0f, -3.0f }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {  3.0f,  3.0f, -3.0f }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { -3.0f,  3.0f, -3.0f }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ { -size, -size, -size }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {  size, -size, -size }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ {  size,  size, -size }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { -size,  size, -size }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
 		
 		//Left face
-		vertices.push_back({ {-3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size, -size, -size }, { -1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size, -size,  size }, { -1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size,  size,  size }, { -1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ {-size,  size, -size }, { -1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 		// right face
-		vertices.push_back({ {-3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f,  3.0f }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { 3.0f, -3.0f, -3.0f }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, -size, -size }, { 1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+		vertices.push_back({ { size, -size,  size }, { 1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size,  size,  size }, { 1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+		vertices.push_back({ { size,  size, -size }, { 1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 		
 	
