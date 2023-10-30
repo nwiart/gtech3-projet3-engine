@@ -9,6 +9,7 @@
 
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+XMVECTOR DefaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -148,6 +149,12 @@ void Graphics::CameraFollow() {
 	else {
 		camYaw += mouseLastStateX * 0.0001f;
 		camPitch += mouseLastStateY * 0.0001f;
+
+		// Limit pitch to straight up or straight down. To Remove
+		if (camPitch > 1.570796f)
+			camPitch = 1.570796f;
+		if (camPitch < -1.570796f)
+			camPitch = -1.570796f;
 	}
 }
 
@@ -373,17 +380,16 @@ void Graphics::update(const Timer& timer)
 		XMMATRIX view, projection, RotateYTempMatrix, camRotationMatrix;
 
 		XMVECTOR camTarget;
-		XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-		
+
 		camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
 		camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
 		camTarget = XMVector3Normalize(camTarget);
 
 		RotateYTempMatrix = XMMatrixRotationY(camYaw);
 
-		camRight = XMVector3TransformCoord(DefaultRight, RotateYTempMatrix);
-		camUp = XMVector3TransformCoord(camUp, RotateYTempMatrix);
-		camForward = XMVector3TransformCoord(DefaultForward, RotateYTempMatrix);
+		camRight = XMVector3TransformCoord(DefaultRight, camRotationMatrix);
+		camUp = XMVector3TransformCoord(DefaultUp, camRotationMatrix);
+		camForward = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
 
 		camTarget = pos + camTarget;
 
