@@ -34,6 +34,7 @@ private:
 	void setPointLight(int index, QuEntityLightPoint* en);
 
 	void updateFrameCB();
+	void updateObjectCB();
 
 
 
@@ -47,6 +48,7 @@ private:
 
 		/// List of objects to render.
 	std::vector<RenderModel> renderList;
+	std::vector<ObjectConstantBuffer> renderWorldMatrices;
 
 		/// Global shader & texture.
 	Shader m_shader;

@@ -55,14 +55,14 @@ void D3D12ConstantBufferBase::destroy()
 	m_cbvHeap = 0;
 }
 
-void D3D12ConstantBufferBase::update(int elemSize, const void* data, SIZE_T size)
+void D3D12ConstantBufferBase::update(int elemIndex, const void* data, SIZE_T size)
 {
 	D3D12_RANGE range = { 0, 0 };
 	char* bufferData;
 
-	m_cbResource->Map(0, &range, (void**)&bufferData);
+	m_cbResource->Map(0, &range, (void**) &bufferData);
 
-	memcpy(bufferData + elemSize * m_cbSize, data, size);
+	memcpy(bufferData + elemIndex * m_cbSize, data, size);
 
 	m_cbResource->Unmap(0, 0);
 }
@@ -70,11 +70,11 @@ void D3D12ConstantBufferBase::update(int elemSize, const void* data, SIZE_T size
 void D3D12ConstantBufferBase::updateRange(int elemIndexStart, int elemCount, const void* data, SIZE_T size)
 {
 	D3D12_RANGE range = { 0, 0 };
-	void* bufferData;
+	char* bufferData;
 
-	m_cbResource->Map(0, &range, &bufferData);
+	m_cbResource->Map(0, &range, (void**) &bufferData);
 
-	memcpy(bufferData, data, size);
+	memcpy(bufferData + elemIndexStart * m_cbSize, data, size);
 
 	m_cbResource->Unmap(0, 0);
 }

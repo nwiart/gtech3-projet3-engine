@@ -21,6 +21,7 @@ void loadResource(std::string& out, UINT id);
 void SceneRenderer::init()
 {
 	// Default values.
+	cameraPos    = XMVectorSet(0, 0, -10, 0);
 	cameraTarget = XMVectorSet(0, 0, 1, 0);
 	cameraUp     = XMVectorSet(0, 1, 0, 0);
 
@@ -56,6 +57,7 @@ void SceneRenderer::renderAll(ID3D12GraphicsCommandList* cmdList)
 	Graphics& g = Graphics::getInstance();
 
 	this->updateFrameCB();
+	this->updateObjectCB();
 
 	// Bind shader.
 	cmdList->SetPipelineState(m_shader.getPipelineStateObject());
@@ -100,15 +102,17 @@ void SceneRenderer::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
 		renderList.size(),
 	};
 
-	ObjectConstantBuffer constbuff;
-	XMStoreFloat4x4(&constbuff.world, worldMatrix);
-	m_cbObjectData.update(renderList.size(), constbuff);
+	ObjectConstantBuffer cb;
+	XMStoreFloat4x4(&cb.world, worldMatrix);
+
 	renderList.push_back(renderModel);
+	renderWorldMatrices.push_back(cb);
 }
 
 void SceneRenderer::freeRenderModel()
 {
 	renderList.clear();
+	renderWorldMatrices.clear();
 }
 
 void SceneRenderer::setCamera(QuEntity* camera)
@@ -177,4 +181,9 @@ void SceneRenderer::updateFrameCB()
 
 		m_cbFrameData.update(0, cb);
 	}
+}
+
+void SceneRenderer::updateObjectCB()
+{
+	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
 }
