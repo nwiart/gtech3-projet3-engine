@@ -23,6 +23,7 @@ void Window::initialize(int width, int height, const char* title, bool fullscree
 	WNDCLASSEX wcex; ZeroMemory(&wcex, sizeof(WNDCLASSEX));
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.hCursor = LoadCursor(0, IDC_ARROW);
 	wcex.lpszClassName = "D3D12TestWindow";
 	wcex.lpfnWndProc = WndProc;
 
