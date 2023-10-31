@@ -11,6 +11,7 @@ struct TestConstantBuffer
 	DirectX::XMFLOAT4 cameraDir;
 	DirectX::XMFLOAT4 cameraRight;
 
+	DirectX::XMFLOAT4 AmbientColor;
 	DirectX::XMFLOAT4 DirColors;
 	DirectX::XMFLOAT4 DirDirection;
 };

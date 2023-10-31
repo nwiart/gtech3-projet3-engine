@@ -80,7 +80,7 @@ void SphereGenerator::generate(Model* outModel)
 	}
 
 
-	outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex));
+	outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex), sizeof(Vertex));
 	outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
 
 	outModel->SetNumTriangle(m_axisSubdivs* m_heightSubdivs * 2);

@@ -14,6 +14,8 @@ public:
 	float getColorB() { return m_ColorB; }
 	float getIntensity() { return m_Intensity; }
 
+	unsigned int getAmbientColor() const { return m_ambientColor; }
+
 	virtual void ExecuteProcedure();
 
 private:
@@ -23,6 +25,6 @@ private:
 
 	float m_Intensity;
 
-
+	unsigned int m_ambientColor;
 };
 
