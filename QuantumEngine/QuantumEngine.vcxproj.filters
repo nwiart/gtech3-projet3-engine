@@ -19,6 +19,9 @@
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="QuEntityRenderSkybox.cpp" />
+    <ClCompile Include="TextureCube.cpp" />
+    <ClCompile Include="ShaderSkybox.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
@@ -26,6 +29,9 @@
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="TestInput.cpp" />
     <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
+    <ClCompile Include="SkyboxRenderer.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -51,6 +57,9 @@
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="QuEntityRenderSkybox.h" />
+    <ClInclude Include="TextureCube.h" />
+    <ClInclude Include="ShaderSkybox.h" />
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
@@ -58,6 +67,10 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="TestInput.h" />
     <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
+    <ClInclude Include="SkyboxRenderer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

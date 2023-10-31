@@ -11,7 +11,7 @@ public:
 	VertexBuffer();
 	~VertexBuffer();
 
-	void setData(const void* data, int byteSize);
+	void setData(const void* data, int byteSize, int stride);
 
 	void destroy();
 
