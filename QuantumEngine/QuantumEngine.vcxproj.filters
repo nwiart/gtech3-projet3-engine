@@ -30,6 +30,7 @@
     <ClCompile Include="SkyboxRenderer.cpp" />
     <ClCompile Include="InputCallback.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="ShaderUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -67,6 +68,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="ShaderUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

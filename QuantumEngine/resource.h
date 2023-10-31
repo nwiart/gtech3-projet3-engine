@@ -4,6 +4,7 @@
 //
 #define ID_SHADER_TEST               101
 #define ID_SHADER_SKYBOX             102
+#define ID_SHADER_UI				 103
 
 // Next default values for new objects
 // 

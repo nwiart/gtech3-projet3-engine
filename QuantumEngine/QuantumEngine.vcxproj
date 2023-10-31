@@ -42,6 +42,7 @@
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderSkybox.cpp" />
+    <ClCompile Include="ShaderUI.cpp" />
     <ClCompile Include="SkyboxRenderer.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderSkybox.h" />
+    <ClInclude Include="ShaderUI.h" />
     <ClInclude Include="SkyboxRenderer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />
