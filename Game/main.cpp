@@ -9,7 +9,9 @@ using namespace Microsoft::WRL;
 #include "Graphics.h"
 #include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
+
 #include "QuEntityRenderModel.h"
+#include "QuEntityLightDirectional.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -47,6 +49,9 @@ int main()
 	Quantum::SphereGenerator::generate(sphere);
 
 	QuWorld* world = new QuWorld();
+
+	QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
+	dirLight->AttachToParent(world);
 
 	QuEntity* sphereE;
 	for (int i = 0; i < 50; i++) 

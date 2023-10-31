@@ -238,6 +238,7 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 }
 
 
+
 //
 // Shutdown.
 //
@@ -246,9 +247,6 @@ void Graphics::_shutdown()
 {
 	m_cbObjectData.destroy();
 	m_cbFrameData.destroy();
-
-	m_vb.destroy();
-	m_ib.destroy();
 
 	m_cbvHeap->Release();
 	m_samplerHeap->Release();

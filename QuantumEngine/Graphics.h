@@ -165,15 +165,11 @@ public:
 	float cameraW = 1.F;
 
 	Shader m_shader;
-	VertexBuffer m_vb;
-	IndexBuffer m_ib;
 
 	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
 	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
 
 	D3D12Texture m_texture;
-
-	Model* m_sphere;
 
 	struct RenderModel
 	{
