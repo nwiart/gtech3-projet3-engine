@@ -10,8 +10,9 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
-#include "InputCallback.h"
 #include "Model.h"
+
+#include "SkyboxRenderer.h"
 
 
 
@@ -24,11 +25,12 @@ typedef struct HWND__* HWND;
 
 
 
-class Graphics : public InputCallback
+class Graphics
 {
 public:
 
 	void UpdateDirectionalLight(QuEntityLightDirectional*Entity);
+	void UpdateSkybox(D3D12Texture* tex);
 
 	static inline Graphics& getInstance() { static Graphics g_graphics; return g_graphics; }
 
@@ -66,13 +68,10 @@ private:
 
 	int _init(Window* w);
 
-	void OnKeyDown(WPARAM wparam) override;
-
 	void CameraFollow();
 
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
-	void createCompatiblePSO(Shader* shader);
 
 	void _shutdown();
 	
@@ -135,8 +134,6 @@ private:
 
 	UINT64 m_currentFenceValue;
 
-	ID3D12PipelineState* m_defaultPSO;
-
 #ifdef _DEBUG
 	ID3D12Debug* d3dDebug;
 #endif
@@ -190,7 +187,12 @@ public:
 
 	void freeRenderModel();
 
-	private:
+
+private:
+
 	int nEntries = 0;
 
+	SkyboxRenderer m_skyboxRenderer;
+
+	D3D12Texture m_skyboxTexture;
 };

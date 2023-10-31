@@ -1,14 +1,13 @@
 #include "stdafx.h"
 #include "InputSystem.h"
 #include <iostream>
-#include "TestInput.h"
 
-Test test;
 
 InputSystem::InputSystem() {}
 InputSystem::~InputSystem() {}
 
-void InputSystem::FireKeyDown(WPARAM wparam) {
+void InputSystem::FireKeyDown(WPARAM wparam)
+{
 	m_keyState[wparam] = true;
 	ExecuteCallbacks(wparam);
 }
