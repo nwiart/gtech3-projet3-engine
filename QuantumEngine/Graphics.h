@@ -189,6 +189,7 @@ public:
 
 
 private:
+
 	int nEntries = 0;
 
 	SkyboxRenderer m_skyboxRenderer;
