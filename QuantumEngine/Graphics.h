@@ -38,6 +38,8 @@ public:
 public:
 
 	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_sceneRenderer.addRenderModel(model, worldMatrix); }
+
+	void setCamera(class QuEntity* camera) { m_sceneRenderer.setCamera(camera); }
 	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_sceneRenderer.setDirectionalLight(dl); }
 
 

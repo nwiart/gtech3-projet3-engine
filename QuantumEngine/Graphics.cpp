@@ -314,15 +314,16 @@ void Graphics::endFrame()
 {
 	// Finish rendering and present back buffer.
 	d3dCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(this->getCurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-}
 
-void Graphics::swapBuffers()
-{
 	d3dCommandList->Close();
 
 	ID3D12CommandList* lists[] = { d3dCommandList };
 	d3dCommandQueue->ExecuteCommandLists(1, lists);
+}
 
+void Graphics::swapBuffers()
+{
+	// Wait for frame to complete.
 	this->flushCommandQueue();
 
 	dxgiSwapChain->Present(1, 0);

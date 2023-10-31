@@ -111,17 +111,15 @@ void SceneRenderer::freeRenderModel()
 	renderList.clear();
 }
 
-void SceneRenderer::setCamera(QuEntityCamera* camera)
+void SceneRenderer::setCamera(QuEntity* camera)
 {
 	QuEntity* en = (QuEntity*) camera;
 
 	XMVECTOR fwd = en->GetTransform().getForwardVector();
 
-	// TODO : Wrong, get WORLD position!!! This one is the local position
-	// and will be incorrect if the camera is a child of another entity.
-	cameraPos    = XMLoadFloat3(&en->GetTransform().getPosition());
+	cameraPos    = en->getWorldPosition();
 	cameraTarget = XMVectorAdd(cameraPos, fwd);
-	cameraUp     = en->GetTransform().getUpVector();
+	cameraUp     = en->getUpVector();
 }
 
 void SceneRenderer::setDirectionalLight(QuEntityLightDirectional* en)
@@ -140,27 +138,24 @@ void SceneRenderer::updateFrameCB()
 {
 	TestConstantBuffer cb;
 	{
-		XMMATRIX view, projection, camRotationMatrix;
+		XMMATRIX view, projection;
 
+		// Combined view and projection matrices.
 		float fov = 70.0F;
 		float aspectRatio = Graphics::getInstance().getRenderWidth() / (float) Graphics::getInstance().getRenderHeight();
 
 		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(fov), aspectRatio, 0.05F, 1000.0F);
 
-		// Combined view and projection matrices.
 		XMStoreFloat4x4(&cb.viewProjection, view * projection);
 
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, cameraPos);
 
+		// Directional light.
 		if (m_directionalLight == NULL)
 		{
-			cb.DirColors.x = 0;
-			cb.DirColors.z = 0;
-			cb.DirColors.y = 0;
-			cb.DirColors.w = 0;
-
+			cb.DirColors = XMFLOAT4(0, 0, 0, 0);
 			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
 		}
 		else

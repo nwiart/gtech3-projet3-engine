@@ -1,4 +1,3 @@
-#include "EntityCamera.h"
 #include "stdafx.h"
 #include "EntityController.h"
 

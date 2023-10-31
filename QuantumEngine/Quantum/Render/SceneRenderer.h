@@ -29,7 +29,7 @@ private:
 
 	void freeRenderModel();
 
-	void setCamera(QuEntityCamera* camera);
+	void setCamera(class QuEntity* camera);
 	void setDirectionalLight(QuEntityLightDirectional* en);
 	void setPointLight(int index, QuEntityLightPoint* en);
 

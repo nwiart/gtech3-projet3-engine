@@ -45,7 +45,7 @@ int main()
 	QuWorld* world = new QuWorld();
 
 	QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
-	dirLight->AttachToParent(world);
+	world->attachChild(dirLight);
 
 	QuEntity* sphereE;
 	for (int i = 0; i < 50; i++) 
@@ -55,7 +55,7 @@ int main()
 		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
 		sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
 		sphereEntity->SetModel(sphere);
-		sphereEntity->AttachToParent(world);
+		world->attachChild(sphereEntity);
 
 		sphereE = sphereEntity;
 	}
@@ -67,7 +67,7 @@ int main()
 		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
 		sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
 		sphereEntity->SetModel(sphere);
-		sphereEntity->AttachToParent(sphereE);
+		world->attachChild(sphereEntity);
 	}
 
 
