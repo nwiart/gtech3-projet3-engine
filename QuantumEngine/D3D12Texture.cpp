@@ -13,7 +13,7 @@ D3D12Texture::D3D12Texture()
 
 }
 
-void D3D12Texture::loadFromDisk(const char* path)
+void D3D12Texture::loadFromDisk(const char* path, D3D12_SRV_DIMENSION dims)
 {
 	ID3D12Device* device = Graphics::getInstance().getDevice();
 	ID3D12CommandQueue* cmdQueue = Graphics::getInstance().getCommandQueue();
@@ -42,7 +42,7 @@ void D3D12Texture::loadFromDisk(const char* path)
 	m_resource = res.Get();
 	m_resource->AddRef();
 
-	this->createHeapAndView(m_resource->GetDesc().Format);
+	this->createHeapAndView(m_resource->GetDesc().Format, dims);
 }
 
 void D3D12Texture::create()
@@ -72,7 +72,7 @@ void D3D12Texture::create()
 
 	m_resource->Unmap(0, 0);
 
-	this->createHeapAndView(format);
+	this->createHeapAndView(format, D3D12_SRV_DIMENSION_TEXTURE2D);
 }
 
 void D3D12Texture::destroy()
@@ -87,7 +87,7 @@ void D3D12Texture::destroy()
 }
 
 
-void D3D12Texture::createHeapAndView(DXGI_FORMAT fmt)
+void D3D12Texture::createHeapAndView(DXGI_FORMAT fmt, D3D12_SRV_DIMENSION dims)
 {
 	ID3D12Device* device = Graphics::getInstance().getDevice();
 
@@ -101,9 +101,9 @@ void D3D12Texture::createHeapAndView(DXGI_FORMAT fmt)
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = { };
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Format = fmt;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.ViewDimension = dims;
 	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = 2;
+	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0F;
 	device->CreateShaderResourceView(m_resource, &srvDesc, m_srvHeap->GetCPUDescriptorHandleForHeapStart());
 

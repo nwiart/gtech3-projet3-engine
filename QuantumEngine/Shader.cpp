@@ -11,6 +11,35 @@
 
 #define ROUND_256(x) ((x + 255) & ~255)
 
+const D3D12_INPUT_ELEMENT_DESC Shader::m_defaultInputLayout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+	{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 3 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 6 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+	{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 8 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+};
+
+const D3D12_GRAPHICS_PIPELINE_STATE_DESC Shader::m_defaultPipelineState =
+{
+	0,
+	{ 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
+	{ 0 },
+	CD3DX12_BLEND_DESC(D3D12_DEFAULT),
+	UINT_MAX,
+	CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT),
+	CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT),
+	{ Shader::m_defaultInputLayout, sizeof(Shader::m_defaultInputLayout) / sizeof(D3D12_INPUT_ELEMENT_DESC) },
+	D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED,
+	D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+	1,
+	{ DXGI_FORMAT_R8G8B8A8_UNORM },
+	DXGI_FORMAT_D24_UNORM_S8_UINT,
+	{ 1, 0 },
+	0,
+	{ 0, 0 },
+	D3D12_PIPELINE_STATE_FLAG_NONE
+};
+
 
 
 static void getOffset(INT* outRangeOffset, INT* outTableParam, ShaderParameter* rootParams, int shaderRegister, ShaderParameterType paramType)
@@ -133,6 +162,10 @@ Shader::~Shader()
 
 void Shader::destroy()
 {
+	if (m_pso) {
+		m_pso->Release();
+	}
+
 	if (m_rootSignature) {
 		m_rootSignature->Release();
 
@@ -152,10 +185,33 @@ bool Shader::compile()
 	return true;
 }
 
+void Shader::createPSOs()
+{
+	ID3D12Device* device = Graphics::getInstance().getDevice();
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
+	this->getDefaultPipelineState(psoDesc);
+
+	device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pso));
+}
+
 bool Shader::isReady() const
 {
 	return m_shaderBytecodes[SHADER_VS] && m_shaderBytecodes[SHADER_PS] && m_rootSignature;
 }
+
+void Shader::getDefaultPipelineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& outDesc) const
+{
+	// Default states.
+	outDesc = m_defaultPipelineState;
+
+	// Shader bytecodes and signature.
+	outDesc.pRootSignature = this->getRootSignature();
+	outDesc.VS = this->getShaderBytecode<Shader::SHADER_VS>();
+	outDesc.PS = this->getShaderBytecode<Shader::SHADER_PS>();
+}
+
+
 
 void Shader::setConstantBuffer(int shaderRegister, int offset)
 {
@@ -187,7 +243,7 @@ void Shader::setTexture2D(int shaderRegister, int offset)
 		CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvHeap->GetGPUDescriptorHandleForHeapStart(), offset, cbvDescriptorSize));
 }
 
-void Shader::setShaderSource(Type shaderType, const char* source, SIZE_T size)
+void Shader::compileShaderSource(Type shaderType, const char* source, SIZE_T size)
 {
 	if (m_shaderBytecodes[shaderType]) return;
 

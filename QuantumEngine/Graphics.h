@@ -12,6 +12,8 @@
 
 #include "Model.h"
 
+#include "SkyboxRenderer.h"
+
 
 
 class Timer;
@@ -28,6 +30,7 @@ class Graphics
 public:
 
 	void UpdateDirectionalLight(QuEntityLightDirectional*Entity);
+	void UpdateSkybox(D3D12Texture* tex);
 
 	static inline Graphics& getInstance() { static Graphics g_graphics; return g_graphics; }
 
@@ -65,9 +68,10 @@ private:
 
 	int _init(Window* w);
 
+	void CameraFollow();
+
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
-	void createCompatiblePSO(Shader* shader);
 
 	void _shutdown();
 	
@@ -130,8 +134,6 @@ private:
 
 	UINT64 m_currentFenceValue;
 
-	ID3D12PipelineState* m_defaultPSO;
-
 #ifdef _DEBUG
 	ID3D12Debug* d3dDebug;
 #endif
@@ -150,6 +152,17 @@ public:
 
 	int cursorX;
 	int cursorY;
+
+	int mouseLastStateX;
+	int mouseLastStateY;
+
+	float camYaw = 0.0f;
+	float camPitch = 0.0f;
+
+	float cameraX = 0;
+	float cameraY = 0;
+	float cameraZ = -4.F;
+	float cameraW = 1.F;
 
 	Shader m_shader;
 	VertexBuffer m_vb;
@@ -175,10 +188,11 @@ public:
 	void freeRenderModel();
 
 
+private:
 
-
-
-	private:
 	int nEntries = 0;
 
+	SkyboxRenderer m_skyboxRenderer;
+
+	D3D12Texture m_skyboxTexture;
 };
