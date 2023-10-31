@@ -25,11 +25,6 @@ using namespace Microsoft::WRL;
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
 
-float randomFloat(float min = 0.0F, float max = 1.0F)
-{
-	return (rand() / (float) RAND_MAX) * (max - min) + min;
-}
-
 
 int main()
 {
@@ -42,7 +37,6 @@ int main()
 		return res;
 	}
 
-	Graphics::getInstance().initTestApp(ID_SHADER_TEST);
 
 	Model* sphere = new Model();
 

@@ -49,6 +49,17 @@ void SkyboxRenderer::init()
 	m_boxIB.setData(indices, sizeof(indices));
 
 	m_shader.init();
+
+	m_skyboxTexture.loadFromDisk("textures/milkyway.dds", D3D12_SRV_DIMENSION_TEXTURECUBE);
+	m_textureCube = &m_skyboxTexture;
+}
+
+void SkyboxRenderer::destroy()
+{
+	m_skyboxTexture.destroy();
+
+	m_boxVB.destroy();
+	m_boxIB.destroy();
 }
 
 void SkyboxRenderer::setTexture(D3D12Texture* tex)
@@ -56,8 +67,13 @@ void SkyboxRenderer::setTexture(D3D12Texture* tex)
 	m_textureCube = tex;
 }
 
-void SkyboxRenderer::render(ID3D12GraphicsCommandList* cmdList, int resourceID)
+void SkyboxRenderer::render(ID3D12GraphicsCommandList* cmdList)
 {
+	Graphics& g = Graphics::getInstance();
+
+	UINT skyboxTextureID = g.allocateDescriptorTable(1);
+	g.setGlobalDescriptor(skyboxTextureID, m_textureCube->getShaderResourceView());
+
 	// Bind shader data.
 	cmdList->SetPipelineState(m_shader.getPipelineStateObject());
 	cmdList->SetGraphicsRootSignature(m_shader.getRootSignature());
@@ -67,7 +83,7 @@ void SkyboxRenderer::render(ID3D12GraphicsCommandList* cmdList, int resourceID)
 		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), 0, Graphics::getInstance().getCBVDescriptorSize()));
 	cmdList->SetGraphicsRootDescriptorTable(
 		0,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), resourceID, Graphics::getInstance().getCBVDescriptorSize()));
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), skyboxTextureID, Graphics::getInstance().getCBVDescriptorSize()));
 
 	// Bind box model.
 	cmdList->IASetVertexBuffers(0, 1, &m_boxVB.getVertexBufferView());

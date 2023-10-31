@@ -7,13 +7,16 @@
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
 
+
+
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 XMVECTOR DefaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-XMVECTOR pos = XMVectorSet(0.0f, 0.0f, -4.0f, 1.0f);
+
+
 
 // Loading resources from the executable.
 void loadResource(std::string& out, UINT id)
@@ -34,16 +37,6 @@ void loadResource(std::string& out, UINT id)
 //
 // Public API.
 //
-
-void Graphics::UpdateDirectionalLight(QuEntityLightDirectional* Entity)
-{
-	LightEntity = Entity;
-}
-
-void Graphics::UpdateSkybox(D3D12Texture* tex)
-{
-	m_skyboxTexture = *tex;
-}
 
 int Graphics::initialize(Window* window)
 {
@@ -114,43 +107,10 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
+	m_sceneRenderer.init();
 	m_skyboxRenderer.init();
 
 	return 0;
-}
-
-void Graphics::CameraFollow()
-{
-	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 0.1F : 0.05F;
-
-	if (InputSystem::Get().isKeyDown('Z')) pos += camForward * speed;
-	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
-	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
-	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
-
-
-	int mouseCurrStateX = cursorX;
-	int mouseCurrStateY = cursorY;
-	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
-	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
-
-	int deadZoneX = (m_renderWidth * 5) / 100;
-	int deadZoneY = (m_renderHeight * 5) / 100;
-
-	mouseLastStateX = mouseCurrStateX;
-	mouseLastStateY = mouseCurrStateY;
-	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
-		return;
-	else {
-		camYaw += mouseLastStateX * 0.0001f;
-		camPitch += mouseLastStateY * 0.0001f;
-
-		// Limit pitch to straight up or straight down. To Remove
-		if (camPitch > 1.570796f)
-			camPitch = 1.570796f;
-		if (camPitch < -1.570796f)
-			camPitch = -1.570796f;
-	}
 }
 
 void Graphics::createCommandList()
@@ -245,13 +205,10 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 
 void Graphics::_shutdown()
 {
-	m_cbObjectData.destroy();
-	m_cbFrameData.destroy();
+	m_skyboxRenderer.destroy();
 
 	m_cbvHeap->Release();
 	m_samplerHeap->Release();
-
-	m_shader.destroy();
 
 	for (int i = 0; i < NUM_BACK_BUFFERS; ++i) {
 		m_backBuffers[i]->Release();
@@ -275,168 +232,22 @@ void Graphics::_shutdown()
 }
 
 
-void Graphics::initTestApp(UINT shaderResID)
+
+void Graphics::renderFrame()
 {
-	// Load our shader and our PSO.
-	std::string source;
-	loadResource(source, shaderResID);
-
-	m_shader.compileShaderSource<Shader::SHADER_VS>(source.c_str(), source.length());
-	m_shader.compileShaderSource<Shader::SHADER_PS>(source.c_str(), source.length());
-	m_shader.compile();
-	m_shader.createPSOs();
-	assert(m_shader.isReady());
-
-
-	m_cbFrameData.init();
-	m_cbObjectData.init(65000);
-
-	m_texture.loadFromDisk("awesome_sphere.dds", D3D12_SRV_DIMENSION_TEXTURE2D);
-	m_skyboxTexture.loadFromDisk("textures/milkyway.dds", D3D12_SRV_DIMENSION_TEXTURECUBE);
-}
-
-static float angle1 = 0.0F;
-static float angle2 = 0.0F;
-
-void Graphics::update(const Timer& timer)
-{
-	TestConstantBuffer cb;
-	{
-		XMMATRIX view, projection, RotateYTempMatrix, camRotationMatrix;
-
-		XMVECTOR camTarget;
-
-		camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
-		camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
-		camTarget = XMVector3Normalize(camTarget);
-
-		RotateYTempMatrix = XMMatrixRotationY(camYaw);
-
-		camRight = XMVector3TransformCoord(DefaultRight, camRotationMatrix);
-		camUp = XMVector3TransformCoord(DefaultUp, camRotationMatrix);
-		camForward = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
-
-		camTarget = pos + camTarget;
-
-		view = XMMatrixLookAtLH(pos, camTarget, camUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(70.0F), m_renderWidth / (float) m_renderHeight, 0.05F, 1000.0F);
-
-		// Combined view and projection matrices.
-		XMStoreFloat4x4(&cb.viewProjection, view * projection);
-
-		// Camera info.
-		XMStoreFloat4(&cb.cameraPos, pos);
-
-		if (LightEntity == NULL)
-		{
-			cb.DirColors.x = 0;
-			cb.DirColors.z = 0;
-			cb.DirColors.y = 0;
-			cb.DirColors.w = 0;
-
-			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
-		}
-		else
-		{
-			XMStoreFloat4(&cb.DirDirection, LightEntity->GetTransform().getForwardVector());
-			cb.DirColors.x = LightEntity->getIntensity() * LightEntity->getColorR();
-			cb.DirColors.y = LightEntity->getIntensity() * LightEntity->getColorG();
-			cb.DirColors.z = LightEntity->getIntensity() * LightEntity->getColorB();
-
-			unsigned int a = LightEntity->getAmbientColor();
-			unsigned char* ab = (unsigned char*) &a;
-			cb.AmbientColor = XMFLOAT4(ab[2] / 255.0F, ab[1] / 255.0F, ab[0] / 255.0F, 0.0F);
-		}
-
-		m_cbFrameData.update(0, cb);
-	}
-
-	angle1 += timer.getDeltaTime() * 4.0F;
-	angle2 += timer.getDeltaTime();
-
-	CameraFollow();
-}
-
-void Graphics::renderFrame(const Timer& timer)
-{
-	update(timer);
-
-	float yaw = (cursorX - m_renderWidth / 2) * -0.01F;
-	float pitch = (cursorY - m_renderHeight / 2) * -0.01F;
-
-	XMMATRIX objectTransform;
-
-
-	objectTransform = XMMatrixRotationY(DirectX::XM_PI * -0.5F) * XMMatrixTranslation(-2.0F, sin(angle1) * 0.5F, 0.0F);
-
-	objectTransform = XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0F);
-
-	objectTransform = XMMatrixRotationY(angle2) * XMMatrixTranslation(2, 0, 0);
-
 	this->beginFrame();
 
-	ID3D12DescriptorHeap* dh[] = { m_cbvHeap, m_samplerHeap };
-	d3dCommandList->SetDescriptorHeaps(2, dh);
 
-	// Frame data.
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 0, cbvDescriptorSize),
-		m_cbFrameData.getDescriptor(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	nEntries++;
+	// Render passes.
+	m_sceneRenderer.renderAll(d3dCommandList);
 
-	// Material data.
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 2, cbvDescriptorSize),
-		m_texture.getShaderResourceView(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	nEntries++;
-	nEntries++;
-
-	d3dDevice->CopyDescriptorsSimple(
-		1,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), 3, cbvDescriptorSize),
-		m_skyboxTexture.getShaderResourceView(),
-		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	nEntries++;
-
-
-	d3dCommandList->SetPipelineState(m_shader.getPipelineStateObject());
-	d3dCommandList->SetGraphicsRootSignature(m_shader.getRootSignature());
-
-	m_shader.setConstantBuffer(2, 0);
-	m_shader.setTexture2D(0, 1);
-
-	// Render object.
-	d3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
-	for (int i = 0; i < renderList.size(); i++) 
-	{
-		d3dCommandList->IASetVertexBuffers(0, 1, &renderList[i].model->GetVertexBuffer()->getVertexBufferView());
-		d3dCommandList->IASetIndexBuffer(&renderList[i].model->GetIndexBuffer()->getIndexBufferView());
-		d3dDevice->CopyDescriptorsSimple(
-			1,
-			CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), nEntries, cbvDescriptorSize),
-			m_cbObjectData.getDescriptor(i),
-			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-		m_shader.setConstantBuffer(0, nEntries);
-
-		nEntries++;
-		d3dCommandList->DrawIndexedInstanced(renderList[i].model->GetNumberTriangle() * 3, 1, 0, 0, 0);
-	}
-
-	
-	m_skyboxRenderer.render(d3dCommandList, 3);
+	m_skyboxRenderer.render(d3dCommandList);
 
 
 	this->endFrame();
 	this->swapBuffers();
 
-	this->freeRenderModel();
+	nEntries = 0;
 }
 
 void Graphics::resizeBuffers(int width, int height)
@@ -444,6 +255,22 @@ void Graphics::resizeBuffers(int width, int height)
 	m_renderWidth = width;
 	m_renderHeight = height;
 }
+
+UINT Graphics::allocateDescriptorTable(INT numDescriptors)
+{
+	UINT base = nEntries;
+	nEntries += numDescriptors;
+	return base;
+}
+
+void Graphics::setGlobalDescriptor(UINT index, D3D12_CPU_DESCRIPTOR_HANDLE descriptor)
+{
+	d3dDevice->CopyDescriptorsSimple(1,
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cbvHeap->GetCPUDescriptorHandleForHeapStart(), index, cbvDescriptorSize),
+		descriptor,
+		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
 
 void Graphics::flushCommandQueue()
 {
@@ -478,6 +305,9 @@ void Graphics::beginFrame()
 	float clearColor[4] = { 0.25F,0.15F,0.4F,1 };
 	//d3dCommandList->ClearRenderTargetView(this->getCurrentBackBufferView(), clearColor, 0, 0);
 	d3dCommandList->ClearDepthStencilView(this->m_depthBufferView, D3D12_CLEAR_FLAG_DEPTH, 1.0F, 0, 0, 0);
+
+	ID3D12DescriptorHeap* dh[] = { m_cbvHeap, m_samplerHeap };
+	d3dCommandList->SetDescriptorHeaps(2, dh);
 }
 
 void Graphics::endFrame()
@@ -506,23 +336,4 @@ void Graphics::executePendingTransfers()
 		this->flushCommandQueue();
 		m_resourceTransferUtility.clear();
 	}
-}
-
-void Graphics::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
-{
-	RenderModel renderModel =
-	{
-		model,
-		renderList.size(),
-	};	
-	ObjectConstantBuffer constbuff;
-	XMStoreFloat4x4(&constbuff.world, worldMatrix);
-	m_cbObjectData.update(renderList.size(), constbuff);
-	renderList.push_back(renderModel);
-}
-
-void Graphics::freeRenderModel()
-{
-	nEntries = 0;
-	renderList.clear();
 }
