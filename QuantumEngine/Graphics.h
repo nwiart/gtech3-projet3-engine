@@ -13,6 +13,7 @@
 #include "Model.h"
 
 #include "SkyboxRenderer.h"
+#include <dxgi.h>
 
 
 
@@ -103,8 +104,6 @@ private:
 	QuEntityLightDirectional* LightEntity;
 
 	static const int NUM_BACK_BUFFERS = 2;
-
-	
 
 	D3D12ResourceTransferUtility m_resourceTransferUtility;
 

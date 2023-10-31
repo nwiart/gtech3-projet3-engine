@@ -73,6 +73,9 @@ int main()
 		sphereEntity->AttachToParent(sphereE);
 	}
 
+	EntityController* c = new EntityController();
+	c->AttachToParent(world);
+
 
 
 	game.openWorld(world);

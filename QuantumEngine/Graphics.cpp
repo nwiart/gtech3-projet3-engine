@@ -5,6 +5,10 @@
 #include "Window.h"
 
 #include "QuEntityLightDirectional.h"
+#include "InputSystem.h"
+#include "QuEntityCamera.h"
+
+QuEntityCamera camera;
 
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
@@ -126,7 +130,7 @@ void Graphics::CameraFollow()
 	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
 	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
 	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
-
+}
 
 void Graphics::createCommandList()
 {
@@ -304,9 +308,6 @@ void Graphics::update(const Timer& timer)
 		// Forward Vector
 		XMStoreFloat4(&cb.cameraDir, camForward);
 
-		// Right Vector
-		XMStoreFloat4(&cb.cameraRight, camRight);
-
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, pos);
 
@@ -333,7 +334,8 @@ void Graphics::update(const Timer& timer)
 
 		m_cbFrameData.update(0, cb);
 	}
-
+	CameraFollow();
+	camera.setCamera(camYaw, camPitch, m_renderWidth, m_renderHeight);
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
 }

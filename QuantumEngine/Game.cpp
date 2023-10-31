@@ -50,7 +50,6 @@ void Game::mainLoop()
 	int frames = 0;
 
 	QuEntityLightDirectional DirectionnalLight;
-	EntityController controller;
 
 	while (!m_window.wantsToClose())
 	{
@@ -60,8 +59,6 @@ void Game::mainLoop()
 
 		m_timer.tick();
 		
-		controller.SetCamera(&Graphics::getInstance());
-
 		DirectionnalLight.ExecuteProcedure();
 		Graphics::getInstance().renderFrame(m_timer);
 
