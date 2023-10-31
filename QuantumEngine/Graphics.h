@@ -10,7 +10,6 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
-#include "InputCallback.h"
 #include "Model.h"
 
 #include "SkyboxRenderer.h"
@@ -26,7 +25,7 @@ typedef struct HWND__* HWND;
 
 
 
-class Graphics : public InputCallback
+class Graphics
 {
 public:
 
@@ -68,8 +67,6 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
-
-	void OnKeyDown(WPARAM wparam) override;
 
 	void CameraFollow();
 

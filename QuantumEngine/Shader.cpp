@@ -162,6 +162,10 @@ Shader::~Shader()
 
 void Shader::destroy()
 {
+	if (m_pso) {
+		m_pso->Release();
+	}
+
 	if (m_rootSignature) {
 		m_rootSignature->Release();
 

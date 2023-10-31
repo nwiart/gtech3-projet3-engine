@@ -113,33 +113,21 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
-	InputSystem::Get().RegisterCallback(this);
-
 	m_skyboxRenderer.init();
 
 	return 0;
 }
 
-void Graphics::OnKeyDown(WPARAM wparam) {
-	switch (wparam) {
-	case VK_UP:
-		pos += camForward * 0.05f;
-		break;
-	case VK_DOWN:
-		pos += camForward * -0.05f;
-		break;
-	case VK_LEFT:
-		pos += camRight * -0.05f;
-		break;
-	case VK_RIGHT:
-		pos += camRight * 0.05f;
-		break;
-	default:
-		break;
-	}
-}
+void Graphics::CameraFollow()
+{
+	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 0.1F : 0.05F;
 
-void Graphics::CameraFollow() {
+	if (InputSystem::Get().isKeyDown('Z')) pos += camForward * speed;
+	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
+	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
+	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
+
+
 	int mouseCurrStateX = cursorX;
 	int mouseCurrStateY = cursorY;
 	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
