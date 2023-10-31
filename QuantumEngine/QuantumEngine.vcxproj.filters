@@ -22,6 +22,10 @@
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="TestInput.cpp" />
+    <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -50,6 +54,10 @@
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="TestInput.h" />
+    <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

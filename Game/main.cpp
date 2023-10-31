@@ -47,7 +47,7 @@ int main()
 	Model* box = new Model();
 
 	Quantum::SphereGenerator::generate(sphere);
-	Quantum::BoxGenerator::generate(box, 5.0f);
+	Quantum::BoxGenerator::generate(box, 0.5f);
 
 	QuWorld* world = new QuWorld();
 
@@ -55,11 +55,11 @@ int main()
 	for (int i = 0; i < 50; i++) 
 	{
 		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-		sphereEntity->setPosition(DirectX::XMFLOAT3(rand() / 100.0f, rand() / 100.0f, rand() / 100.0f));
+		sphereEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
 		sphereEntity->SetModel(sphere);
 		sphereEntity->AttachToParent(world);
 		QuEntityRenderModel* boxEntity = new QuEntityRenderModel();
-		boxEntity->setPosition(DirectX::XMFLOAT3(rand()/ 100.0f, rand() / 100.0f, rand() / 100.0f));
+		boxEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
 		boxEntity->SetModel(box);
 		boxEntity->AttachToParent(world);
 	}
