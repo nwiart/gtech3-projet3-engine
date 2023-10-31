@@ -10,29 +10,16 @@
 #include "QuEntity.h"
 #include "QuEntityLightDirectional.h"
 
-#include "resource.h"
-
-
-
-void loadResource(std::string& out, UINT id);
-
 
 
 void SceneRenderer::init()
 {
 	// Default values.
-	cameraPos    = XMVectorSet(0, 0, -10, 0);
+	cameraPos    = XMVectorSet(0, 0, 0, 0);
 	cameraTarget = XMVectorSet(0, 0, 1, 0);
 	cameraUp     = XMVectorSet(0, 1, 0, 0);
 
-	// Load our shader and our PSO.
-	std::string source;
-	loadResource(source, ID_SHADER_TEST);
-
-	m_shader.compileShaderSource<Shader::SHADER_VS>(source.c_str(), source.length());
-	m_shader.compileShaderSource<Shader::SHADER_PS>(source.c_str(), source.length());
-	m_shader.compile();
-	m_shader.createPSOs();
+	m_shader.init();
 	assert(m_shader.isReady());
 
 

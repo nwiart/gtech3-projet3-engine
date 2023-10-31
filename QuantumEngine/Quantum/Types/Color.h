@@ -14,13 +14,22 @@ public:
 	static const Color BLACK;
 	static const Color BLUE;
 	static const Color GREEN;
+	static const Color CYAN;
 	static const Color RED;
+	static const Color MAGENTA;
+	static const Color YELLOW;
 	static const Color WHITE;
 
 public:
 
 	inline Color()
-		: m_rgba(0x000000ff)
+		: m_rgba(BLACK.getRGBA())
+	{
+
+	}
+
+	inline Color(const Color& o)
+		: m_rgba(o.getRGBA())
 	{
 
 	}
@@ -44,6 +53,8 @@ public:
 	void fromFloat4(float r, float g, float b, float a);
 
 	void toFloat4(float out[4]) const;
+
+	inline unsigned int getRGBA() const { return m_rgba; }
 
 
 

@@ -4,11 +4,14 @@ using namespace Quantum;
 
 
 
-const Color Color::BLACK = 0x000000ff;
-const Color Color::BLUE  = 0x0000FFff;
-const Color Color::GREEN = 0x00FF00ff;
-const Color Color::RED   = 0xFF0000ff;
-const Color Color::WHITE = 0xFFFFFFff;
+const Color Color::BLACK   = 0x000000ff;
+const Color Color::BLUE    = 0x0000FFff;
+const Color Color::GREEN   = 0x00FF00ff;
+const Color Color::CYAN    = 0x00FFFFff;
+const Color Color::RED     = 0xFF0000ff;
+const Color Color::MAGENTA = 0xFF00FFff;
+const Color Color::YELLOW  = 0xFFFF00ff;
+const Color Color::WHITE   = 0xFFFFFFff;
 
 
 

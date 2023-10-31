@@ -1,16 +1,6 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
-
-#include "TestConstantBuffer.h"
-#include "D3D12ConstantBuffer.h"
-#include "D3D12Texture.h"
-
 #include "D3D12ResourceTransferUtility.h"
-
-#include "Model.h"
 
 #include "Quantum/Render/SceneRenderer.h"
 #include "Quantum/Render/SkyboxRenderer.h"
@@ -19,6 +9,8 @@
 
 class Timer;
 class Window;
+
+class Model;
 
 typedef struct HWND__* HWND;
 

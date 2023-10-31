@@ -147,12 +147,6 @@ Shader::Shader()
 	: m_serializedRootSig(0), m_rootSignature(0)
 {
 	ZeroMemory(m_shaderBytecodes, SHADER_NUM_TYPES * sizeof(ID3DBlob*));
-
-	m_parameters.push_back({ "cb_objectData",   0, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
-	m_parameters.push_back({ "cb_materialData", 1, TYPE_CONSTANT_BUFFER, UPDATE_PER_MATERIAL });
-	m_parameters.push_back({ "textureDiffuse",  0, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
-	m_parameters.push_back({ "cb_frameData",    2, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
-	m_parameters.push_back({ 0,                 0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
 }
 
 Shader::~Shader()
@@ -183,16 +177,6 @@ bool Shader::compile()
 	device->CreateRootSignature(0, m_serializedRootSig->GetBufferPointer(), m_serializedRootSig->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
 
 	return true;
-}
-
-void Shader::createPSOs()
-{
-	ID3D12Device* device = Graphics::getInstance().getDevice();
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
-	this->getDefaultPipelineState(psoDesc);
-
-	device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pso));
 }
 
 bool Shader::isReady() const

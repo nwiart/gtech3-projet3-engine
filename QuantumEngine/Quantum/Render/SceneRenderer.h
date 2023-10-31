@@ -4,7 +4,7 @@
 #include "TestConstantBuffer.h"
 
 #include "D3D12Texture.h"
-#include "Shader.h"
+#include "Quantum/Render/ShaderDefault.h"
 
 class Model;
 
@@ -51,7 +51,7 @@ private:
 	std::vector<ObjectConstantBuffer> renderWorldMatrices;
 
 		/// Global shader & texture.
-	Shader m_shader;
+	ShaderDefault m_shader;
 	D3D12Texture m_texture;
 
 		/// Frame-invariant data (camera, view & projection, light sources...).
