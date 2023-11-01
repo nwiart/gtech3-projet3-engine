@@ -19,6 +19,8 @@ const D3D12_INPUT_ELEMENT_DESC Shader::m_defaultInputLayout[] =
 	{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 8 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 };
 
+// Do not modify this. This is a constant describing all default pipeline states.
+// To customize on a per-shader basis, copy this into a new structure and overwrite members.
 const D3D12_GRAPHICS_PIPELINE_STATE_DESC Shader::m_defaultPipelineState =
 {
 	0,

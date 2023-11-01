@@ -32,9 +32,8 @@ int Game::init()
 	m_window.initialize(1280, 720, WINDOW_TITLE, false);
 
 	status = Graphics::initialize(&m_window);
-	if (status) {
-		return status;
-	}
+
+	return status;
 }
 
 void Game::shutdown()

@@ -26,7 +26,11 @@ const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
 
 
+#ifdef _DEBUG
 int main()
+#else
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+#endif
 {
 	srand(time(0));
 
@@ -48,7 +52,7 @@ int main()
 	world->attachChild(dirLight);
 
 	QuEntity* sphereE;
-	for (int i = 0; i < 50; i++) 
+	for (int i = 0; i < 5000; i++) 
 	{
 		namespace qm = Quantum::Math;
 
