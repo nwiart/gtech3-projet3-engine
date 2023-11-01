@@ -9,7 +9,7 @@
 
 
 
-class SkyboxRenderer
+class SkyboxPass
 {
 public:
 
@@ -18,7 +18,7 @@ public:
 
 	void setTexture(D3D12Texture* tex);
 
-	void render(ID3D12GraphicsCommandList* cmdList);
+	void render(ID3D12GraphicsCommandList* cmdList, UINT frameData);
 
 
 	

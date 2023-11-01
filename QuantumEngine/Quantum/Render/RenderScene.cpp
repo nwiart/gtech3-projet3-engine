@@ -1,88 +1,74 @@
 #include "stdafx.h"
-#include "SceneRenderer.h"
+#include "RenderScene.h"
 
 #include "Graphics.h"
-
-#include "Model.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
 
 #include "QuEntity.h"
 #include "QuEntityLightDirectional.h"
 
 
 
-void SceneRenderer::init()
+void RenderScene::init()
 {
 	// Default values.
 	cameraPos    = XMVectorSet(0, 0, 0, 0);
 	cameraTarget = XMVectorSet(0, 0, 1, 0);
 	cameraUp     = XMVectorSet(0, 1, 0, 0);
 
-	m_shader.init();
-	assert(m_shader.isReady());
-
-
 	m_cbFrameData.init();
-	m_cbObjectData.init(65000);
+	m_cbObjectData.init(QU_RENDER_MAX_MESHES);
 
-	m_texture.loadFromDisk("awesome_sphere.dds", D3D12_SRV_DIMENSION_TEXTURE2D);
+	m_passScene.init();
+	m_passSkybox.init();
 }
 
-void SceneRenderer::destroy()
+void RenderScene::destroy()
 {
-	m_cbFrameData.destroy();
+	m_passSkybox.destroy();
+	m_passScene.destroy();
+
 	m_cbObjectData.destroy();
-
-	m_shader.destroy();
-
-	m_texture.destroy();
+	m_cbFrameData.destroy();
 }
 
-void SceneRenderer::renderAll(ID3D12GraphicsCommandList* cmdList)
+void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 {
 	Graphics& g = Graphics::getInstance();
 
 	this->updateFrameCB();
 	this->updateObjectCB();
 
-	// Bind shader.
-	cmdList->SetPipelineState(m_shader.getPipelineStateObject());
-	cmdList->SetGraphicsRootSignature(m_shader.getRootSignature());
 
 	// Frame data.
-	UINT index = g.allocateDescriptorTable(1);
-	g.setGlobalDescriptor(index, m_cbFrameData.getDescriptor());
-	m_shader.setConstantBuffer(2, index);
+	UINT cb_frameData_ID = g.allocateDescriptorTable(1);
+	g.setGlobalDescriptor(cb_frameData_ID, m_cbFrameData.getDescriptor());
 
 	// Material data.
-	index = g.allocateDescriptorTable(2);
-	g.setGlobalDescriptor(index + 1, m_texture.getShaderResourceView());
-	m_shader.setTexture2D(0, index);
+	UINT cb_materialData_ID = g.allocateDescriptorTable(2);
 
-	// Render object.
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
+	// Object world matrices.
+	UINT cb_objectData_IDbase = g.allocateDescriptorTable(renderList.size());
 	for (int i = 0; i < renderList.size(); i++)
 	{
-		cmdList->IASetVertexBuffers(0, 1, &renderList[i].model->GetVertexBuffer()->getVertexBufferView());
-		cmdList->IASetIndexBuffer(&renderList[i].model->GetIndexBuffer()->getIndexBufferView());
-
-		UINT objectCBVIndex = g.allocateDescriptorTable(1);
-		g.setGlobalDescriptor(objectCBVIndex, m_cbObjectData.getDescriptor(i));
-		m_shader.setConstantBuffer(0, objectCBVIndex);
-
-		cmdList->DrawIndexedInstanced(renderList[i].model->GetNumberTriangle() * 3, 1, 0, 0, 0);
+		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbObjectData.getDescriptor(i));
 	}
+
+
+	m_passScene.renderAll(cmdList, renderList, cb_frameData_ID, cb_materialData_ID, cb_objectData_IDbase);
+
+	m_passSkybox.render(cmdList, cb_frameData_ID);
 
 
 	// Clear model list.
 	this->freeRenderModel();
 }
 
-void SceneRenderer::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
+
+
+void RenderScene::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
 {
+	assert(renderList.size() < QU_RENDER_MAX_MESHES);
+
 	RenderModel renderModel =
 	{
 		model,
@@ -96,36 +82,36 @@ void SceneRenderer::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
 	renderWorldMatrices.push_back(cb);
 }
 
-void SceneRenderer::freeRenderModel()
+void RenderScene::freeRenderModel()
 {
 	renderList.clear();
 	renderWorldMatrices.clear();
 }
 
-void SceneRenderer::setCamera(QuEntity* camera)
+void RenderScene::setCamera(QuEntity* camera)
 {
-	QuEntity* en = (QuEntity*) camera;
+	QuEntity* en = (QuEntity*)camera;
 
 	XMVECTOR fwd = en->GetTransform().getForwardVector();
 
-	cameraPos    = en->getWorldPosition();
+	cameraPos = en->getWorldPosition();
 	cameraTarget = XMVectorAdd(cameraPos, fwd);
-	cameraUp     = en->getUpVector();
+	cameraUp = en->getUpVector();
 }
 
-void SceneRenderer::setDirectionalLight(QuEntityLightDirectional* en)
+void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
 {
 	m_directionalLight = en;
 }
 
-void SceneRenderer::setPointLight(int index, QuEntityLightPoint* en)
+void RenderScene::setPointLight(int index, QuEntityLightPoint* en)
 {
 
 }
 
 
 
-void SceneRenderer::updateFrameCB()
+void RenderScene::updateFrameCB()
 {
 	TestConstantBuffer cb;
 	{
@@ -133,7 +119,7 @@ void SceneRenderer::updateFrameCB()
 
 		// Combined view and projection matrices.
 		float fov = 70.0F;
-		float aspectRatio = Graphics::getInstance().getRenderWidth() / (float) Graphics::getInstance().getRenderHeight();
+		float aspectRatio = Graphics::getInstance().getRenderWidth() / (float)Graphics::getInstance().getRenderHeight();
 
 		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(fov), aspectRatio, 0.05F, 1000.0F);
@@ -170,7 +156,7 @@ void SceneRenderer::updateFrameCB()
 	}
 }
 
-void SceneRenderer::updateObjectCB()
+void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
 }

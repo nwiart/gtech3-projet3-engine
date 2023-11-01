@@ -52,7 +52,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	world->attachChild(dirLight);
 
 	QuEntity* sphereE;
-	for (int i = 0; i < 5000; i++) 
+	for (int i = 0; i < 50; i++)
 	{
 		namespace qm = Quantum::Math;
 
@@ -63,7 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		sphereE = sphereEntity;
 	}
-	
+
 	for (int i = 0; i < 10; i++)
 	{
 		namespace qm = Quantum::Math;

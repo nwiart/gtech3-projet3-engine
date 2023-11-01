@@ -3,8 +3,14 @@
 #include "D3D12ConstantBuffer.h"
 #include "TestConstantBuffer.h"
 
-#include "D3D12Texture.h"
-#include "Quantum/Render/ShaderDefault.h"
+#include "Quantum/Render/ScenePass.h"
+#include "Quantum/Render/SkyboxPass.h"
+
+#include "Quantum/Render/RenderModel.h"
+
+#define QU_RENDER_MAX_MESHES 16384
+
+
 
 class Model;
 
@@ -14,7 +20,7 @@ class QuEntityLightPoint;
 
 
 
-class SceneRenderer
+class RenderScene
 {
 	friend class Graphics;
 
@@ -25,6 +31,8 @@ private:
 
 	void renderAll(ID3D12GraphicsCommandList* cmdList);
 
+
+
 	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
 
 	void freeRenderModel();
@@ -33,6 +41,8 @@ private:
 	void setDirectionalLight(QuEntityLightDirectional* en);
 	void setPointLight(int index, QuEntityLightPoint* en);
 
+private:
+
 	void updateFrameCB();
 	void updateObjectCB();
 
@@ -40,26 +50,20 @@ private:
 
 private:
 
-	struct RenderModel
-	{
-		Model* model;
-		int cbID;
-	};
+	ScenePass m_passScene;
+	SkyboxPass m_passSkybox;
+
 
 		/// List of objects to render.
 	std::vector<RenderModel> renderList;
 	std::vector<ObjectConstantBuffer> renderWorldMatrices;
 
-		/// Global shader & texture.
-	ShaderDefault m_shader;
-	D3D12Texture m_texture;
 
 		/// Frame-invariant data (camera, view & projection, light sources...).
 	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
 
 		/// Array of constant buffers for object transforms.
 	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
-
 
 
 		/// Cached data to send to the constant buffer.

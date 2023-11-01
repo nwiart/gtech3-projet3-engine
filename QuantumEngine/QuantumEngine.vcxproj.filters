@@ -25,11 +25,12 @@
     <ClCompile Include="Quantum\Math\Math.cpp" />
     <ClCompile Include="InputCallback.cpp" />
     <ClCompile Include="InputSystem.cpp" />
-    <ClCompile Include="Quantum\Render\SceneRenderer.cpp" />
+    <ClCompile Include="Quantum\Render\ScenePass.cpp" />
     <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
-    <ClCompile Include="Quantum\Render\SkyboxRenderer.cpp" />
+    <ClCompile Include="Quantum\Render\SkyboxPass.cpp" />
     <ClCompile Include="Quantum\Types\Color.cpp" />
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
+    <ClCompile Include="Quantum\Render\RenderScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -62,11 +63,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="Quantum\Render\SceneRenderer.h" />
+    <ClInclude Include="Quantum\Render\ScenePass.h" />
     <ClInclude Include="Quantum\Render\ShaderSkybox.h" />
-    <ClInclude Include="Quantum\Render\SkyboxRenderer.h" />
+    <ClInclude Include="Quantum\Render\SkyboxPass.h" />
     <ClInclude Include="Quantum\Types\Color.h" />
     <ClInclude Include="Quantum\Render\ShaderDefault.h" />
+    <ClInclude Include="Quantum\Render\RenderScene.h" />
+    <ClInclude Include="Quantum\Render\RenderModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

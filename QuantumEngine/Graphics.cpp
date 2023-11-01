@@ -107,8 +107,7 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
-	m_sceneRenderer.init();
-	m_skyboxRenderer.init();
+	m_renderScene.init();
 
 	return 0;
 }
@@ -205,7 +204,7 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 
 void Graphics::_shutdown()
 {
-	m_skyboxRenderer.destroy();
+	m_renderScene.destroy();
 
 	m_cbvHeap->Release();
 	m_samplerHeap->Release();
@@ -239,9 +238,7 @@ void Graphics::renderFrame()
 
 
 	// Render passes.
-	m_sceneRenderer.renderAll(d3dCommandList);
-
-	m_skyboxRenderer.render(d3dCommandList);
+	m_renderScene.renderAll(d3dCommandList);
 
 
 	this->endFrame();

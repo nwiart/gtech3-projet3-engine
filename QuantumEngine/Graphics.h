@@ -2,8 +2,7 @@
 
 #include "D3D12ResourceTransferUtility.h"
 
-#include "Quantum/Render/SceneRenderer.h"
-#include "Quantum/Render/SkyboxRenderer.h"
+#include "Quantum/Render/RenderScene.h"
 
 
 
@@ -29,10 +28,10 @@ public:
 
 public:
 
-	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_sceneRenderer.addRenderModel(model, worldMatrix); }
+	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_renderScene.addRenderModel(model, worldMatrix); }
 
-	void setCamera(class QuEntity* camera) { m_sceneRenderer.setCamera(camera); }
-	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_sceneRenderer.setDirectionalLight(dl); }
+	void setCamera(class QuEntity* camera) { m_renderScene.setCamera(camera); }
+	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
 
 
 	void renderFrame();
@@ -145,6 +144,5 @@ private:
 
 	int nEntries = 0;
 
-	SceneRenderer m_sceneRenderer;
-	SkyboxRenderer m_skyboxRenderer;
+	RenderScene m_renderScene;
 };

@@ -33,9 +33,10 @@
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
     <ClCompile Include="Quantum\Math\Transform.cpp" />
-    <ClCompile Include="Quantum\Render\SceneRenderer.cpp" />
+    <ClCompile Include="Quantum\Render\ScenePass.cpp" />
+    <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
-    <ClCompile Include="Quantum\Render\SkyboxRenderer.cpp" />
+    <ClCompile Include="Quantum\Render\SkyboxPass.cpp" />
     <ClCompile Include="Quantum\Types\Color.cpp" />
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
@@ -66,9 +67,11 @@
     <ClInclude Include="Quantum\Generate\SphereGenerator.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
     <ClInclude Include="Quantum\Math\Transform.h" />
-    <ClInclude Include="Quantum\Render\SceneRenderer.h" />
+    <ClInclude Include="Quantum\Render\RenderModel.h" />
+    <ClInclude Include="Quantum\Render\RenderScene.h" />
+    <ClInclude Include="Quantum\Render\ScenePass.h" />
     <ClInclude Include="Quantum\Render\ShaderSkybox.h" />
-    <ClInclude Include="Quantum\Render\SkyboxRenderer.h" />
+    <ClInclude Include="Quantum\Render\SkyboxPass.h" />
     <ClInclude Include="Quantum\Types\Color.h" />
     <ClInclude Include="Quantum\World\World.h" />
     <ClInclude Include="QuEntity.h" />
