@@ -6,20 +6,6 @@
 
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
-#include "QuEntityCamera.h"
-
-QuEntityCamera camera;
-
-
-
-XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-XMVECTOR DefaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-
 
 // Loading resources from the executable.
 void loadResource(std::string& out, UINT id)
@@ -34,8 +20,6 @@ void loadResource(std::string& out, UINT id)
 
 	FreeResource(resg);
 }
-
-
 
 //
 // Public API.

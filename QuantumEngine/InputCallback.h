@@ -8,5 +8,5 @@ public:
 
 	virtual void OnKeyDown(unsigned short vkCode) { }
 
-	virtual void OnMouseDown(int button) { }
+	virtual void OnMouseDown(unsigned short vkCode) { }
 };

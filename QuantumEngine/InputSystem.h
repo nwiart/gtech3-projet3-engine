@@ -10,8 +10,8 @@ class InputSystem
 public:
 	inline bool isMouseDown(int vkCode) const { return m_mouseState[vkCode]; }
 
-	void MouseDown(WPARAM wparam);
-	void MouseUp(WPARAM wparam);
+	void MouseDown(unsigned short vkCode);
+	void MouseUp(unsigned short vkCode);
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 

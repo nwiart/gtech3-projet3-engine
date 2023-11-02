@@ -156,3 +156,12 @@ void QuEntity::updateWorldMatrix()
 
 	DirectX::XMStoreFloat4x4(&m_cachedWorldMatrix, res);
 }
+
+QuEntity* QuEntity::getWorld() {
+	QuEntity* parent = this->m_Parent;
+	while (parent->m_Parent != NULL)
+	{
+		parent = parent->m_Parent;
+	}
+	return parent;
+}

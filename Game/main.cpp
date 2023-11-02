@@ -17,7 +17,7 @@
 #include <time.h>
 
 #include "EntityController.h"
-
+#include "Shooting.h"
 
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
@@ -61,32 +61,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		// Spheres.
 		QuEntity* sphereE;
-		for (int i = 0; i < 50; i++)
-		{
-			namespace qm = Quantum::Math;
+		//for (int i = 0; i < 50; i++)
+		//{
+		//	namespace qm = Quantum::Math;
 
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
-			world->attachChild(sphereEntity);
+		//	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+		//	sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
+		//	sphereEntity->SetModel(sphere);
+		//	world->attachChild(sphereEntity);
 
-			sphereE = sphereEntity;
-		}
+		//	sphereE = sphereEntity;
+		//}
 
-		for (int i = 0; i < 10; i++)
-		{
-			namespace qm = Quantum::Math;
+		//for (int i = 0; i < 10; i++)
+		//{
+		//	namespace qm = Quantum::Math;
 
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
-			world->attachChild(sphereEntity);
-		}
+		//	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+		//	sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
+		//	sphereEntity->SetModel(sphere);
+		//	world->attachChild(sphereEntity);
+		//}
+
+		EntityController* c = new EntityController();
+		world->attachChild(c);
+
+		Shooting* s = new Shooting();
+		world->attachChild(s);
 	}
-
-	EntityController* c = new EntityController();
-	c->AttachToParent(world);
-
 
 	game.openWorld(world);
 
