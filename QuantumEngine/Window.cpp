@@ -97,8 +97,8 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_MOUSEMOVE:
-		Graphics::getInstance().cursorX = (lparam & 0xFFFF);
-		Graphics::getInstance().cursorY = (lparam >> 16 & 0xFFFF);
+		InputSystem::Get().cursorX = (lparam & 0xFFFF);
+		InputSystem::Get().cursorY = (lparam >> 16 & 0xFFFF);
 		break;
 		// Prevent Alt key from triggering menu, which freezes the application.
 	case WM_SYSCOMMAND:

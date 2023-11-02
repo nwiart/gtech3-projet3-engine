@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Windows.h>
 #include "InputCallback.h"
 
 class InputSystem
@@ -7,6 +8,9 @@ class InputSystem
 public:
 	InputSystem();
 	~InputSystem();
+
+	int cursorX;
+	int cursorY;
 
 	void FireKeyDown(WPARAM wparam);
 	void FireKeyUp(WPARAM wparam);

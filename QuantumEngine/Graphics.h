@@ -13,6 +13,7 @@
 #include "Model.h"
 
 #include "SkyboxRenderer.h"
+#include <dxgi.h>
 
 
 
@@ -58,7 +59,7 @@ public:
 	void beginFrame();
 	void endFrame();
 	void swapBuffers();
-
+	void OnKeyDown(WPARAM wparam);
 
 
 	/// Initialization methods.
@@ -67,9 +68,7 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
-
 	void CameraFollow();
-
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
 
@@ -106,8 +105,6 @@ private:
 
 	static const int NUM_BACK_BUFFERS = 2;
 
-	
-
 	D3D12ResourceTransferUtility m_resourceTransferUtility;
 
 	HANDLE m_fenceEvent;
@@ -139,16 +136,15 @@ private:
 #endif
 
 	UINT rtvDescriptorSize, dsvDescriptorSize, cbvDescriptorSize, samplerDescriptorSize;
-
-	int m_renderWidth;
-	int m_renderHeight;
-
 	int m_currentBackBuffer;
 
 
 
 	/// Cube test.
 public:
+
+	int m_renderWidth;
+	int m_renderHeight;
 
 	int cursorX;
 	int cursorY;

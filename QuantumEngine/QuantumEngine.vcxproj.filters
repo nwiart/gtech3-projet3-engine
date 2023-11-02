@@ -27,6 +27,7 @@
     <ClCompile Include="SkyboxRenderer.cpp" />
     <ClCompile Include="InputCallback.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="QuEntityCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="QuEntityCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
