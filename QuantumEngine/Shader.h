@@ -54,8 +54,6 @@ public:
 
 	bool compile();
 
-	void createPSOs();
-
 		/// Root signature must be valid, and shader must have at least a vertex and a pixel shader.
 	bool isReady() const;
 

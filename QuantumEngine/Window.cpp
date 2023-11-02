@@ -78,6 +78,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 	case WM_CLOSE:
 		window->setWantsToClose(true);
 		break;
+
 	case WM_KEYDOWN:
 		InputSystem::Get().FireKeyDown(wparam);
 		break;
@@ -97,13 +98,14 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_MOUSEMOVE:
-		InputSystem::Get().cursorX = (lparam & 0xFFFF);
-		InputSystem::Get().cursorY = (lparam >> 16 & 0xFFFF);
+		InputSystem::Get().FireMouseMove((lparam & 0xFFFF), (lparam >> 16 & 0xFFFF));
 		break;
+
 		// Prevent Alt key from triggering menu, which freezes the application.
 	case WM_SYSCOMMAND:
 		if (wparam == SC_KEYMENU) return 0;
 		break;
+
 	default:
 		break;
 	}

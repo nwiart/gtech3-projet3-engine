@@ -1,21 +1,19 @@
 #include "stdafx.h"
 #include "InputSystem.h"
-#include <iostream>
+
+#include <string.h>
 
 
-InputSystem::InputSystem() {}
-InputSystem::~InputSystem() {}
 
-void InputSystem::FireKeyDown(WPARAM wparam)
+InputSystem::InputSystem()
+	: m_cursorX(0), m_cursorY(0), m_lastCursorX(0), m_lastCursorY(0)
 {
-	m_keyState[wparam] = true;
-	ExecuteCallbacks(wparam);
+	memset(m_keyState, 0, sizeof(m_keyState));
 }
 
-void InputSystem::FireKeyUp(WPARAM wparam)
+InputSystem::~InputSystem()
 {
-	m_keyState[wparam] = false;
-	ExecuteCallbacks(wparam);
+
 }
 
 void InputSystem::MouseDown(WPARAM wparam)
@@ -30,15 +28,40 @@ void InputSystem::MouseUp(WPARAM wparam)
 	ExecuteCallbacks(wparam);
 }
 
-void InputSystem::RegisterCallback(InputCallback* callback)
+void InputSystem::FireKeyDown(unsigned short vkCode)
 {
-	m_callbacklist.push_back(callback);
+	m_keyState[vkCode] = true;
+
+	for (auto& callback : m_callbacklist)
+	{
+		callback->OnKeyDown(vkCode);
+	}
 }
 
-void InputSystem::ExecuteCallbacks(WPARAM wparam)
+void InputSystem::FireKeyUp(unsigned short vkCode)
+{
+	m_keyState[vkCode] = false;
+}
+
+void InputSystem::FireMouseMove(int newX, int newY)
+{
+	m_lastCursorX = m_cursorX;
+	m_lastCursorY = m_cursorY;
+
+	m_cursorX = newX;
+	m_cursorY = newY;
+}
+
+void InputSystem::FireMouseDown(int button)
 {
 	for (auto& callback : m_callbacklist)
 	{
-		callback->OnKeyDown(wparam);
+		callback->OnMouseDown(button);
 	}
+}
+
+
+void InputSystem::RegisterCallback(InputCallback* callback)
+{
+	m_callbacklist.push_back(callback);
 }
