@@ -40,6 +40,7 @@ private:
 	void setCamera(class QuEntity* camera);
 	void setDirectionalLight(QuEntityLightDirectional* en);
 	void setPointLight(int index, QuEntityLightPoint* en);
+	void setSkybox(class QuEntityRenderSkybox* skybox);
 
 private:
 

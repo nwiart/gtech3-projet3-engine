@@ -3,9 +3,9 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-#include "D3D12Texture.h"
-
 #include "ShaderSkybox.h"
+
+class D3D12Texture;
 
 
 
@@ -29,6 +29,5 @@ private:
 
 	ShaderSkybox m_shader;
 
-	D3D12Texture m_skyboxTexture;
 	D3D12Texture* m_textureCube;
 };

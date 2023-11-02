@@ -3,8 +3,11 @@
 
 #include "Graphics.h"
 
+#include "TextureCube.h"
+
 #include "QuEntity.h"
 #include "QuEntityLightDirectional.h"
+#include "QuEntityRenderSkybox.h"
 
 
 
@@ -107,6 +110,11 @@ void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
 void RenderScene::setPointLight(int index, QuEntityLightPoint* en)
 {
 
+}
+
+void RenderScene::setSkybox(QuEntityRenderSkybox* skybox)
+{
+	m_passSkybox.setTexture(skybox->getTexture()->getTexture());
 }
 
 

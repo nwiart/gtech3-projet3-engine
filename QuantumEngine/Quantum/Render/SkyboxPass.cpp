@@ -49,15 +49,10 @@ void SkyboxPass::init()
 	m_boxIB.setData(indices, sizeof(indices));
 
 	m_shader.init();
-
-	m_skyboxTexture.loadFromDisk("textures/milkyway.dds", D3D12_SRV_DIMENSION_TEXTURECUBE);
-	m_textureCube = &m_skyboxTexture;
 }
 
 void SkyboxPass::destroy()
 {
-	m_skyboxTexture.destroy();
-
 	m_boxVB.destroy();
 	m_boxIB.destroy();
 }
@@ -70,6 +65,9 @@ void SkyboxPass::setTexture(D3D12Texture* tex)
 void SkyboxPass::render(ID3D12GraphicsCommandList* cmdList, UINT frameData)
 {
 	Graphics& g = Graphics::getInstance();
+
+	// No texture bound.
+	if (!m_textureCube) return;
 
 	UINT skyboxTextureID = g.allocateDescriptorTable(1);
 	g.setGlobalDescriptor(skyboxTextureID, m_textureCube->getShaderResourceView());

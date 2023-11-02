@@ -10,7 +10,10 @@ using namespace Microsoft::WRL;
 #include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 
+#include "TextureCube.h"
+
 #include "QuEntityRenderModel.h"
+#include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
 
 #include "Quantum/Math/Math.h"
@@ -42,41 +45,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 
+	// Load resources.
 	Model* sphere = new Model();
-
 	Quantum::SphereGenerator::generate(sphere);
 
+	TextureCube skyboxTexture("textures/milkyway.dds");
+
+
+	// Create the world.
 	QuWorld* world = new QuWorld();
-
-	QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
-	world->attachChild(dirLight);
-
-	QuEntity* sphereE;
-	for (int i = 0; i < 50; i++)
 	{
-		namespace qm = Quantum::Math;
+		// Global directional light.
+		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
+		world->attachChild(dirLight);
 
-		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-		sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-		sphereEntity->SetModel(sphere);
-		world->attachChild(sphereEntity);
+		// Skybox.
+		QuEntityRenderSkybox* entitySkybox = new QuEntityRenderSkybox();
+		entitySkybox->setTexture(&skyboxTexture);
+		world->attachChild(entitySkybox);
 
-		sphereE = sphereEntity;
+		// Spheres.
+		QuEntity* sphereE;
+		for (int i = 0; i < 50; i++)
+		{
+			namespace qm = Quantum::Math;
+
+			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
+			sphereEntity->SetModel(sphere);
+			world->attachChild(sphereEntity);
+
+			sphereE = sphereEntity;
+		}
+
+		for (int i = 0; i < 10; i++)
+		{
+			namespace qm = Quantum::Math;
+
+			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
+			sphereEntity->SetModel(sphere);
+			world->attachChild(sphereEntity);
+		}
 	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		namespace qm = Quantum::Math;
-
-		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-		sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-		sphereEntity->SetModel(sphere);
-		world->attachChild(sphereEntity);
-	}
-
-
 
 	game.openWorld(world);
+
 
 	game.mainLoop();
 
