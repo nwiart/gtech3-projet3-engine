@@ -11,8 +11,6 @@ void loadResource(std::string& out, UINT id);
 
 ShaderSkybox::ShaderSkybox()
 {
-	m_parameters.clear();
-
 	m_parameters.push_back({ "textureSkybox",   0, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
 	m_parameters.push_back({ "cb_frameData",    2, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
 	m_parameters.push_back({ 0,                 0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });

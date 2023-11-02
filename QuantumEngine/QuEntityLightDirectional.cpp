@@ -5,12 +5,10 @@
 
 QuEntityLightDirectional::QuEntityLightDirectional()
 {
-	m_ColorR = 1.0F;
-	m_ColorG = 0.85F;
-	m_ColorB = 0.7F;
-	m_Intensity = 1.0F;
+	m_ambientColor = 0x102038ff;
+	m_color.fromFloat4(1.0F, 0.85F, 0.7F, 1.0F);
 
-	m_ambientColor = 0x102038;
+	m_intensity = 1.0F;
 }
 
 QuEntityLightDirectional::~QuEntityLightDirectional()
@@ -19,5 +17,5 @@ QuEntityLightDirectional::~QuEntityLightDirectional()
 
 void QuEntityLightDirectional::ExecuteProcedure()
 {
-	Graphics::getInstance().UpdateDirectionalLight(this);
+	Graphics::getInstance().setDirectionalLight(this);
 }

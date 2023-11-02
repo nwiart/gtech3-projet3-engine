@@ -2,18 +2,15 @@
 #include "Game.h"
 
 #include "Graphics.h"
+
+#include "QuWorld.h"
 #include "QuEntityLightDirectional.h"
-
-
-#include "TestConstantBuffer.h"
-
-#include "D3D12UploadHelper.h"
 
 #include <iostream>
 #include <cassert>
 #include <string>
 #include <ctime>
-#include "../Game/EntityController.h"	
+
 
 
 static const char WINDOW_TITLE[] = "Direct3D 12 Test";
@@ -32,9 +29,8 @@ int Game::init()
 	m_window.initialize(1280, 720, WINDOW_TITLE, false);
 
 	status = Graphics::initialize(&m_window);
-	if (status) {
-		return status;
-	}
+
+	return status;
 }
 
 void Game::shutdown()
@@ -49,8 +45,6 @@ void Game::mainLoop()
 
 	int frames = 0;
 
-	QuEntityLightDirectional DirectionnalLight;
-
 	while (!m_window.wantsToClose())
 	{
 		visitEntity(m_world);
@@ -58,9 +52,9 @@ void Game::mainLoop()
 		m_window.pollEvents();
 
 		m_timer.tick();
-		
-		DirectionnalLight.ExecuteProcedure();
-		Graphics::getInstance().renderFrame(m_timer);
+
+		Graphics::getInstance().renderFrame();
+
 
 		// Display FPS each second.
 		frames++;
@@ -84,6 +78,18 @@ void Game::openWorld(QuWorld* world)
 {
 	m_world = world;
 }
+
+int Game::getRenderWidth() const
+{
+	return Graphics::getInstance().getRenderWidth();
+}
+
+int Game::getRenderHeight() const
+{
+	return Graphics::getInstance().getRenderHeight();
+}
+
+
 
 void Game::visitEntity(QuEntity* entity)
 {

@@ -11,12 +11,22 @@ class QuEntity
 		QuEntity();
 		~QuEntity();
 
+		void attachChild(QuEntity* child);
 		void AttachToParent(QuEntity* Parent);
 		void DetachFromParent();
 
 		const Quantum::Transform& GetTransform() const { return m_Transform; }
 
 		const DirectX::XMFLOAT4X4& GetWorldTransformMatrix() { this->updateWorldMatrix(); return m_cachedWorldMatrix; }
+
+			/// Get world transform of this entity.
+		DirectX::XMVECTOR getWorldPosition();
+		DirectX::XMVECTOR getWorldRotation();
+
+			/// Direction vectors in world space.
+		DirectX::XMVECTOR getForwardVector();
+		DirectX::XMVECTOR getRightVector();
+		DirectX::XMVECTOR getUpVector();
 
 			/// Set local transform components.
 		void setPosition(DirectX::XMFLOAT3 positon);

@@ -20,6 +20,8 @@ public:
 	void setIdentity();
 
 	DirectX::XMVECTOR getForwardVector() const;
+	DirectX::XMVECTOR getRightVector() const;
+	DirectX::XMVECTOR getUpVector() const;
 
 	inline const DirectX::XMFLOAT3& getPosition() const { return m_position; }
 	inline const DirectX::XMFLOAT4& getRotation() const { return m_rotation; }

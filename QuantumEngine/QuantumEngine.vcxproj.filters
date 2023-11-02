@@ -21,12 +21,16 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="QuEntityRenderSkybox.cpp" />
     <ClCompile Include="TextureCube.cpp" />
-    <ClCompile Include="ShaderSkybox.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
-    <ClCompile Include="SkyboxRenderer.cpp" />
     <ClCompile Include="InputCallback.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Quantum\Render\ScenePass.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
+    <ClCompile Include="Quantum\Render\SkyboxPass.cpp" />
+    <ClCompile Include="Quantum\Types\Color.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
+    <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="QuEntityCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -55,14 +59,22 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="QuEntityRenderSkybox.h" />
     <ClInclude Include="TextureCube.h" />
-    <ClInclude Include="ShaderSkybox.h" />
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
-    <ClInclude Include="SkyboxRenderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Quantum\Render\ScenePass.h" />
+    <ClInclude Include="Quantum\Render\ShaderSkybox.h" />
+    <ClInclude Include="Quantum\Render\SkyboxPass.h" />
+    <ClInclude Include="Quantum\Types\Color.h" />
+    <ClInclude Include="Quantum\Render\ShaderDefault.h" />
+    <ClInclude Include="Quantum\Render\RenderScene.h" />
+    <ClInclude Include="Quantum\Render\RenderModel.h" />
+=======
     <ClInclude Include="QuEntityCamera.h" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
@@ -122,5 +134,8 @@
     <ClInclude Include="DDS\DDSTextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D3D12ConstantBuffer.inl" />
   </ItemGroup>
 </Project>

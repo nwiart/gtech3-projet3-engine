@@ -17,9 +17,19 @@ void Transform::setIdentity()
 	m_scale    = { 1.0F, 1.0F, 1.0F };
 }
 
-DirectX::XMVECTOR Quantum::Transform::getForwardVector() const
+XMVECTOR Transform::getForwardVector() const
 {
 	return XMVector3Rotate(XMVectorSet(0, 0, 1, 0), XMLoadFloat4(&m_rotation));
+}
+
+XMVECTOR Transform::getRightVector() const
+{
+	return XMVector3Rotate(XMVectorSet(1, 0, 0, 0), XMLoadFloat4(&m_rotation));
+}
+
+XMVECTOR Transform::getUpVector() const
+{
+	return XMVector3Rotate(XMVectorSet(0, 1, 0, 0), XMLoadFloat4(&m_rotation));
 }
 
 const XMFLOAT4X4& Transform::toMatrix()
