@@ -18,7 +18,9 @@ using namespace Microsoft::WRL;
 #include <stdlib.h>
 #include <time.h>
 
+#include "EntityController.h"
 
+//EntityController entityController;
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
@@ -70,6 +72,9 @@ int main()
 		sphereEntity->SetModel(sphere);
 		sphereEntity->AttachToParent(sphereE);
 	}
+
+	EntityController* c = new EntityController();
+	c->AttachToParent(world);
 
 
 

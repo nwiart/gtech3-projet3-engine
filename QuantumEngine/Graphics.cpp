@@ -6,6 +6,9 @@
 
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
+#include "QuEntityCamera.h"
+
+QuEntityCamera camera;
 
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
@@ -127,30 +130,6 @@ void Graphics::CameraFollow()
 	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
 	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
 	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
-
-
-	int mouseCurrStateX = cursorX;
-	int mouseCurrStateY = cursorY;
-	mouseCurrStateX = mouseCurrStateX - m_renderWidth / 2;
-	mouseCurrStateY = mouseCurrStateY - m_renderHeight / 2;
-
-	int deadZoneX = (m_renderWidth * 5) / 100;
-	int deadZoneY = (m_renderHeight * 5) / 100;
-
-	mouseLastStateX = mouseCurrStateX;
-	mouseLastStateY = mouseCurrStateY;
-	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
-		return;
-	else {
-		camYaw += mouseLastStateX * 0.0001f;
-		camPitch += mouseLastStateY * 0.0001f;
-
-		// Limit pitch to straight up or straight down. To Remove
-		if (camPitch > 1.570796f)
-			camPitch = 1.570796f;
-		if (camPitch < -1.570796f)
-			camPitch = -1.570796f;
-	}
 }
 
 void Graphics::createCommandList()
@@ -326,6 +305,9 @@ void Graphics::update(const Timer& timer)
 		// Combined view and projection matrices.
 		XMStoreFloat4x4(&cb.viewProjection, view * projection);
 
+		// Forward Vector
+		XMStoreFloat4(&cb.cameraDir, camForward);
+
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, pos);
 
@@ -352,11 +334,10 @@ void Graphics::update(const Timer& timer)
 
 		m_cbFrameData.update(0, cb);
 	}
-
+	CameraFollow();
+	camera.setCamera(camYaw, camPitch, m_renderWidth, m_renderHeight);
 	angle1 += timer.getDeltaTime() * 4.0F;
 	angle2 += timer.getDeltaTime();
-
-	CameraFollow();
 }
 
 void Graphics::renderFrame(const Timer& timer)
