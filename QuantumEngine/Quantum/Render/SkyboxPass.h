@@ -9,15 +9,16 @@ class D3D12Texture;
 
 
 
-class SkyboxRenderer
+class SkyboxPass
 {
 public:
 
 	void init();
+	void destroy();
 
 	void setTexture(D3D12Texture* tex);
 
-	void render(ID3D12GraphicsCommandList* cmdList, int resourceID);
+	void render(ID3D12GraphicsCommandList* cmdList, UINT frameData);
 
 
 	

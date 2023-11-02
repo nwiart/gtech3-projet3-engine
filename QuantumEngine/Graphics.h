@@ -1,25 +1,15 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
-
-#include "TestConstantBuffer.h"
-#include "D3D12ConstantBuffer.h"
-#include "D3D12Texture.h"
-
 #include "D3D12ResourceTransferUtility.h"
 
-#include "Model.h"
-
-#include "SkyboxRenderer.h"
+#include "Quantum/Render/RenderScene.h"
 
 
 
 class Timer;
 class Window;
 
-class QuEntityLightDirectional;
+class Model;
 
 typedef struct HWND__* HWND;
 
@@ -28,9 +18,6 @@ typedef struct HWND__* HWND;
 class Graphics
 {
 public:
-
-	void UpdateDirectionalLight(QuEntityLightDirectional*Entity);
-	void UpdateSkybox(D3D12Texture* tex);
 
 	static inline Graphics& getInstance() { static Graphics g_graphics; return g_graphics; }
 
@@ -41,14 +28,20 @@ public:
 
 public:
 
-	void initTestApp(UINT shaderResID);
+	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_renderScene.addRenderModel(model, worldMatrix); }
+	void setCamera(class QuEntityCamera* camera) { m_renderScene.setCamera(camera); }
+	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
+	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
 
-	void update(const Timer& timer);
-	void renderFrame(const Timer& timer);
+
+	void renderFrame();
 
 	void flushCommandQueue();
 
 	void resizeBuffers(int width, int height);
+
+	UINT allocateDescriptorTable(INT numDescriptors);
+	void setGlobalDescriptor(UINT index, D3D12_CPU_DESCRIPTOR_HANDLE descriptor);
 
 
 
@@ -58,7 +51,7 @@ public:
 	void beginFrame();
 	void endFrame();
 	void swapBuffers();
-
+	void OnKeyDown(WPARAM wparam);
 
 
 	/// Initialization methods.
@@ -67,8 +60,6 @@ private:
 	Graphics() { }
 
 	int _init(Window* w);
-
-	void CameraFollow();
 
 	void createCommandList();
 	void createSwapChain(HWND hwnd, int width, int height);
@@ -98,15 +89,18 @@ public:
 
 	inline D3D12ResourceTransferUtility& getResourceTransferUtility() { return m_resourceTransferUtility; }
 
+	inline int getRenderWidth() const { return m_renderWidth; }
+	inline int getRenderHeight() const { return m_renderHeight; }
+
+
 
 
 private:
 
-	QuEntityLightDirectional* LightEntity;
-
 	static const int NUM_BACK_BUFFERS = 2;
 
-	
+	int m_renderWidth;
+	int m_renderHeight;
 
 	D3D12ResourceTransferUtility m_resourceTransferUtility;
 
@@ -139,60 +133,13 @@ private:
 #endif
 
 	UINT rtvDescriptorSize, dsvDescriptorSize, cbvDescriptorSize, samplerDescriptorSize;
-
-	int m_renderWidth;
-	int m_renderHeight;
-
 	int m_currentBackBuffer;
 
-
-
-	/// Cube test.
-public:
-
-	int cursorX;
-	int cursorY;
-
-	int mouseLastStateX;
-	int mouseLastStateY;
-
-	float camYaw = 0.0f;
-	float camPitch = 0.0f;
-
-	float cameraX = 0;
-	float cameraY = 0;
-	float cameraZ = -4.F;
-	float cameraW = 1.F;
-
-	Shader m_shader;
-	VertexBuffer m_vb;
-	IndexBuffer m_ib;
-
-	D3D12ConstantBuffer<TestConstantBuffer> m_cbFrameData;
-	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
-
-	D3D12Texture m_texture;
-
-	Model* m_sphere;
-
-	struct RenderModel
-	{
-		Model* model;
-		int cbID;
-	};
-
-	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
-
-	std::vector<RenderModel> renderList;
-
-	void freeRenderModel();
 
 
 private:
 
 	int nEntries = 0;
 
-	SkyboxRenderer m_skyboxRenderer;
-
-	D3D12Texture m_skyboxTexture;
+	RenderScene m_renderScene;
 };

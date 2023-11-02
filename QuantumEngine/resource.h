@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by Resource.rc
 //
-#define ID_SHADER_TEST               101
+#define ID_SHADER_DEFAULT            101
 #define ID_SHADER_SKYBOX             102
 #define ID_SHADER_UI				 103
 

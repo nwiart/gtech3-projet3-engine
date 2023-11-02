@@ -1,4 +1,9 @@
+#include "Quantum/Math/Math.h"
+
 #include "QuEntity.h"
+
+using namespace DirectX;
+
 
 QuEntity::QuEntity()
 	: m_Parent(0), m_FirstChild(0), m_Sibling(0)
@@ -9,6 +14,19 @@ QuEntity::QuEntity()
 
 QuEntity::~QuEntity()
 {
+}
+
+void QuEntity::attachChild(QuEntity* child)
+{
+	// Undo previous attachments.
+	if (child->m_Parent) {
+		child->DetachFromParent();
+	}
+
+	// Prepend child.
+	child->m_Parent = this;
+	child->m_Sibling = this->m_FirstChild;
+	this->m_FirstChild = child;
 }
 
 void QuEntity::AttachToParent(QuEntity* Parent)
@@ -46,6 +64,54 @@ void QuEntity::DetachFromParent()
 	this->m_Parent = NULL;
 	
 }
+
+
+XMVECTOR QuEntity::getWorldPosition()
+{
+	// Extract translate component from the world matrix.
+	const XMFLOAT4X4& mat = this->GetWorldTransformMatrix();
+	const XMFLOAT4& pos = *((const XMFLOAT4*) mat.m[3]);
+
+	return XMLoadFloat4(&pos);
+}
+
+XMVECTOR QuEntity::getWorldRotation()
+{
+	XMVECTOR quat = XMLoadFloat4(&m_Transform.getRotation());
+	XMVECTOR pqua;
+
+	for (QuEntity* parent = this->m_Parent; parent; parent = parent->m_Parent) {
+		pqua = XMLoadFloat4(&parent->m_Transform.getRotation());
+		quat = XMQuaternionMultiply(quat, pqua);
+	}
+
+	return quat;
+}
+
+XMVECTOR QuEntity::getForwardVector()
+{
+	XMVECTOR v = XMVectorSet(0, 0, 1, 0);
+	XMMATRIX worldMat = XMLoadFloat4x4(&this->GetWorldTransformMatrix());
+
+	return XMVector3Normalize(XMVector4Transform(v, worldMat));
+}
+
+XMVECTOR QuEntity::getRightVector()
+{
+	XMVECTOR v = XMVectorSet(1, 0, 0, 0);
+	XMMATRIX worldMat = XMLoadFloat4x4(&this->GetWorldTransformMatrix());
+
+	return XMVector3Normalize(XMVector4Transform(v, worldMat));
+}
+
+XMVECTOR QuEntity::getUpVector()
+{
+	XMVECTOR v = XMVectorSet(0, 1, 0, 0);
+	XMMATRIX worldMat = XMLoadFloat4x4(&this->GetWorldTransformMatrix());
+
+	return XMVector3Normalize(XMVector4Transform(v, worldMat));
+}
+
 
 void QuEntity::setPosition(DirectX::XMFLOAT3 positon) 
 {

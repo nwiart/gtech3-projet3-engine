@@ -4,6 +4,13 @@
 
 
 
+float Quantum::Math::clamp(float x, float min, float max)
+{
+	if (x < min) return min;
+	if (x > max) return max;
+	return x;
+}
+
 int Quantum::Math::randomInt(int min, int max)
 {
 	return rand() % (max - min) + min;

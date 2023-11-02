@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SkyboxRenderer.h"
+#include "SkyboxPass.h"
 
 #include "D3D12Texture.h"
 
@@ -41,7 +41,7 @@ static UINT indices[] = {
 
 
 
-void SkyboxRenderer::init()
+void SkyboxPass::init()
 {
 	m_textureCube = 0;
 
@@ -51,23 +51,37 @@ void SkyboxRenderer::init()
 	m_shader.init();
 }
 
-void SkyboxRenderer::setTexture(D3D12Texture* tex)
+void SkyboxPass::destroy()
+{
+	m_boxVB.destroy();
+	m_boxIB.destroy();
+}
+
+void SkyboxPass::setTexture(D3D12Texture* tex)
 {
 	m_textureCube = tex;
 }
 
-void SkyboxRenderer::render(ID3D12GraphicsCommandList* cmdList, int resourceID)
+void SkyboxPass::render(ID3D12GraphicsCommandList* cmdList, UINT frameData)
 {
+	Graphics& g = Graphics::getInstance();
+
+	// No texture bound.
+	if (!m_textureCube) return;
+
+	UINT skyboxTextureID = g.allocateDescriptorTable(1);
+	g.setGlobalDescriptor(skyboxTextureID, m_textureCube->getShaderResourceView());
+
 	// Bind shader data.
 	cmdList->SetPipelineState(m_shader.getPipelineStateObject());
 	cmdList->SetGraphicsRootSignature(m_shader.getRootSignature());
 
 	cmdList->SetGraphicsRootDescriptorTable(
 		1,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), 0, Graphics::getInstance().getCBVDescriptorSize()));
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), frameData, Graphics::getInstance().getCBVDescriptorSize()));
 	cmdList->SetGraphicsRootDescriptorTable(
 		0,
-		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), resourceID, Graphics::getInstance().getCBVDescriptorSize()));
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), skyboxTextureID, Graphics::getInstance().getCBVDescriptorSize()));
 
 	// Bind box model.
 	cmdList->IASetVertexBuffers(0, 1, &m_boxVB.getVertexBufferView());
