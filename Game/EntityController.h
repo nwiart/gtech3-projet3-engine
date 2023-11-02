@@ -9,7 +9,6 @@ public:
 	EntityController();
 
 	void OnUpdate(Timer timer) override;
-
 private:
 
 	int mouseLastStateX;

@@ -10,7 +10,7 @@ public:
 
 	QuEntityCamera();
 
-	void setCamera(float camYaw, float CamPitch, int renderWidth, int renderHeight);
+	void setCamera(float camYaw, float camPitch, int renderWidth, int renderHeight);
 
 	float m_camYaw;
 	float m_camPitch;

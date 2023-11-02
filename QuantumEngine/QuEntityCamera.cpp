@@ -4,7 +4,7 @@ QuEntityCamera::QuEntityCamera()
 {
 }
 
-void QuEntityCamera::setCamera(float camYaw, float CamPitch, int renderWidth, int renderHeight)
+void QuEntityCamera::setCamera(float camYaw, float camPitch, int renderWidth, int renderHeight)
 {
 	m_camYaw = camYaw;
 	m_camPitch = CamPitch;
