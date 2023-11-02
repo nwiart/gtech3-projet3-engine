@@ -23,7 +23,9 @@ using namespace Microsoft::WRL;
 #include <stdlib.h>
 #include <time.h>
 
+#include "EntityController.h"
 
+//EntityController entityController;
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
@@ -88,6 +90,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			world->attachChild(sphereEntity);
 		}
 	}
+
+	EntityController* c = new EntityController();
+	c->AttachToParent(world);
+
 
 	game.openWorld(world);
 

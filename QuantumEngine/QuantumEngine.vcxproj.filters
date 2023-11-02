@@ -31,6 +31,7 @@
     <ClCompile Include="Quantum\Types\Color.cpp" />
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
+    <ClCompile Include="QuEntityCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -63,6 +64,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
+<<<<<<< HEAD
     <ClInclude Include="Quantum\Render\ScenePass.h" />
     <ClInclude Include="Quantum\Render\ShaderSkybox.h" />
     <ClInclude Include="Quantum\Render\SkyboxPass.h" />
@@ -70,6 +72,9 @@
     <ClInclude Include="Quantum\Render\ShaderDefault.h" />
     <ClInclude Include="Quantum\Render\RenderScene.h" />
     <ClInclude Include="Quantum\Render\RenderModel.h" />
+=======
+    <ClInclude Include="QuEntityCamera.h" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

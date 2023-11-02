@@ -1,19 +1,17 @@
 #pragma once
-#include "InputCallback.h"
+#include "QuEntityCamera.h"
 
-class EntityController : public InputCallback
+class EntityController : public QuEntityCamera
 {
 public:
 
+	void SetCamera();
+	EntityController();
+
+	void OnUpdate(Timer timer) override;
+private:
+
 	int mouseLastStateX;
 	int mouseLastStateY;
-
-	//Graphics* m_graphics;
-
-	void OnKeyDown(WPARAM wparam) override;
-	void SetCamera();
-
-	float camYaw = 0.0f;
-	float camPitch = 0.0f;
 };
 

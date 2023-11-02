@@ -51,7 +51,7 @@ public:
 	void beginFrame();
 	void endFrame();
 	void swapBuffers();
-
+	void OnKeyDown(WPARAM wparam);
 
 
 	/// Initialization methods.
@@ -99,8 +99,6 @@ private:
 
 	static const int NUM_BACK_BUFFERS = 2;
 
-	
-
 	D3D12ResourceTransferUtility m_resourceTransferUtility;
 
 	HANDLE m_fenceEvent;
@@ -132,10 +130,6 @@ private:
 #endif
 
 	UINT rtvDescriptorSize, dsvDescriptorSize, cbvDescriptorSize, samplerDescriptorSize;
-
-	int m_renderWidth;
-	int m_renderHeight;
-
 	int m_currentBackBuffer;
 
 

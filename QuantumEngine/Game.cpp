@@ -13,7 +13,7 @@
 #include <cassert>
 #include <string>
 #include <ctime>
-
+#include "../Game/EntityController.h"	
 
 
 static const char WINDOW_TITLE[] = "Direct3D 12 Test";
@@ -57,6 +57,7 @@ void Game::mainLoop()
 		m_timer.tick();
 
 		Graphics::getInstance().renderFrame();
+
 
 		// Display FPS each second.
 		frames++;
