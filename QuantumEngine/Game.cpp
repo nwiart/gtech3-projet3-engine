@@ -85,6 +85,11 @@ void Game::openWorld(QuWorld* world)
 	m_world = world;
 }
 
+void Game::openWidget(QuWidget* widget)
+{
+	m_widget = widget;
+}
+
 void Game::visitEntity(QuEntity* entity)
 {
 	if (entity == nullptr) return;
@@ -94,5 +99,15 @@ void Game::visitEntity(QuEntity* entity)
 	for (QuEntity* child = entity->m_FirstChild; child != nullptr; child = child->m_Sibling)
 	{
 		visitEntity(child);
+	}
+}
+
+void Game::visitUI(QuWidget* widget)
+{
+	if (widget == nullptr) return;
+
+	for (QuWidget* child = widget->m_FirstChild; child != nullptr; child = child->m_Sibling)
+	{
+		visitUI(widget);
 	}
 }

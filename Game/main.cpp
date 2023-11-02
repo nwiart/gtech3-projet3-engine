@@ -11,6 +11,9 @@ using namespace Microsoft::WRL;
 #include "Quantum/Generate/SphereGenerator.h"
 #include "QuEntityRenderModel.h"
 
+#include "Quantum/UI/QuWidgetButton.h"
+#include "Quantum/UI/QuMainWidget.h"
+
 #include "Quantum/Math/Math.h"
 
 #include "resource.h"
@@ -71,7 +74,16 @@ int main()
 		sphereEntity->AttachToParent(sphereE);
 	}
 
+	QuMainWidget* mainWidget = new QuMainWidget();
+	mainWidget->SetSize(DirectX::XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	mainWidget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+
+	QuWidgetButton* button = new QuWidgetButton();
+	button->SetSize(DirectX::XMFLOAT2(50.f, 50.f));
+	button->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+	button->AttachToParent(mainWidget);
 	
+	game.openWidget(mainWidget);
 
 	game.openWorld(world);
 

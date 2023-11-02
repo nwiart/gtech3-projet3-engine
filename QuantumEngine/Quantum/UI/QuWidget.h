@@ -4,6 +4,7 @@
 
 class QuWidget
 {
+friend class Game;
 public:
 	QuWidget();
 
