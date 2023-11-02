@@ -90,16 +90,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	EntityController* c = new EntityController();
 	c->AttachToParent(world);
 
-	QuMainWidget* mainWidget = new QuMainWidget();
-	mainWidget->SetSize(DirectX::XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT));
-	mainWidget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+	QuWidget* Widget = new QuWidget();
+	//mainWidget->SetSize(DirectX::XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	//mainWidget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
 
 	QuWidgetButton* button = new QuWidgetButton();
 	button->SetSize(DirectX::XMFLOAT2(50.f, 50.f));
 	button->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
-	button->AttachToParent(mainWidget);
+	Widget->attachChild(button);
 	
-	game.openWidget(mainWidget);
+	game.openWidget(Widget);
 
 	game.openWorld(world);
 

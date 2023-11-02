@@ -35,6 +35,11 @@
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="QuEntityCamera.cpp" />
+    <ClCompile Include="Quantum\UI\ShaderUI.cpp" />
+    <ClCompile Include="Quantum\UI\QuMainWidget.cpp" />
+    <ClCompile Include="Quantum\UI\UIRenderer.cpp" />
+    <ClCompile Include="Quantum\UI\UISystem.cpp" />
+    <ClCompile Include="Quantum\UI\UIpass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -67,11 +72,10 @@
     <ClInclude Include="Quantum\UI\QuWidget.h" />
     <ClInclude Include="Quantum\UI\QuWidgetButton.h" />
     <ClInclude Include="Quantum\UI\QuWidgetText.h" />
-    <ClInclude Include="SkyboxRenderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="ShaderUI.h" />
+    <ClInclude Include="Quantum\UI\ShaderUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
@@ -83,6 +87,10 @@
     <ClInclude Include="Quantum\Render\RenderScene.h" />
     <ClInclude Include="Quantum\Render\RenderModel.h" />
     <ClInclude Include="QuEntityCamera.h" />
+    <ClInclude Include="Quantum\UI\QuMainWidget.h" />
+    <ClInclude Include="Quantum\UI\UIRenderer.h" />
+    <ClInclude Include="Quantum\UI\UISystem.h" />
+    <ClInclude Include="Quantum\UI\UIpass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

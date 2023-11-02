@@ -3,6 +3,7 @@
 #include "D3D12ResourceTransferUtility.h"
 
 #include "Quantum/Render/RenderScene.h"
+#include "Quantum/UI/UIrenderer.h"
 
 
 
@@ -142,4 +143,6 @@ private:
 	int nEntries = 0;
 
 	RenderScene m_renderScene;
+
+	UIRenderer* m_renderUI;
 };

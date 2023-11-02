@@ -4,11 +4,12 @@
 
 class QuWidget
 {
-friend class Game;
+friend class UISystem;
+friend class UIRenderer;
 public:
 	QuWidget();
 
-
+	void attachChild(QuWidget* child);
 	void AttachToParent(QuWidget* Parent);
 	void DetachFromParent();
 

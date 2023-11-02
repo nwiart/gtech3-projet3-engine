@@ -6,6 +6,19 @@ QuWidget::QuWidget()
 	m_size = DirectX::XMFLOAT2(0, 0);
 }
 
+void QuWidget::attachChild(QuWidget* child)
+{
+	// Undo previous attachments.
+	if (child->m_Parent) {
+		child->DetachFromParent();
+	}
+
+	// Prepend child.
+	child->m_Parent = this;
+	child->m_Sibling = this->m_FirstChild;
+	this->m_FirstChild = child;
+}
+
 void QuWidget::AttachToParent(QuWidget* Parent)
 {
 	if (m_Parent != NULL)
