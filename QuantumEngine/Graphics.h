@@ -29,7 +29,7 @@ public:
 public:
 
 	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_renderScene.addRenderModel(model, worldMatrix); }
-	void setCamera(class QuEntity* camera) { m_renderScene.setCamera(camera); }
+	void setCamera(class QuEntityCamera* camera) { m_renderScene.setCamera(camera); }
 	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
 	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
 
@@ -98,6 +98,9 @@ public:
 private:
 
 	static const int NUM_BACK_BUFFERS = 2;
+
+	int m_renderWidth;
+	int m_renderHeight;
 
 	D3D12ResourceTransferUtility m_resourceTransferUtility;
 

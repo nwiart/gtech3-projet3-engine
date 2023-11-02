@@ -17,6 +17,7 @@ class Model;
 class QuEntityCamera;
 class QuEntityLightDirectional;
 class QuEntityLightPoint;
+class QuEntityRenderSkybox;
 
 
 
@@ -37,10 +38,10 @@ private:
 
 	void freeRenderModel();
 
-	void setCamera(class QuEntity* camera);
+	void setCamera(QuEntityCamera* camera);
 	void setDirectionalLight(QuEntityLightDirectional* en);
 	void setPointLight(int index, QuEntityLightPoint* en);
-	void setSkybox(class QuEntityRenderSkybox* skybox);
+	void setSkybox(QuEntityRenderSkybox* skybox);
 
 private:
 

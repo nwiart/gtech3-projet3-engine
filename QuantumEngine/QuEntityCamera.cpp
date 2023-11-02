@@ -1,13 +1,16 @@
+#include "stdafx.h"
 #include "QuEntityCamera.h"
+
+#include "Graphics.h"
+
+
 
 QuEntityCamera::QuEntityCamera()
 {
+
 }
 
-void QuEntityCamera::setCamera(float camYaw, float camPitch, int renderWidth, int renderHeight)
+void QuEntityCamera::ExecuteProcedure()
 {
-	m_camYaw = camYaw;
-	m_camPitch = camPitch;
-	m_renderWidth = renderWidth;
-	m_renderHeight = renderHeight;
+	Graphics::getInstance().setCamera(this);
 }

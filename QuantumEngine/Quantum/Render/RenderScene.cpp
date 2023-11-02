@@ -8,6 +8,7 @@
 #include "QuEntity.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityRenderSkybox.h"
+#include "QuEntityCamera.h"
 
 
 
@@ -91,10 +92,8 @@ void RenderScene::freeRenderModel()
 	renderWorldMatrices.clear();
 }
 
-void RenderScene::setCamera(QuEntity* camera)
+void RenderScene::setCamera(QuEntityCamera* en)
 {
-	QuEntity* en = (QuEntity*)camera;
-
 	XMVECTOR fwd = en->GetTransform().getForwardVector();
 
 	cameraPos = en->getWorldPosition();

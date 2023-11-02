@@ -2,18 +2,15 @@
 #include "Game.h"
 
 #include "Graphics.h"
+
+#include "QuWorld.h"
 #include "QuEntityLightDirectional.h"
-
-
-#include "TestConstantBuffer.h"
-
-#include "D3D12UploadHelper.h"
 
 #include <iostream>
 #include <cassert>
 #include <string>
 #include <ctime>
-#include "../Game/EntityController.h"	
+
 
 
 static const char WINDOW_TITLE[] = "Direct3D 12 Test";
@@ -81,6 +78,18 @@ void Game::openWorld(QuWorld* world)
 {
 	m_world = world;
 }
+
+int Game::getRenderWidth() const
+{
+	return Graphics::getInstance().getRenderWidth();
+}
+
+int Game::getRenderHeight() const
+{
+	return Graphics::getInstance().getRenderHeight();
+}
+
+
 
 void Game::visitEntity(QuEntity* entity)
 {

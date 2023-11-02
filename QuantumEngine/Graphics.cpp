@@ -115,18 +115,6 @@ int Graphics::_init(Window* window)
 	return 0;
 }
 
-
-void Graphics::CameraFollow()
-{
-	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 0.1F : 0.05F;
-
-	if (InputSystem::Get().isKeyDown('Z')) pos += camForward * speed;
-	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
-	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
-	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
-}
-
-
 void Graphics::createCommandList()
 {
 	D3D12_COMMAND_QUEUE_DESC cmdQueueDesc = { };
@@ -246,67 +234,6 @@ void Graphics::_shutdown()
 }
 
 
-
-void Graphics::update(const Timer& timer)
-{
-	TestConstantBuffer cb;
-	{
-		XMMATRIX view, projection, RotateYTempMatrix, camRotationMatrix;
-
-		XMVECTOR camTarget;
-
-		camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
-		camTarget = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
-		camTarget = XMVector3Normalize(camTarget);
-
-		RotateYTempMatrix = XMMatrixRotationY(camYaw);
-
-		camRight = XMVector3TransformCoord(DefaultRight, camRotationMatrix);
-		camUp = XMVector3TransformCoord(DefaultUp, camRotationMatrix);
-		camForward = XMVector3TransformCoord(DefaultForward, camRotationMatrix);
-
-		camTarget = pos + camTarget;
-
-		view = XMMatrixLookAtLH(pos, camTarget, camUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(70.0F), m_renderWidth / (float) m_renderHeight, 0.05F, 1000.0F);
-
-		// Combined view and projection matrices.
-		XMStoreFloat4x4(&cb.viewProjection, view * projection);
-
-		// Forward Vector
-		XMStoreFloat4(&cb.cameraDir, camForward);
-
-		// Camera info.
-		XMStoreFloat4(&cb.cameraPos, pos);
-
-		if (LightEntity == NULL)
-		{
-			cb.DirColors.x = 0;
-			cb.DirColors.z = 0;
-			cb.DirColors.y = 0;
-			cb.DirColors.w = 0;
-
-			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
-		}
-		else
-		{
-			XMStoreFloat4(&cb.DirDirection, LightEntity->GetTransform().getForwardVector());
-			cb.DirColors.x = LightEntity->getIntensity() * LightEntity->getColorR();
-			cb.DirColors.y = LightEntity->getIntensity() * LightEntity->getColorG();
-			cb.DirColors.z = LightEntity->getIntensity() * LightEntity->getColorB();
-
-			unsigned int a = LightEntity->getAmbientColor();
-			unsigned char* ab = (unsigned char*) &a;
-			cb.AmbientColor = XMFLOAT4(ab[2] / 255.0F, ab[1] / 255.0F, ab[0] / 255.0F, 0.0F);
-		}
-
-		m_cbFrameData.update(0, cb);
-	}
-	CameraFollow();
-	camera.setCamera(camYaw, camPitch, m_renderWidth, m_renderHeight);
-	angle1 += timer.getDeltaTime() * 4.0F;
-	angle2 += timer.getDeltaTime();
-}
 
 void Graphics::renderFrame()
 {
