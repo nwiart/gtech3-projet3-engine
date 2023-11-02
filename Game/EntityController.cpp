@@ -5,6 +5,8 @@
 
 #include "Quantum/Math/Math.h"
 
+#include <Windows.h> // Necessary for key codes.
+
 using namespace DirectX;
 
 
@@ -41,28 +43,20 @@ void EntityController::UpdateCamera(float dt)
 
 
 	// Rotate camera.
-	int mouseCurrStateX = InputSystem::Get().cursorX;
-	int mouseCurrStateY = InputSystem::Get().cursorY;
-	mouseCurrStateX = mouseCurrStateX - Game::getInstance().getRenderWidth() / 2;
-	mouseCurrStateY = mouseCurrStateY - Game::getInstance().getRenderHeight() / 2;
+	int mouseX = InputSystem::Get().getMouseX() - Game::getInstance().getRenderWidth() / 2;
+	int mouseY = InputSystem::Get().getMouseY() - Game::getInstance().getRenderHeight() / 2;
 
 	int deadZoneX = (Game::getInstance().getRenderWidth() * 5) / 100;
 	int deadZoneY = (Game::getInstance().getRenderHeight() * 5) / 100;
+	bool inDeadZone = (mouseX > -deadZoneX && mouseX < deadZoneX && mouseY > -deadZoneY && mouseY < deadZoneY);
 
-	mouseLastStateX = mouseCurrStateX;
-	mouseLastStateY = mouseCurrStateY;
-
-	if (mouseCurrStateX < deadZoneX && mouseCurrStateX > -deadZoneX && mouseCurrStateY < deadZoneY && mouseCurrStateY > -deadZoneY)
-		return;
-	else {
-		m_camYaw += mouseLastStateX * 0.0001f;
-		m_camPitch += mouseLastStateY * 0.0001f;
+	if (!inDeadZone)
+	{
+		m_camYaw += mouseX * 0.0001f;
+		m_camPitch += mouseY * 0.0001f;
 
 		// Limit pitch to straight up or straight down. To Remove
-		if (m_camPitch > 1.570796f)
-			m_camPitch = 1.570796f;
-		if (m_camPitch < -1.570796f)
-			m_camPitch = -1.570796f;
+		m_camPitch = Quantum::Math::clamp(m_camPitch, -1.570796f, 1.570796f);
 	}
 
 	XMVECTOR quat = XMQuaternionRotationRollPitchYaw(m_camPitch, m_camYaw, 0.0F);

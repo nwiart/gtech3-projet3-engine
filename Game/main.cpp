@@ -1,12 +1,5 @@
-#include <Windows.h>
-#include <wrl.h>
-#include <d3d12.h>
-#include <dxgi.h>
-
-using namespace Microsoft::WRL;
-
 #include "Game.h"
-#include "Graphics.h"
+
 #include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 
@@ -25,7 +18,7 @@ using namespace Microsoft::WRL;
 
 #include "EntityController.h"
 
-//EntityController entityController;
+
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
