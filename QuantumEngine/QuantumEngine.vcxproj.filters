@@ -59,8 +59,8 @@
     <ClInclude Include="Quantum\Math\Math.h" />
     <ClInclude Include="SkyboxRenderer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="InputCallback.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

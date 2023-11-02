@@ -4,11 +4,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
     <ClCompile Include="EntityController.cpp" />
+    <ClCompile Include="Shooting.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="Shooting.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
 </Project>

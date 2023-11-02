@@ -18,18 +18,16 @@ void InputSystem::FireKeyUp(WPARAM wparam)
 	ExecuteCallbacks(wparam);
 }
 
-void InputSystem::MouseDown(int button)
+void InputSystem::MouseDown(WPARAM wparam)
 {
-	switch (button) {
-	case 1:
-		std::cout << "left click";
-		break;
-	case 2:
-		std::cout << "right click";
-		break;
-	default:
-		break;
-	}
+	m_mouseState[wparam] = true;
+	ExecuteCallbacks(wparam);
+}
+
+void InputSystem::MouseUp(WPARAM wparam)
+{
+	m_mouseState[wparam] = false;
+	ExecuteCallbacks(wparam);
 }
 
 void InputSystem::RegisterCallback(InputCallback* callback)

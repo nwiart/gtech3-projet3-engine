@@ -85,10 +85,16 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		InputSystem::Get().FireKeyUp(wparam);
 		break;
 	case WM_LBUTTONDOWN:
-		InputSystem::Get().MouseDown(1);
+		InputSystem::Get().MouseDown(wparam);
+		break;
+	case WM_LBUTTONUP:
+		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_RBUTTONDOWN:
-		InputSystem::Get().MouseDown(2);
+		InputSystem::Get().MouseDown(wparam);
+		break;
+	case WM_RBUTTONUP:
+		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_MOUSEMOVE:
 		Graphics::getInstance().cursorX = (lparam & 0xFFFF);

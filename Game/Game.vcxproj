@@ -22,12 +22,16 @@
     <ClCompile Include="EntityController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Shooting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Shooting.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
