@@ -33,6 +33,9 @@
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
     <ClCompile Include="Quantum\Math\Transform.cpp" />
+    <ClCompile Include="Quantum\Physics\Internal\InternalCollisionAgents.cpp" />
+    <ClCompile Include="Quantum\Physics\PhysicsWorld.cpp" />
+    <ClCompile Include="Quantum\Physics\RigidBody.cpp" />
     <ClCompile Include="Quantum\Render\ScenePass.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
@@ -59,6 +62,13 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDS\DDSTextureLoader.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Quantum\Physics\Collide\CollisionAgent.h" />
+    <ClInclude Include="Quantum\Physics\Collide\PhysicsShape.h" />
+    <ClInclude Include="Quantum\Physics\Collide\PhysicsShapeSphere.h" />
+    <ClInclude Include="Quantum\Physics\Physics.h" />
+    <ClInclude Include="Quantum\Physics\PhysicsWorld.h" />
+    <ClInclude Include="Quantum\Physics\RayCast.h" />
+    <ClInclude Include="Quantum\Physics\RigidBody.h" />
     <ClInclude Include="QuEntityCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
