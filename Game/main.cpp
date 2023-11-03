@@ -22,6 +22,9 @@
 #include "EntityController.h"
 
 
+namespace qm = Quantum::Math;
+
+
 
 #ifdef _DEBUG
 int main()
@@ -71,34 +74,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(entitySkybox);
 
 		// Spheres.
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 3000; i++)
 		{
-			namespace qm = Quantum::Math;
-
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(box);
-			world->attachChild(sphereEntity);
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
+			model->SetModel(box);
+			world->attachChild(model);
 		}
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 3000; i++)
 		{
-			namespace qm = Quantum::Math;
-
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
-			world->attachChild(sphereEntity);
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
+			model->SetModel(sphere);
+			world->attachChild(model);
 		}
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 3000; i++)
 		{
-			namespace qm = Quantum::Math;
-
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(capsule);
-			world->attachChild(sphereEntity);
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
+			model->SetModel(capsule);
+			world->attachChild(model);
 		}
 	}
 
