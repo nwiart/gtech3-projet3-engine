@@ -5,7 +5,7 @@
 
 #include "TextureCube.h"
 
-#include "QuEntity.h"
+#include "QuEntityRenderModel.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightPoint.h"
@@ -19,6 +19,9 @@ void RenderScene::init()
 	cameraPos    = XMVectorSet(0, 0, 0, 0);
 	cameraTarget = XMVectorSet(0, 0, 1, 0);
 	cameraUp     = XMVectorSet(0, 1, 0, 0);
+
+	cameraFOV = 70.0F;
+	cameraAspect = Graphics::getInstance().getRenderWidth() / (float) Graphics::getInstance().getRenderHeight();
 
 	m_cbFrameData.init();
 	m_cbObjectData.init(QU_RENDER_MAX_MESHES);
@@ -39,6 +42,8 @@ void RenderScene::destroy()
 void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 {
 	Graphics& g = Graphics::getInstance();
+
+	this->updateFrustum();
 
 	this->updateFrameCB();
 	this->updateObjectCB();
@@ -64,6 +69,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 	m_passSkybox.render(cmdList, cb_frameData_ID);
 
+	std::cout << renderList.size() << '\n';
+
 
 	// Clear model list.
 	this->freeRenderModel();
@@ -71,13 +78,21 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 
 
-void RenderScene::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
+static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius);
+
+void RenderScene::addRenderModel(QuEntityRenderModel* model)
 {
 	assert(renderList.size() < QU_RENDER_MAX_MESHES);
 
+	// Frustum test.
+	XMVECTOR worldPos = model->getWorldPosition();
+	if (!frustum_sphere(m_frustum, worldPos, 0.1F)) return;
+
+	XMMATRIX worldMatrix = XMLoadFloat4x4(&model->GetWorldTransformMatrix());
+
 	RenderModel renderModel =
 	{
-		model,
+		model->GetModel(),
 		renderList.size(),
 	};
 
@@ -97,11 +112,14 @@ void RenderScene::freeRenderModel()
 
 void RenderScene::setCamera(QuEntityCamera* en)
 {
-	XMVECTOR fwd = en->GetTransform().getForwardVector();
+	XMVECTOR fwd = en->getForwardVector();
 
 	cameraPos = en->getWorldPosition();
 	cameraTarget = XMVectorAdd(cameraPos, fwd);
+	cameraRight = en->getRightVector();
 	cameraUp = en->getUpVector();
+
+	cameraFOV = en->getFOV();
 }
 
 void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
@@ -128,11 +146,8 @@ void RenderScene::updateFrameCB()
 		XMMATRIX view, projection;
 
 		// Combined view and projection matrices.
-		float fov = 70.0F;
-		float aspectRatio = Graphics::getInstance().getRenderWidth() / (float)Graphics::getInstance().getRenderHeight();
-
 		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(fov), aspectRatio, 0.05F, 1000.0F);
+		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F);
 
 		XMStoreFloat4x4(&cb.viewProjection, view * projection);
 
@@ -186,4 +201,32 @@ void RenderScene::updateFrameCB()
 void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
+}
+
+
+
+static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius)
+{
+	// Intersecting one of the planes.
+	for (int i = 0; i < 4; ++i) {
+		float dist = XMVectorGetX(XMPlaneDot(frustum[i], sphereCenter));
+		if (dist > sphereRadius) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void RenderScene::updateFrustum()
+{
+	float halfVertical = tan(XMConvertToRadians(cameraFOV) * 0.5F);
+	float halfHorizontal = halfVertical * cameraAspect;
+
+	XMVECTOR cameraForward = XMVectorSubtract(cameraTarget, cameraPos);
+
+	m_frustum[0] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraUp, cameraForward + cameraRight * halfHorizontal)));
+	m_frustum[1] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraForward + cameraUp * halfVertical, cameraRight)));
+	m_frustum[2] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraForward - cameraRight * halfHorizontal, cameraUp)));
+	m_frustum[3] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraRight, cameraForward - cameraUp * halfVertical)));
 }

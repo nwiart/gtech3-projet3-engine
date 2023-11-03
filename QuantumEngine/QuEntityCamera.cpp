@@ -6,6 +6,7 @@
 
 
 QuEntityCamera::QuEntityCamera()
+	: m_fov(70.0F)
 {
 
 }

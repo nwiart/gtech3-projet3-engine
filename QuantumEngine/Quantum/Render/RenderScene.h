@@ -14,6 +14,7 @@
 
 class Model;
 
+class QuEntityRenderModel;
 class QuEntityCamera;
 class QuEntityLightDirectional;
 class QuEntityLightPoint;
@@ -34,7 +35,7 @@ private:
 
 
 
-	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
+	void addRenderModel(QuEntityRenderModel* model);
 
 	void freeRenderModel();
 
@@ -47,6 +48,8 @@ private:
 
 	void updateFrameCB();
 	void updateObjectCB();
+
+	void updateFrustum();
 
 
 
@@ -71,8 +74,16 @@ private:
 		/// Cached data to send to the constant buffer.
 	DirectX::XMVECTOR cameraPos;
 	DirectX::XMVECTOR cameraTarget;
+	DirectX::XMVECTOR cameraRight;
 	DirectX::XMVECTOR cameraUp;
+	float cameraFOV;
+	float cameraAspect;
 
 	QuEntityLightDirectional* m_directionalLight;
 	std::vector<QuEntityLightPoint*> m_ListPointLight;
+
+
+		/// Frustum.
+		/// We're not storing the near and far planes, as we just assume the frustum extends to infinity.
+	DirectX::XMVECTOR m_frustum[4];
 };

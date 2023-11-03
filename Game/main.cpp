@@ -22,10 +22,6 @@
 #include "EntityController.h"
 
 
-#define MAX_POINT_LIGHT 8
-const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
-
-
 
 #ifdef _DEBUG
 int main()
