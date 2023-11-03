@@ -52,6 +52,8 @@ cbuffer cb_frameData : register(b2)
 
 Texture2D textureDiffuse : register(t0);
 
+TextureCube textureSkybox : register(t1);
+
 SamplerState samplerLinear : register(s0);
 
 
@@ -138,6 +140,11 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
         calcPointLightSpecular(pl, V, input.pixelWorldPos, normal, PointLightPos[i].xyz, PointLightColor[i].xyz);
     }
     finalColor.rgb += pl;
+	
+	
+    float3 camToPixel = normalize(input.pixelWorldPos - cameraPos.xyz);
+    float3 ref = reflect(camToPixel, normal);
+    finalColor.rgb += textureSkybox.Sample(samplerLinear, ref).rgb * 0.6F;
 	
 	
 	// Fresnel.

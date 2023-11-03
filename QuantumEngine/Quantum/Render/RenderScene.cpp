@@ -49,7 +49,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	g.setGlobalDescriptor(cb_frameData_ID, m_cbFrameData.getDescriptor());
 
 	// Material data.
-	UINT cb_materialData_ID = g.allocateDescriptorTable(2);
+	UINT cb_materialData_ID = g.allocateDescriptorTable(3);
+	g.setGlobalDescriptor(cb_materialData_ID + 2, m_passSkybox.getTexture()->getShaderResourceView());
 
 	// Object world matrices.
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(renderList.size());

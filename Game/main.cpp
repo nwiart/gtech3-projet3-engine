@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// Load resources.
 
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(5);
+	pointLight->setIntensity(0.2F);
 
 
 	Model* sphere = new Model();
@@ -65,6 +65,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		// Global directional light.
 		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
+		dirLight->setAmbientColor(Quantum::Color(0, 10, 20));
+		dirLight->setIntensity(0.5F);
 		world->attachChild(dirLight);
 
 		// Skybox.
@@ -73,8 +75,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(entitySkybox);
 
 		// Spheres.
-		QuEntity* sphereE;
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 20; i++)
+		{
+			namespace qm = Quantum::Math;
+
+			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
+			sphereEntity->SetModel(box);
+			world->attachChild(sphereEntity);
+		}
+
+		for (int i = 0; i < 20; i++)
 		{
 			namespace qm = Quantum::Math;
 
@@ -82,17 +93,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
 			sphereEntity->SetModel(sphere);
 			world->attachChild(sphereEntity);
-
-			sphereE = sphereEntity;
 		}
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 20; i++)
 		{
 			namespace qm = Quantum::Math;
 
 			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
 			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
+			sphereEntity->SetModel(capsule);
 			world->attachChild(sphereEntity);
 		}
 	}
