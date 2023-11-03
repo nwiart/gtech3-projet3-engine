@@ -3,6 +3,8 @@
 
 #include "D3D12Texture.h"
 
+#include "UIRenderer.h"
+
 #include "Graphics.h"
 
 static struct { float pos[3]; } verts[] = {
@@ -32,7 +34,7 @@ void UIpass::setTexture(D3D12Texture* tex)
 {
 }
 
-void UIpass::render(ID3D12GraphicsCommandList* cmdList)
+void UIpass::render(ID3D12GraphicsCommandList* cmdList, std::vector<QuWidget*> allWidget)
 {
 	Graphics& g = Graphics::getInstance();
 

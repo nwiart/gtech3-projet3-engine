@@ -25,10 +25,18 @@ private:
 	{
 		DirectX::XMFLOAT4X4 matrix;
 	};
+	D3D12ConstantBuffer<CanvasConstantBuffer> m_cbCanvasData;
 
-	D3D12ConstantBuffer<CanvasConstantBuffer> m_cbObjectData;
+	struct RectanglesBuffer
+	{
+		DirectX::XMFLOAT2 position;
+		DirectX::XMFLOAT2 size;
+	};
 
-	XMMATRIX matrix;
+
+	CanvasConstantBuffer m_matrix;
+
+	std::vector<QuWidget*> allWidget;
 
 	void updateObjectCB();
 };

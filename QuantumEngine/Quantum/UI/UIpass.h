@@ -7,16 +7,17 @@
 class D3D12Texture;
 
 
-
 class UIpass
 {
+
 public:
 	void init();
 	void destroy();
 
 	void setTexture(D3D12Texture* tex);
 
-	void render(ID3D12GraphicsCommandList* cmdList);
+	void render(ID3D12GraphicsCommandList* cmdList, std::vector<QuWidget*> allWidget);
+
 
 
 private:
