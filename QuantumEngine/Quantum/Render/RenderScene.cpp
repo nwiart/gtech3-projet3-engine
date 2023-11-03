@@ -8,6 +8,7 @@
 #include "QuEntity.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityRenderSkybox.h"
+#include "QuEntityLightPoint.h"
 #include "QuEntityCamera.h"
 
 
@@ -90,6 +91,7 @@ void RenderScene::freeRenderModel()
 {
 	renderList.clear();
 	renderWorldMatrices.clear();
+	m_ListPointLight.clear();
 }
 
 void RenderScene::setCamera(QuEntityCamera* en)
@@ -106,9 +108,9 @@ void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
 	m_directionalLight = en;
 }
 
-void RenderScene::setPointLight(int index, QuEntityLightPoint* en)
+void RenderScene::addPointLight( QuEntityLightPoint* en)
 {
-
+	m_ListPointLight.push_back(en);
 }
 
 void RenderScene::setSkybox(QuEntityRenderSkybox* skybox)
@@ -157,6 +159,23 @@ void RenderScene::updateFrameCB()
 
 			// Ambient color.
 			m_directionalLight->getAmbientColor().toFloat4(&cb.AmbientColor.x);
+		}
+
+		int i;
+		for (i = 0; i < m_ListPointLight.size(); i++)
+		{
+			XMFLOAT4 colorPl;
+			m_ListPointLight[i]->getColor().toFloat4(&colorPl.x);
+			XMVECTOR colorIntensityPl = XMVectorMultiply(XMLoadFloat4(&colorPl), XMVectorReplicate(m_ListPointLight[i]->getIntensity()));
+			XMStoreFloat4(&cb.PointLightColor[i], colorIntensityPl);
+
+			XMStoreFloat4(&cb.PointLightPosition[i], m_ListPointLight[i]->getWorldPosition());
+		}
+
+		for (i; i < MAX_POINT_LIGHT; i++)
+		{
+			cb.PointLightColor[i] = XMFLOAT4(0, 0, 0, 1);
+			cb.PointLightPosition[i] = XMFLOAT4(0, 0, 0, 1);
 		}
 
 		m_cbFrameData.update(0, cb);

@@ -1,3 +1,5 @@
+#define MAX_POINT_LIGHT 8
+
 struct VS_INPUT
 {
 	float3 pos : POSITION;
@@ -40,6 +42,12 @@ cbuffer cb_frameData : register(b2)
 	float4 ambientColor;
 	float4 dirLightColor;
 	float4 dirLightDir;
+	
+    float4 PointLightPos[MAX_POINT_LIGHT];
+    float4 PointLightColor[MAX_POINT_LIGHT];
+    float4 PointLightAttenuation[MAX_POINT_LIGHT];
+
+	
 };
 
 Texture2D textureDiffuse : register(t0);
@@ -48,7 +56,7 @@ SamplerState samplerLinear : register(s0);
 
 
 
-void calcPointLight(inout float3 color, float3 pixelWorldPos, float3 normal, float3 pointLightPos, float3 pointLightColor)
+void calcPointLightDiffuse(inout float3 color, float3 pixelWorldPos, float3 normal, float3 pointLightPos, float3 pointLightColor)
 {
     float3 pxToLight = pointLightPos - pixelWorldPos;
     float dist = length(pxToLight);
@@ -57,6 +65,19 @@ void calcPointLight(inout float3 color, float3 pixelWorldPos, float3 normal, flo
     float b = max(0, dot(normal, pxToLight)) / (dist * dist);
 	
     color += pointLightColor * b;
+}
+
+void calcPointLightSpecular(inout float3 color, float3 V, float3 pixelWorldPos, float3 normal, float3 pointLightPos, float3 pointLightColor)
+{
+    float3 lightToPx = pixelWorldPos - pointLightPos;
+    float dist = length(lightToPx);
+    lightToPx = normalize(lightToPx);
+	
+    float3 R = reflect(lightToPx, normal);
+	
+    float s = pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F / (dist * dist);
+	
+	color += pointLightColor * s;
 }
 
 
@@ -96,8 +117,11 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 	
 	// Point light diffuse.
     float3 pl = float3(0, 0, 0);
-    calcPointLight(pl, input.pixelWorldPos, normal, float3(0, 0, 0), float3(0, 1, 0));
-    finalColor.rgb += pl;
+    for (int i = 0; i < MAX_POINT_LIGHT; i++)
+    {
+        calcPointLightDiffuse(pl, input.pixelWorldPos, normal, PointLightPos[i].xyz, PointLightColor[i].xyz);	
+    }
+	finalColor.rgb += pl;
 	
     finalColor.rgb *= albedo.rgb;
 
@@ -107,6 +131,14 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 	// Directional light specular.
 	float3 R = reflect(dirLightDir.xyz, normal);
 	finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F * dirLightColor.rgb;
+	
+    pl = float3(0, 0, 0);
+    for (int i = 0; i < MAX_POINT_LIGHT; i++)
+    {
+        calcPointLightSpecular(pl, V, input.pixelWorldPos, normal, PointLightPos[i].xyz, PointLightColor[i].xyz);
+    }
+    finalColor.rgb += pl;
+	
 	
 	// Fresnel.
     float3 F = pow(1 - dot(normal, V), 3) * 0.4F;

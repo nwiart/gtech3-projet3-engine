@@ -40,7 +40,7 @@ private:
 
 	void setCamera(QuEntityCamera* camera);
 	void setDirectionalLight(QuEntityLightDirectional* en);
-	void setPointLight(int index, QuEntityLightPoint* en);
+	void addPointLight( QuEntityLightPoint* en);
 	void setSkybox(QuEntityRenderSkybox* skybox);
 
 private:
@@ -74,4 +74,5 @@ private:
 	DirectX::XMVECTOR cameraUp;
 
 	QuEntityLightDirectional* m_directionalLight;
+	std::vector<QuEntityLightPoint*> m_ListPointLight;
 };

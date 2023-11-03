@@ -10,6 +10,7 @@
 #include "QuEntityRenderModel.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
+#include "QuEntityLightPoint.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -21,7 +22,7 @@
 #include "EntityController.h"
 
 
-
+#define MAX_POINT_LIGHT 8
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
 
@@ -43,6 +44,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// Load resources.
+
+	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
+	pointLight->setIntensity(5);
+
+
 	Model* sphere = new Model();
 	Model* box = new Model();
 	Model* capsule = new Model();
@@ -93,6 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	EntityController* c = new EntityController();
 	c->AttachToParent(world);
+	c->attachChild(pointLight);
 
 
 	game.openWorld(world);

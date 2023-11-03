@@ -32,6 +32,7 @@ public:
 	void setCamera(class QuEntityCamera* camera) { m_renderScene.setCamera(camera); }
 	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
 	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
+	void addPointLight(class QuEntityLightPoint* pl) { m_renderScene.addPointLight(pl); }
 
 
 	void renderFrame();
