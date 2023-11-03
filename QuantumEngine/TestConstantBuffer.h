@@ -13,6 +13,8 @@ struct TestConstantBuffer
 	DirectX::XMFLOAT4 AmbientColor;
 	DirectX::XMFLOAT4 DirColors;
 	DirectX::XMFLOAT4 DirDirection;
+	
+	
 };
 
 struct ObjectConstantBuffer

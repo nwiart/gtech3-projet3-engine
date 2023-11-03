@@ -239,35 +239,6 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 
 
 
-
-	D3D12_INPUT_ELEMENT_DESC inputLayout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 3 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 6 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UINT,   0, 8 * sizeof(float), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
-	};
-
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC desc; ZeroMemory(&desc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	desc.pRootSignature = shader->getRootSignature();
-	desc.VS = shader->getShaderBytecode<Shader::SHADER_VS>();
-	desc.PS = shader->getShaderBytecode<Shader::SHADER_PS>();
-	desc.InputLayout = { inputLayout, sizeof(inputLayout) / sizeof(inputLayout[0]) };
-	desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-	desc.SampleMask = UINT_MAX;
-	desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	desc.NumRenderTargets = 1;
-	desc.RTVFormats[0] = m_backBufferFormat;
-	desc.DSVFormat = m_depthBufferFormat;
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-
-	desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-
-	HRESULT r = d3dDevice->CreateGraphicsPipelineState(&desc, IID_PPV_ARGS(&m_defaultPSO));
-}
-
 //
 // Shutdown.
 //

@@ -48,6 +48,19 @@ SamplerState samplerLinear : register(s0);
 
 
 
+void calcPointLight(inout float3 color, float3 pixelWorldPos, float3 normal, float3 pointLightPos, float3 pointLightColor)
+{
+    float3 pxToLight = pointLightPos - pixelWorldPos;
+    float dist = length(pxToLight);
+    pxToLight = normalize(pxToLight);
+	
+    float b = max(0, dot(normal, pxToLight)) / (dist * dist);
+	
+    color += pointLightColor * b;
+}
+
+
+
 PS_INPUT vs_main(VS_INPUT input)
 {
 	PS_INPUT output;
@@ -76,20 +89,29 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 
 	float4 albedo = textureDiffuse.Sample(samplerLinear, input.texCoord);
 
-
+	// Directional light diffuse component.
 	float brightness = max(0.0F, dot(normal, -dirLightDir.xyz));
 	finalColor.rgb += brightness * dirLightColor.rgb;
 	finalColor.rgb += ambientColor.rgb;
 	
+	// Point light diffuse.
+    float3 pl = float3(0, 0, 0);
+    calcPointLight(pl, input.pixelWorldPos, normal, float3(0, 0, 0), float3(0, 1, 0));
+    finalColor.rgb += pl;
+	
     finalColor.rgb *= albedo.rgb;
 
+
 	float3 V = normalize(cameraPos.xyz - input.pixelWorldPos).xyz;
+
+	// Directional light specular.
 	float3 R = reflect(dirLightDir.xyz, normal);
-	float3 F = pow(1- dot(normal, V),3) * 0.4F;
-
-
 	finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F * dirLightColor.rgb;
+	
+	// Fresnel.
+    float3 F = pow(1 - dot(normal, V), 3) * 0.4F;
 	finalColor.rgb += F;
+	
 
 	return finalColor;
 }

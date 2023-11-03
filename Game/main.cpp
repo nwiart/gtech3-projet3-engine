@@ -10,6 +10,7 @@ using namespace Microsoft::WRL;
 #include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Quantum/Generate/BoxGenerator.h"
+#include "Quantum/Generate/CapsuleGenerator.h"
 #include "QuEntityRenderModel.h"
 
 #include "Quantum/Math/Math.h"
@@ -45,23 +46,29 @@ int main()
 
 	Model* sphere = new Model();
 	Model* box = new Model();
+	Model* capsule = new Model();
 
 	Quantum::SphereGenerator::generate(sphere);
 	Quantum::BoxGenerator::generate(box, 0.5f);
+	Quantum::CapsuleGenerator::generate(capsule);
 
 	QuWorld* world = new QuWorld();
 
 	QuEntity* sphereE;
 	for (int i = 0; i < 50; i++) 
 	{
-		QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-		sphereEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
-		sphereEntity->SetModel(sphere);
-		sphereEntity->AttachToParent(world);
-		QuEntityRenderModel* boxEntity = new QuEntityRenderModel();
-		boxEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
-		boxEntity->SetModel(box);
-		boxEntity->AttachToParent(world);
+		//QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
+		//sphereEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
+		//sphereEntity->SetModel(sphere);
+		//sphereEntity->AttachToParent(world);
+		//QuEntityRenderModel* boxEntity = new QuEntityRenderModel();
+		//boxEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
+		//boxEntity->SetModel(box);
+		//boxEntity->AttachToParent(world);
+		QuEntityRenderModel* CapsuleEntity = new QuEntityRenderModel();
+		CapsuleEntity->setPosition(DirectX::XMFLOAT3(randomFloat(-4.0F, 4.0F), randomFloat(-4.0F, 4.0F), randomFloat(0, 10.0F)));
+		CapsuleEntity->SetModel(capsule);
+		CapsuleEntity->AttachToParent(world);
 	}
 
 
