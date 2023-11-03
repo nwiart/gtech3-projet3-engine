@@ -18,6 +18,7 @@
 
 #include "EntityController.h"
 #include "Shooting.h"
+#include "Bullet.h"
 
 
 const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;

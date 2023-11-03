@@ -3,24 +3,25 @@
 #include "QuEntityRenderModel.h"
 #include "EntityController.h"
 #include <vector>
+#include "Bullet.h"
 
 class Shooting : public QuEntity
 {
-	void Shoot();
-	void OnUpdate(Timer timer) override;
-	void OnSpawn() override;
-	void InstantiateBullet();
-	void MoveBullet();
+public:
+	Shooting();
 
-	void DestroyBullet();
-	void CoolDown(float dt);
+	void Shoot();
+	Bullet* bullet = new Bullet;
+	EntityController* entityController = new EntityController;
 
 private:
 
+	void OnUpdate(Timer timer) override;
+	void OnSpawn() override;
+	void InstantiateBullet();
+
+	void CoolDown(float dt);
+
 	float m_coolDown = 0.5f;
-	bool alreadyShooting = false;
 
-	std::vector<QuEntityRenderModel*> m_bullets;
-	QuEntityRenderModel* sphereEntity;
 };
-

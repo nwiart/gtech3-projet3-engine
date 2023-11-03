@@ -5,19 +5,25 @@
 #include "InputSystem.h"
 #include "Quantum/Generate/SphereGenerator.h"
 
+Shooting::Shooting()
+{
+}
+
 void Shooting::Shoot()
 {
-	if (InputSystem::Get().isMouseDown(1) && !alreadyShooting) {
+	if (InputSystem::Get().isMouseDown(1) && !bullet->alreadyShooting) {
+		std::cout << "Shoot" << std::endl;
 		InstantiateBullet();
 	}
 }
 
 void Shooting::OnUpdate(Timer timer)
 {
+	this->attachChild(bullet);
 	Shoot();
-	MoveBullet();
+	bullet->MoveBullet(timer.getDeltaTime());
 	CoolDown(timer.getDeltaTime());
-	DestroyBullet();
+	bullet->DestroyBullet();
 }
 
 void Shooting::OnSpawn()
@@ -25,44 +31,15 @@ void Shooting::OnSpawn()
 }
 
 void Shooting::InstantiateBullet() {
-	alreadyShooting = true;
-	sphereEntity = new QuEntityRenderModel;
-	Model* sphere = new Model();
-	Quantum::SphereGenerator::generate(sphere);
-	sphereEntity->SetModel(sphere);
-	sphereEntity->setPosition(DirectX::XMFLOAT3(0, 0, 0));
-	this->attachChild(sphereEntity);
-	m_bullets.push_back(sphereEntity);
-}
-
-void Shooting::MoveBullet() {
-	if (m_bullets.size() > 0) {
-		for (int i = 0; i < m_bullets.size(); i++) {
-			XMVECTOR vectForward = XMVectorSet(0,0,1,0);
-			XMVECTOR pos = XMLoadFloat3(&m_bullets[i]->GetTransform().getPosition());
-			pos += vectForward;
-
-			XMFLOAT3 fpos;
-			XMStoreFloat3(&fpos, pos);
-
-			m_bullets[i]->setPosition(fpos);
-		}
-	}
-}
-
-void Shooting::DestroyBullet() {
-	for (int i = 0; i < m_bullets.size(); i++) {
-		if (m_bullets[i]->GetTransform().getPosition().z > 100) {
-			//m_bullets[i]->DetachFromParent();
-			m_bullets.erase(m_bullets.begin() + i);
-		}
-	}
+	bullet->Shoot();
 }
 
 void Shooting::CoolDown(float dt) {
-	m_coolDown -= dt;
-	if (m_coolDown <= 0) {
-		m_coolDown = 0.5f;
-		alreadyShooting = false;
+	if (bullet->alreadyShooting) {
+		m_coolDown -= dt;
+		if (m_coolDown <= 0) {
+			m_coolDown = 0.5f;
+			bullet->alreadyShooting = false;
+		}
 	}
 }
