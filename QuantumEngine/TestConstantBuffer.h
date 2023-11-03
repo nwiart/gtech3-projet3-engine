@@ -20,4 +20,8 @@ struct TestConstantBuffer
 struct ObjectConstantBuffer
 {
 	DirectX::XMFLOAT4X4 world;   /// World space transform of the object.
+
+	DirectX::XMFLOAT4X4 pad0;
+	DirectX::XMFLOAT4X4 pad1;
+	DirectX::XMFLOAT4X4 pad2;
 };

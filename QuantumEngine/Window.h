@@ -1,5 +1,9 @@
 #pragma once
 
+typedef struct HWND__* HWND;
+
+
+
 class Window
 {
 public:

@@ -1,29 +1,45 @@
 #pragma once
+
 #include <vector>
+
 #include "InputCallback.h"
+
 
 class InputSystem
 {
 public:
-	InputSystem();
-	~InputSystem();
-
-	void FireKeyDown(WPARAM wparam);
-	void FireKeyUp(WPARAM wparam);
-
-	inline bool isKeyDown(int vkCode) const { return m_keyState[vkCode]; }
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
-	void MouseDown(int button);
+	InputSystem();
+	~InputSystem();
+
+	void FireKeyDown(unsigned short vkCode);
+	void FireKeyUp(unsigned short vkCode);
+
+	void FireMouseMove(int newX, int newY);
+	void FireMouseDown(int button);
+
+	inline bool isKeyDown(int vkCode) const { return m_keyState[vkCode]; }
+
+	inline int getMouseX() const { return m_cursorX; }
+	inline int getMouseY() const { return m_cursorY; }
+
+	inline int getMouseDX() const { return m_cursorX - m_lastCursorX; }
+	inline int getMouseDY() const { return m_cursorY - m_lastCursorY; }
 
 	void RegisterCallback(InputCallback* callback);
-	void ExecuteCallbacks(WPARAM wparam);
-	std::vector <InputCallback*> m_callbacklist;
 
-	WPARAM m_wparam;
+
 
 private:
+
+	std::vector<InputCallback*> m_callbacklist;
+
+	int m_cursorX;
+	int m_cursorY;
+	int m_lastCursorX;
+	int m_lastCursorY;
 
 	bool m_keyState[256];
 };

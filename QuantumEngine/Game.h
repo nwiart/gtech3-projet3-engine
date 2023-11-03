@@ -2,7 +2,9 @@
 
 #include "Timer.h"
 #include "Window.h"
-#include "QuWorld.h"
+
+class QuEntity;
+class QuWorld;
 
 
 
@@ -21,11 +23,15 @@ public:
 
 	void openWorld(QuWorld* world);
 
+	int getRenderWidth() const;
+	int getRenderHeight() const;
+
 	void visitEntity(QuEntity* entity);
 
 
 
 private:
+
 	Timer m_timer;
 	Window m_window;
 
