@@ -87,7 +87,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(c);
 
 		Shooting* s = new Shooting();
-		world->attachChild(s);
+		c->attachChild(s);
 	}
 
 	game.openWorld(world);

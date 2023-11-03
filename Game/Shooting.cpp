@@ -31,23 +31,19 @@ void Shooting::InstantiateBullet() {
 	Quantum::SphereGenerator::generate(sphere);
 	sphereEntity->SetModel(sphere);
 	sphereEntity->setPosition(DirectX::XMFLOAT3(0, 0, 0));
-	getWorld()->attachChild(sphereEntity);
-	//Not Working
-	//m_entityController->attachChild(sphereEntity);
+	this->attachChild(sphereEntity);
 	m_bullets.push_back(sphereEntity);
 }
 
 void Shooting::MoveBullet() {
 	if (m_bullets.size() > 0) {
 		for (int i = 0; i < m_bullets.size(); i++) {
+			XMVECTOR vectForward = XMVectorSet(0,0,1,0);
 			XMVECTOR pos = XMLoadFloat3(&m_bullets[i]->GetTransform().getPosition());
-			XMVECTOR vectForward = m_bullets[i]->GetTransform().getForwardVector();
 			pos += vectForward;
 
 			XMFLOAT3 fpos;
 			XMStoreFloat3(&fpos, pos);
-
-			m_bullets[i]->setRotation(this->GetTransform().getRotation());
 
 			m_bullets[i]->setPosition(fpos);
 		}

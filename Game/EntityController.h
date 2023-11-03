@@ -11,8 +11,6 @@ public:
 
 	void OnUpdate(Timer timer) override;
 
-	static inline EntityController& Get() { static EntityController m_entityControl; return m_entityControl; }
-
 	void UpdateCamera(float dt);
 
 	float m_camYaw;

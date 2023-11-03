@@ -17,12 +17,10 @@ class Shooting : public QuEntity
 
 private:
 
-	float m_coolDown = 0.f;
+	float m_coolDown = 0.5f;
 	bool alreadyShooting = false;
 
-	DirectX::XMFLOAT4 m_bulletPosition;
 	std::vector<QuEntityRenderModel*> m_bullets;
 	QuEntityRenderModel* sphereEntity;
-	EntityController* m_entityController;
 };
 
