@@ -195,7 +195,6 @@ void Shader::getDefaultPipelineState(D3D12_GRAPHICS_PIPELINE_STATE_DESC& outDesc
 	outDesc.pRootSignature = this->getRootSignature();
 	outDesc.VS = this->getShaderBytecode<Shader::SHADER_VS>();
 	outDesc.PS = this->getShaderBytecode<Shader::SHADER_PS>();
-	outDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 }
 
 

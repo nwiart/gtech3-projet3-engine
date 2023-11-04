@@ -29,67 +29,67 @@ void Quantum::BoxGenerator::generate(Model* outModel, float size)
 
 
 
-		for (int face = 0; face < numFaces; ++face)
-		{
-			int baseFaceIndex = face * 4;
+	for (int face = 0; face < numFaces; ++face)
+	{
+		int baseFaceIndex = face * 4;
 
-			UINT v0 = baseFaceIndex;
-			UINT v1 = baseFaceIndex + 1;
-			UINT v2 = baseFaceIndex + 2;
-			indices.push_back(v0); indices.push_back(v1); indices.push_back(v2);
+		UINT v0 = baseFaceIndex;
+		UINT v1 = baseFaceIndex + 1;
+		UINT v2 = baseFaceIndex + 2;
+		indices.push_back(v0); indices.push_back(v1); indices.push_back(v2);
 
-			v0 = baseFaceIndex + 2;
-			v1 = baseFaceIndex + 3;
-			v2 = baseFaceIndex;
-			indices.push_back(v0); indices.push_back(v1); indices.push_back(v2);
-		}
+		v0 = baseFaceIndex + 2;
+		v1 = baseFaceIndex + 3;
+		v2 = baseFaceIndex;
+		indices.push_back(v0); indices.push_back(v1); indices.push_back(v2);
+	}
 
 
+	// Top face
+	vertices.push_back({ { -size,  size, -size }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size,  size,  size }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size,  size,  size }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size,  size, -size }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
-		Vertex v;
-		// Top face
-		vertices.push_back({ {-size, size, -size }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-size, size,  size }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size, size,  size }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size, size, -size }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });
+	// Bottom face
+	vertices.push_back({ {  size, -size, -size }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size, -size,  size }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size, -size,  size }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size, -size, -size }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
-		// Bottom face
-		vertices.push_back({ {-size, -size, -size }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-size, -size,  size }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size, -size,  size }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size, -size, -size }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
+	// Front face
+	vertices.push_back({ {  size, -size,  size }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size,  size,  size }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size,  size,  size }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size, -size,  size }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
 
-		//back face
-		vertices.push_back({ { -size, -size, size }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {  size, -size, size }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {  size,  size, size }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { -size,  size, size }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
-
-		//front face
-		vertices.push_back({ { -size, -size, -size }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {  size, -size, -size }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {  size,  size, -size }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { -size,  size, -size }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
+	// Back face
+	vertices.push_back({ { -size, -size, -size }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size,  size, -size }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size,  size, -size }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size, -size, -size }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
 		
-		//Left face
-		vertices.push_back({ {-size, -size, -size }, { -1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ {-size, -size,  size }, { -1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {-size,  size,  size }, { -1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ {-size,  size, -size }, { -1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
+	// Right face
+	vertices.push_back({ { size, -size, -size }, { 1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { size,  size, -size }, { 1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { size,  size,  size }, { 1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { size, -size,  size }, { 1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
-		// right face
-		vertices.push_back({ { size, -size, -size }, { 1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
-		vertices.push_back({ { size, -size,  size }, { 1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size,  size,  size }, { 1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
-		vertices.push_back({ { size,  size, -size }, { 1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
-
-		
-	
-
-        outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex), sizeof(Vertex));
-        outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
-
-        outModel->SetNumTriangle(numFaces * 2);
-    }
+	// Left face
+	vertices.push_back({ {-size, -size,  size }, { -1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size,  size,  size }, { -1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size,  size, -size }, { -1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size, -size, -size }, { -1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 
+    outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex), sizeof(Vertex));
+    outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
+
+    outModel->SetNumTriangle(numFaces * 2);
+
+
+	// AABB centered on the origin.
+	XMVECTOR aabbMin = XMVectorReplicate(-size);
+	XMVECTOR aabbMax = XMVectorReplicate(size);
+	outModel->setDimensions(aabbMin, aabbMax);
+}

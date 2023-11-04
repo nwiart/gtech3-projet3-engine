@@ -52,8 +52,8 @@ void EntityController::UpdateCamera(float dt)
 
 	if (!inDeadZone)
 	{
-		m_camYaw += mouseX * 0.0001f;
-		m_camPitch += mouseY * 0.0001f;
+		m_camYaw += mouseX * dt * 0.005F;
+		m_camPitch += mouseY * dt * 0.005F;
 
 		// Limit pitch to straight up or straight down. To Remove
 		m_camPitch = Quantum::Math::clamp(m_camPitch, -1.570796f, 1.570796f);

@@ -14,5 +14,5 @@ QuEntityRenderModel::~QuEntityRenderModel()
 
 void QuEntityRenderModel::ExecuteProcedure()
 {
-	Graphics::getInstance().addRenderModel(m_model, XMLoadFloat4x4(&this->GetWorldTransformMatrix()));
+	Graphics::getInstance().addRenderModel(this);
 }

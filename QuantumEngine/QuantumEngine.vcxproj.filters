@@ -39,6 +39,7 @@
     <ClCompile Include="QuEntityCamera.cpp" />
     <ClCompile Include="Quantum\Render\ParticlesPass.cpp" />
     <ClCompile Include="QuEntityParticleEmitter.cpp" />
+    <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="QuEntityCamera.h" />
     <ClInclude Include="Quantum\Render\ParticlesPass.h" />
     <ClInclude Include="QuEntityParticleEmitter.h" />
+    <ClInclude Include="Quantum\Render\FrustumTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
