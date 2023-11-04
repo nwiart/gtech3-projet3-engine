@@ -76,6 +76,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 
 
+static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FXMVECTOR aabbMax);
+
 static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius);
 
 void RenderScene::addRenderModel(QuEntityRenderModel* model)
@@ -84,7 +86,10 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 
 	// Frustum test.
 	XMVECTOR worldPos = model->getWorldPosition();
-	if (!frustum_sphere(m_frustum, worldPos, 0.0F)) return;
+	float radius = 0.0F;
+	get_approximate_sphere(radius, XMLoadFloat3(&model->GetModel()->getDimensionsMin()), XMLoadFloat3(&model->GetModel()->getDimensionsMax()));
+
+	if (!frustum_sphere(m_frustum, worldPos, radius)) return;
 
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&model->GetWorldTransformMatrix());
 	worldMatrix = XMMatrixTranspose(worldMatrix);
@@ -204,6 +209,14 @@ void RenderScene::updateObjectCB()
 }
 
 
+
+static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FXMVECTOR aabbMax)
+{
+	float lenMin = XMVectorGetX(XMVector3Length(aabbMin));
+	float lenMax = XMVectorGetX(XMVector3Length(aabbMax));
+
+	outSphereRadius = max(lenMin, lenMax);
+}
 
 static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius)
 {

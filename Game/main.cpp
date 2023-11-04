@@ -77,23 +77,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		for (int i = 0; i < 3000; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
-			model->SetModel(box);
-			world->attachChild(model);
-		}
-
-		for (int i = 0; i < 3000; i++)
-		{
-			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
 			model->SetModel(sphere);
 			world->attachChild(model);
 		}
 
+		// Boxes.
 		for (int i = 0; i < 3000; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(-20.0F, 20.0F), qm::randomFloat(0, 40.0F)));
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
+			model->SetModel(box);
+			world->attachChild(model);
+		}
+
+		// Capsules.
+		for (int i = 0; i < 3000; i++)
+		{
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
 			model->SetModel(capsule);
 			world->attachChild(model);
 		}

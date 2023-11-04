@@ -50,27 +50,22 @@ void CapsuleGenerator::generate(Model* outModel)
 
 			if (itheta < m_heightSubdivs / 2)
 			{
-				
 				Vertex v;
-				v.pos[0] = x * m_radius  ; v.pos[1] = y * m_radius ; v.pos[2] = z * m_radius ;
+				v.pos[0] = x * m_radius; v.pos[1] = y * m_radius + 2; v.pos[2] = z * m_radius;
 				v.normal[0] = x; v.normal[1] = y; v.normal[2] = z;
-				v.uv[0] = 1.0F - (iphi / (float)m_axisSubdivs); v.uv[1] = itheta / (float)m_heightSubdivs;
+				v.uv[0] = 1.0F - (iphi / (float)m_axisSubdivs); v.uv[1] = itheta / (float)m_heightSubdivs - 2;
 				v.color = 0xFFFFFFFF;
 				vertices.push_back(v);
 			}
 			else
 			{
 				Vertex v;
-				v.pos[0] = (x * m_radius) ; v.pos[1] = (y * m_radius) -2; v.pos[2] = z * m_radius;
+				v.pos[0] = x * m_radius; v.pos[1] = y * m_radius; v.pos[2] = z * m_radius;
 				v.normal[0] = x; v.normal[1] = y; v.normal[2] = z;
-				v.uv[0] = 1.0F - (iphi / (float)m_axisSubdivs); v.uv[1] = (itheta / (float)m_heightSubdivs) + 2;
+				v.uv[0] = 1.0F - (iphi / (float)m_axisSubdivs); v.uv[1] = (itheta / (float)m_heightSubdivs);
 				v.color = 0xFFFFFFFF;
 				vertices.push_back(v);
-
 			}
-	
-	
-
 		}
 	}
 
@@ -102,4 +97,9 @@ void CapsuleGenerator::generate(Model* outModel)
 	outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
 
 	outModel->SetNumTriangle(m_axisSubdivs * m_heightSubdivs * 2);
+
+	XMVECTOR aabbMin = XMVectorReplicate(-m_radius);
+	XMVECTOR aabbMax = XMVectorReplicate(m_radius);
+	aabbMax = XMVectorSetY(aabbMax, XMVectorGetY(aabbMax) + 2.0F);
+	outModel->setDimensions(aabbMin, aabbMax);
 }

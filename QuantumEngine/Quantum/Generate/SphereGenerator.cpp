@@ -84,4 +84,10 @@ void SphereGenerator::generate(Model* outModel)
 	outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
 
 	outModel->SetNumTriangle(m_axisSubdivs* m_heightSubdivs * 2);
+
+
+	// AABB extends to radius.
+	XMVECTOR aabbMin = XMVectorReplicate(-m_radius);
+	XMVECTOR aabbMax = XMVectorReplicate(m_radius);
+	outModel->setDimensions(aabbMin, aabbMax);
 }
