@@ -37,6 +37,8 @@
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="QuEntityCamera.cpp" />
+    <ClCompile Include="Quantum\Render\ParticlesPass.cpp" />
+    <ClCompile Include="QuEntityParticleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -85,6 +87,8 @@
     <ClInclude Include="Quantum\Render\RenderScene.h" />
     <ClInclude Include="Quantum\Render\RenderModel.h" />
     <ClInclude Include="QuEntityCamera.h" />
+    <ClInclude Include="Quantum\Render\ParticlesPass.h" />
+    <ClInclude Include="QuEntityParticleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
