@@ -87,6 +87,7 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 	if (!frustum_sphere(m_frustum, worldPos, 0.0F)) return;
 
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&model->GetWorldTransformMatrix());
+	worldMatrix = XMMatrixTranspose(worldMatrix);
 
 	RenderModel renderModel =
 	{
@@ -141,13 +142,14 @@ void RenderScene::updateFrameCB()
 {
 	TestConstantBuffer cb;
 	{
-		XMMATRIX view, projection;
+		XMMATRIX view, projection, viewProjection;
 
 		// Combined view and projection matrices.
 		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
 		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F);
 
-		XMStoreFloat4x4(&cb.viewProjection, view * projection);
+		viewProjection = XMMatrixMultiplyTranspose(view, projection);
+		XMStoreFloat4x4(&cb.viewProjection, viewProjection);
 
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, cameraPos);

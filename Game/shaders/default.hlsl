@@ -22,7 +22,7 @@ struct PS_INPUT
 
 cbuffer cb_objectData : register(b0)
 {
-	row_major float4x4 world;
+	float4x4 world;
 };
 
 cbuffer cb_materialData : register(b1)
@@ -34,7 +34,7 @@ cbuffer cb_materialData : register(b1)
 
 cbuffer cb_frameData : register(b2)
 {
-	row_major float4x4 viewProjection;
+	float4x4 viewProjection;
 
 	float4 cameraPos;
 	float4 cameraDir;
