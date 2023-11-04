@@ -43,7 +43,7 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 {
 	Graphics& g = Graphics::getInstance();
 
-	this->updateFrustum();
+	frustumBuild(m_frustum, cameraPos, cameraTarget, cameraRight, cameraUp, cameraFOV, cameraAspect);
 
 	this->updateFrameCB();
 	this->updateObjectCB();
@@ -78,8 +78,6 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FXMVECTOR aabbMax);
 
-static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius);
-
 void RenderScene::addRenderModel(QuEntityRenderModel* model)
 {
 	assert(renderList.size() < QU_RENDER_MAX_MESHES);
@@ -89,7 +87,7 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 	float radius = 0.0F;
 	get_approximate_sphere(radius, XMLoadFloat3(&model->GetModel()->getDimensionsMin()), XMLoadFloat3(&model->GetModel()->getDimensionsMax()));
 
-	if (!frustum_sphere(m_frustum, worldPos, radius)) return;
+	if (!frustumSphereIntersect(m_frustum, worldPos, radius)) return;
 
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&model->GetWorldTransformMatrix());
 	worldMatrix = XMMatrixTranspose(worldMatrix);
@@ -216,33 +214,4 @@ static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FX
 	float lenMax = XMVectorGetX(XMVector3Length(aabbMax));
 
 	outSphereRadius = max(lenMin, lenMax);
-}
-
-static bool frustum_sphere(XMVECTOR* frustum, FXMVECTOR sphereCenter, float sphereRadius)
-{
-	// Test each plane if sphere is lying entirely on its positive side.
-	for (int i = 0; i < 4; ++i) {
-		float dist = XMVectorGetX(XMPlaneDot(frustum[i], sphereCenter));
-		if (dist > sphereRadius) {
-			return false;
-		}
-	}
-
-	// Sphere intersects.
-	return true;
-}
-
-void RenderScene::updateFrustum()
-{
-	float halfVertical = tan(XMConvertToRadians(cameraFOV) * 0.5F);
-	float halfHorizontal = halfVertical * cameraAspect;
-
-	XMVECTOR cameraForward   = XMVectorSubtract(cameraTarget, cameraPos);
-	XMVECTOR cameraHalfRight = XMVectorScale(cameraRight, halfHorizontal);
-	XMVECTOR cameraHalfUp    = XMVectorScale(cameraUp, halfVertical);
-
-	m_frustum[0] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraUp, cameraForward + cameraHalfRight)));
-	m_frustum[1] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraForward + cameraHalfUp, cameraRight)));
-	m_frustum[2] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraForward - cameraHalfRight, cameraUp)));
-	m_frustum[3] = XMPlaneFromPointNormal(cameraPos, XMVector3Normalize(XMVector3Cross(cameraRight, cameraForward - cameraHalfUp)));
 }

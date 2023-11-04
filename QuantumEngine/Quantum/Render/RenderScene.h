@@ -3,6 +3,8 @@
 #include "D3D12ConstantBuffer.h"
 #include "TestConstantBuffer.h"
 
+#include "Quantum/Render/FrustumTest.h"
+
 #include "Quantum/Render/ScenePass.h"
 #include "Quantum/Render/SkyboxPass.h"
 
@@ -49,8 +51,6 @@ private:
 	void updateFrameCB();
 	void updateObjectCB();
 
-	void updateFrustum();
-
 
 
 private:
@@ -84,6 +84,5 @@ private:
 
 
 		/// Frustum.
-		/// We're not storing the near and far planes, as we just assume the frustum extends to infinity.
-	DirectX::XMVECTOR m_frustum[4];
+	Frustum m_frustum;
 };
