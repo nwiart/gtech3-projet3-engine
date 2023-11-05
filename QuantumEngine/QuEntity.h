@@ -41,6 +41,8 @@ class QuEntity
 
 		void updateWorldMatrix();
 
+		void setDirtyWorldMatrix();
+
 
 	protected:
 		QuEntity *m_Parent;

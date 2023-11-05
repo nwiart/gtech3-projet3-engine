@@ -15,6 +15,22 @@
     <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
     <ClCompile Include="Quantum\Math\Transform.cpp" />
+    <ClCompile Include="Quantum\Generate\SphereGenerator.cpp" />
+    <ClCompile Include="QuEntity.cpp" />
+    <ClCompile Include="QuEntityRenderModel.cpp" />
+    <ClCompile Include="QuEntityLightDirectional.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="QuEntityRenderSkybox.cpp" />
+    <ClCompile Include="TextureCube.cpp" />
+    <ClCompile Include="QuWorld.cpp" />
+    <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
+    <ClCompile Include="Quantum\Math\Math.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
+    <ClCompile Include="InputCallback.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="QuEntityLightPoint.cpp" />
     <ClCompile Include="Quantum\Render\ScenePass.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
@@ -35,6 +51,7 @@
     <ClCompile Include="Quantum\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="Quantum\Physics\RigidBody.cpp" />
     <ClCompile Include="Quantum\Physics\Internal\InternalCollisionAgents.cpp" />
+    <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -82,6 +99,86 @@
     <ClInclude Include="Quantum\Physics\Collide\PhysicsShape.h" />
     <ClInclude Include="Quantum\Physics\Collide\CollisionAgent.h" />
     <ClInclude Include="Quantum\Physics\Collide\PhysicsShapeSphere.h" />
+    <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
+    <ClInclude Include="Quantum\Math\Math.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="QuEntityLightPoint.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Quantum\Render\ScenePass.h" />
+    <ClInclude Include="Quantum\Render\ShaderSkybox.h" />
+    <ClInclude Include="Quantum\Render\SkyboxPass.h" />
+    <ClInclude Include="Quantum\Types\Color.h" />
+    <ClInclude Include="Quantum\Render\ShaderDefault.h" />
+    <ClInclude Include="Quantum\Render\RenderScene.h" />
+    <ClInclude Include="Quantum\Render\RenderModel.h" />
+    <ClInclude Include="QuEntityCamera.h" />
+    <ClInclude Include="Quantum\Render\FrustumTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D3D12ConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D12ResourceTransferUtility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D12Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D12UploadHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quantum\Generate\SphereGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quantum\Math\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quantum\World\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DDS\DDSTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="D3D12ConstantBuffer.inl" />

@@ -2,12 +2,15 @@
 
 #include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
+#include "Quantum/Generate/BoxGenerator.h"
+#include "Quantum/Generate/CapsuleGenerator.h"
 
 #include "TextureCube.h"
 
 #include "QuEntityRenderModel.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
+#include "QuEntityLightPoint.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -19,8 +22,7 @@
 #include "EntityController.h"
 
 
-
-const int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
+namespace qm = Quantum::Math;
 
 
 
@@ -41,8 +43,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// Load resources.
+
+	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
+	pointLight->setIntensity(0.2F);
+
+
 	Model* sphere = new Model();
+	Model* box = new Model();
+	Model* capsule = new Model();
+
 	Quantum::SphereGenerator::generate(sphere);
+	Quantum::BoxGenerator::generate(box, 0.5f);
+	Quantum::CapsuleGenerator::generate(capsule);
 
 	TextureCube skyboxTexture("textures/milkyway.dds");
 
@@ -52,6 +64,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		// Global directional light.
 		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
+		dirLight->setAmbientColor(Quantum::Color(0, 10, 20));
+		dirLight->setIntensity(0.5F);
 		world->attachChild(dirLight);
 
 		// Skybox.
@@ -60,32 +74,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(entitySkybox);
 
 		// Spheres.
-		QuEntity* sphereE;
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 3000; i++)
 		{
-			namespace qm = Quantum::Math;
-
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
-			world->attachChild(sphereEntity);
-
-			sphereE = sphereEntity;
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
+			model->SetModel(sphere);
+			world->attachChild(model);
 		}
 
-		for (int i = 0; i < 10; i++)
+		// Boxes.
+		for (int i = 0; i < 3000; i++)
 		{
-			namespace qm = Quantum::Math;
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
+			model->SetModel(box);
+			world->attachChild(model);
+		}
 
-			QuEntityRenderModel* sphereEntity = new QuEntityRenderModel();
-			sphereEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(-4.0F, 4.0F), qm::randomFloat(0, 10.0F)));
-			sphereEntity->SetModel(sphere);
-			world->attachChild(sphereEntity);
+		// Capsules.
+		for (int i = 0; i < 3000; i++)
+		{
+			QuEntityRenderModel* model = new QuEntityRenderModel();
+			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
+			model->SetModel(capsule);
+			world->attachChild(model);
 		}
 	}
 
 	EntityController* c = new EntityController();
 	c->AttachToParent(world);
+	c->attachChild(pointLight);
 
 
 	game.openWorld(world);

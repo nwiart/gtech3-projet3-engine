@@ -11,4 +11,8 @@
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\PointLightPixelShader.hlsl" />
+    <FxCompile Include="shaders\PointLightVertexShader.hlsl" />
+  </ItemGroup>
 </Project>

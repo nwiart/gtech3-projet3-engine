@@ -6,11 +6,6 @@
 
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
-#include "QuEntityCamera.h"
-
-QuEntityCamera camera;
-
-
 
 XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
