@@ -48,6 +48,7 @@
     <ClCompile Include="QuEntityCamera.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="QuEntityLightPoint.cpp" />
+    <ClCompile Include="QuEntityPhysicsCollider.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityRenderSkybox.cpp" />
     <ClCompile Include="QuWorld.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="QuEntity.h" />
     <ClInclude Include="QuEntityLightDirectional.h" />
     <ClInclude Include="QuEntityLightPoint.h" />
+    <ClInclude Include="QuEntityPhysicsCollider.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
     <ClInclude Include="QuEntityRenderSkybox.h" />
     <ClInclude Include="QuWorld.h" />

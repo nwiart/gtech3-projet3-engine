@@ -28,6 +28,7 @@ public:
 
 
 	void addRigidBody(RigidBody* rb);
+	void removeRigidBody(RigidBody* rb);
 
 	bool rayCast(RayHitResult& outHit, DirectX::FXMVECTOR origin, DirectX::FXMVECTOR direction, float length);
 	bool rayCast(RayHitResult& outHit, DirectX::FXMVECTOR begin, DirectX::FXMVECTOR end);

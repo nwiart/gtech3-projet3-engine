@@ -11,6 +11,7 @@
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityLightPoint.h"
+#include "QuEntityPhysicsCollider.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -43,11 +44,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// Load resources.
-
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(0.2F);
-
-
 	Model* sphere = new Model();
 	Model* box = new Model();
 	Model* capsule = new Model();
@@ -101,9 +97,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 	}
 
+
+	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider();
+	physCol->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 3.0F));
+
+	QuEntityRenderModel* physModel = new QuEntityRenderModel();
+	physModel->SetModel(sphere);
+	physModel->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 0.0F));
+
+	physCol->attachChild(physModel);
+
+	world->attachChild(physCol);
+
+
 	EntityController* c = new EntityController();
-	c->AttachToParent(world);
+	world->attachChild(c);
+
+	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
+	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
+
 
 
 	game.openWorld(world);

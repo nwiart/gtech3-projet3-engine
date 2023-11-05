@@ -18,7 +18,7 @@ EntityController::EntityController()
 	
 }
 
-void EntityController::OnUpdate(Timer timer)
+void EntityController::OnUpdate(const Timer& timer)
 {
 	UpdateCamera(timer.getDeltaTime());
 }

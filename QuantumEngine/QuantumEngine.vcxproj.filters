@@ -52,6 +52,7 @@
     <ClCompile Include="Quantum\Physics\RigidBody.cpp" />
     <ClCompile Include="Quantum\Physics\Internal\InternalCollisionAgents.cpp" />
     <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
+    <ClCompile Include="QuEntityPhysicsCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="Quantum\Render\RenderModel.h" />
     <ClInclude Include="QuEntityCamera.h" />
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
+    <ClInclude Include="QuEntityPhysicsCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

@@ -1,7 +1,13 @@
 #pragma once
-#include <string>
+
 #include "Quantum/Math/Transform.h"
-#include "Timer.h"
+
+#include <string>
+
+class QuWorld;
+class Timer;
+
+
 
 class QuEntity
 {
@@ -10,6 +16,10 @@ class QuEntity
 	public:
 		QuEntity();
 		~QuEntity();
+
+		virtual void OnSpawn(QuWorld* world) {}
+		virtual void OnUpdate(const Timer& timer) {}
+		virtual void OnDestroy(QuWorld* world) {}
 
 		void attachChild(QuEntity* child);
 		void AttachToParent(QuEntity* Parent);
@@ -58,9 +68,5 @@ class QuEntity
 		bool m_dirtyWorldMatrix;
 
 		virtual void ExecuteProcedure(){}
-		
-		virtual void OnSpawn(){}
-		virtual void OnUpdate(Timer timer){}
-		virtual void OnDestroy(){}
 };
 

@@ -7,20 +7,42 @@ using namespace DirectX;
 
 
 
-PhysicsWorld::PhysicsWorld(const PhysicsWorldCinfo& info)
+struct Sphere
+{
+	DirectX::XMFLOAT3 m_center;
+	float m_radius;
+};
+
+
+
+PhysicsWorldCinfo::PhysicsWorldCinfo()
+	: m_gravity(0.0F, -9.8F, 0.0F)
+	, m_broadphase(128.0F)
 {
 
+}
+
+
+
+PhysicsWorld::PhysicsWorld(const PhysicsWorldCinfo& info)
+{
+	m_gravity = info.m_gravity;
 }
 
 void PhysicsWorld::step(float deltaTime)
 {
 	XMVECTOR deltaVec = XMVectorReplicate(deltaTime);
-	XMVECTOR gravity = XMLoadFloat3(&m_gravity);
+	XMVECTOR gravity = XMVectorMultiply(XMLoadFloat3(&m_gravity), deltaVec);
 
 	for (RigidBody* rb : m_dynamicRigidBodies)
 	{
 		// Gravity.
 		rb->applyImpulse(gravity);
+
+		XMVECTOR vel = XMLoadFloat4(&rb->getLinearVelocity());
+		vel = XMVectorMultiply(vel, deltaVec);
+		vel = XMVectorAdd(vel, XMLoadFloat4(&rb->getPosition()));
+		rb->setPosition(vel);
 	}
 }
 
@@ -37,16 +59,22 @@ void PhysicsWorld::addRigidBody(RigidBody* rb)
 	rb->m_world = this;
 }
 
+void PhysicsWorld::removeRigidBody(RigidBody* rb)
+{
+
+}
+
 bool PhysicsWorld::rayCast(RayHitResult& outHit, DirectX::FXMVECTOR origin, DirectX::FXMVECTOR direction, float length)
 {
-	float minT;
+	/*float minT;
 	for (RigidBody* rb : m_staticRigidBodies)
 	{
 		Sphere s = { rb->getPosition(), 1.0F };
 		bool hit = rayCast_sphere(outHit, origin, direction, length, s);
 	}
 
-	return this->rayCast(outHit, XMLoadFloat3(&ray.m_begin), XMLoadFloat3(&ray.m_end));
+	return this->rayCast(outHit, XMLoadFloat3(&ray.m_begin), XMLoadFloat3(&ray.m_end));*/
+	return false;
 }
 
 bool PhysicsWorld::rayCast(RayHitResult& outHit, DirectX::FXMVECTOR begin, DirectX::FXMVECTOR end)
@@ -61,16 +89,10 @@ bool PhysicsWorld::rayCast(RayHitResult& outHit, DirectX::FXMVECTOR begin, Direc
 
 bool PhysicsWorld::rayCast(RayHitResult& outHit, const Ray& ray)
 {
-	
+	return false;
 }
 
 
-
-struct Sphere
-{
-	DirectX::XMFLOAT3 m_center;
-	float m_radius;
-};
 
 bool rayCast_sphere(RayHitResult& outResult, FXMVECTOR rayOrigin, FXMVECTOR rayDirection, float length, const Sphere& sphere)
 {

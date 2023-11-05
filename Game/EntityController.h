@@ -9,7 +9,7 @@ public:
 
 	EntityController();
 
-	void OnUpdate(Timer timer) override;
+	virtual void OnUpdate(const Timer& timer) override;
 
 	void UpdateCamera(float dt);
 

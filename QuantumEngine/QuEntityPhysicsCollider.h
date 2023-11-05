@@ -7,11 +7,17 @@ class PhysicsShape;
 
 
 
-class QuEntityPhysicsCollider
+class QuEntityPhysicsCollider : public QuEntity
 {
 public:
 
 	QuEntityPhysicsCollider();
+
+	virtual void OnSpawn(QuWorld* world) final override;
+
+	virtual void OnUpdate(const Timer& timer) final override;
+
+	virtual void OnDestroy(QuWorld* world) final override;
 
 
 private:

@@ -25,6 +25,14 @@ struct RigidBodyCinfo
 
 	EMotionType m_motionType;
 
+		/// Initial transform.
+	DirectX::XMFLOAT4 m_position;
+	DirectX::XMFLOAT4 m_rotation;
+
+		/// Initial velocity.
+	DirectX::XMFLOAT4 m_linearVelocity;
+	DirectX::XMFLOAT4 m_angularVelocity;
+
 	RigidBodyCinfo();
 };
 
@@ -40,6 +48,11 @@ public:
 
 	inline const DirectX::XMFLOAT4& getPosition() const { return m_position; }
 	inline const DirectX::XMFLOAT4& getRotation() const { return m_rotation; }
+
+	inline const DirectX::XMFLOAT4& getLinearVelocity() const { return m_linearVelocity; }
+
+	inline EMotionType getMotionType() const { return m_motionType; }
+
 
 	void setPosition(DirectX::FXMVECTOR p);
 	void setRotation(DirectX::FXMVECTOR p);

@@ -116,7 +116,7 @@ XMVECTOR QuEntity::getUpVector()
 void QuEntity::setPosition(DirectX::XMFLOAT3 positon) 
 {
 	m_Transform.setPosition(positon);
-	m_dirtyWorldMatrix = true;
+	this->setDirtyWorldMatrix();
 }
 
 void QuEntity::setRotation(DirectX::XMFLOAT4 quat)
