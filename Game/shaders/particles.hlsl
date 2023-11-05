@@ -26,6 +26,10 @@ cbuffer cbParticleData : register(b0)
     float2 particleSizes[MAX_PARTICLES];
 };
 
+Texture2D texture : register(t0);
+
+SamplerState samplerLinear : register(s0);
+
 
 
 PS_INPUT vs_main(VS_INPUT input, int instanceID : SV_InstanceID)
@@ -43,5 +47,9 @@ PS_INPUT vs_main(VS_INPUT input, int instanceID : SV_InstanceID)
 
 float4 ps_main(PS_INPUT input) : SV_Target
 {
-    return float4(1, 1, 1, 1);
+    float4 color = texture.Sample(samplerLinear, input.texCoord);
+    if (color.a == 0.0F)
+        discard;
+    
+    return color;
 }

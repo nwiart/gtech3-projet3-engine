@@ -31,6 +31,18 @@ void QuEntityParticleEmitter::OnUpdate(Timer timer)
 		m_spawnTimer -= m_spawnRate;
 		this->spawnParticle();
 	}
+
+	this->UpdateParticles(timer);
+}
+
+void QuEntityParticleEmitter::UpdateParticles(Timer timer)
+{
+	// Default movement.
+	for (XMFLOAT4* pos = m_particlePositions; pos != m_particlePositions + this->getMaxParticles(); pos++) {
+		XMVECTOR v = XMLoadFloat4(pos);
+		v = XMVectorAdd(v, XMVectorReplicate(timer.getDeltaTime()));
+		XMStoreFloat4(pos, v);
+	}
 }
 
 
@@ -45,7 +57,8 @@ void QuEntityParticleEmitter::spawnParticle()
 {
 	XMVECTOR worldPos = this->getWorldPosition();
 
-
+	XMStoreFloat4(&m_particlePositions[m_spawnIndex], worldPos);
+	m_particleSizes[m_spawnIndex] = XMFLOAT2(0.5F, 0.5F);
 
 	// Increment spawn index and loop around.
 	m_spawnIndex++;

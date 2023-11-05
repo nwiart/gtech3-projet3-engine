@@ -28,10 +28,12 @@ void RenderScene::init()
 
 	m_passScene.init();
 	m_passSkybox.init();
+	m_passParticles.init();
 }
 
 void RenderScene::destroy()
 {
+	m_passParticles.destroy();
 	m_passSkybox.destroy();
 	m_passScene.destroy();
 
@@ -105,6 +107,11 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 	renderWorldMatrices.push_back(cb);
 }
 
+void RenderScene::addParticleEmitter(QuEntityParticleEmitter* pe)
+{
+
+}
+
 void RenderScene::freeRenderModel()
 {
 	renderList.clear();
@@ -160,8 +167,10 @@ void RenderScene::updateFrameCB()
 		// Directional light.
 		if (m_directionalLight == NULL)
 		{
-			cb.DirColors = XMFLOAT4(0, 0, 0, 0);
-			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
+			XMVECTOR zero = XMVectorZero();
+			XMStoreFloat4(&cb.DirColors, zero);
+			XMStoreFloat4(&cb.DirDirection, zero);
+			XMStoreFloat4(&cb.AmbientColor, zero);
 		}
 		else
 		{

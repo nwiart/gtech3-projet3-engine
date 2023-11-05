@@ -40,6 +40,8 @@
     <ClCompile Include="Quantum\Render\ParticlesPass.cpp" />
     <ClCompile Include="QuEntityParticleEmitter.cpp" />
     <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderParticles.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -91,6 +93,8 @@
     <ClInclude Include="Quantum\Render\ParticlesPass.h" />
     <ClInclude Include="QuEntityParticleEmitter.h" />
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
+    <ClInclude Include="Quantum\Render\ShaderParticles.h" />
+    <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

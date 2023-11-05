@@ -7,6 +7,7 @@
 
 #include "Quantum/Render/ScenePass.h"
 #include "Quantum/Render/SkyboxPass.h"
+#include "Quantum/Render/ParticlesPass.h"
 
 #include "Quantum/Render/RenderModel.h"
 
@@ -16,11 +17,12 @@
 
 class Model;
 
-class QuEntityRenderModel;
 class QuEntityCamera;
+class QuEntityRenderModel;
+class QuEntityRenderSkybox;
+class QuEntityParticleEmitter;
 class QuEntityLightDirectional;
 class QuEntityLightPoint;
-class QuEntityRenderSkybox;
 
 
 
@@ -38,6 +40,7 @@ private:
 
 
 	void addRenderModel(QuEntityRenderModel* model);
+	void addParticleEmitter(QuEntityParticleEmitter* pe);
 
 	void freeRenderModel();
 
@@ -57,6 +60,7 @@ private:
 
 	ScenePass m_passScene;
 	SkyboxPass m_passSkybox;
+	ParticlesPass m_passParticles;
 
 
 		/// List of objects to render.
