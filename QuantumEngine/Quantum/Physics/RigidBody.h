@@ -53,6 +53,8 @@ public:
 
 	inline EMotionType getMotionType() const { return m_motionType; }
 
+	inline void* getUserData() const { return m_userData; }
+
 
 	void setPosition(DirectX::FXMVECTOR p);
 	void setRotation(DirectX::FXMVECTOR p);
@@ -65,6 +67,8 @@ public:
 		/// Change the rigid body's motion type during runtime.
 		/// This is only possible for objects initially created with a dynamic motion type.
 	void setMotionType(EMotionType m);
+
+	inline void setUserData(void* d) { m_userData = d; }
 
 	inline PhysicsWorld* getWorld() const { return m_world; }
 
@@ -84,6 +88,8 @@ private:
 	DirectX::XMFLOAT4 m_linearVelocity;
 	DirectX::XMFLOAT4 m_angularVelocity;
 
+
+	void* m_userData;
 
 	EMotionType m_motionType;
 

@@ -18,6 +18,7 @@ RigidBody::RigidBody(const RigidBodyCinfo& info)
 	: m_world(0)
 	, m_shape(info.m_shape)
 	, m_motionType(info.m_motionType)
+	, m_userData(0)
 {
 	assert(m_shape != 0);
 

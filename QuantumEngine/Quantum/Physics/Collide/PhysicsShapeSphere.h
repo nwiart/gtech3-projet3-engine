@@ -9,12 +9,15 @@ class PhysicsShapeSphere : public PhysicsShape
 public:
 
 	PhysicsShapeSphere(float radius)
-		: m_radius(radius)
+		: PhysicsShape(SHAPE_SPHERE)
+		, m_radius(radius)
 	{
 
 	}
 
 	inline float getRadius() const { return m_radius; }
+
+	virtual void getAabb(Quantum::AABB& out) const override;
 
 
 private:
