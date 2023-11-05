@@ -19,19 +19,17 @@ QuEntityPhysicsCollider::QuEntityPhysicsCollider()
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {
-	PhysicsShapeSphere* shape = new PhysicsShapeSphere(0.5F);
+	m_shape = new PhysicsShapeSphere(0.5F);
 
 	RigidBodyCinfo info;
 	info.m_motionType = MOTION_KEYFRAMED;
-	info.m_shape = shape;
+	info.m_shape = m_shape;
 	XMStoreFloat4(&info.m_position, XMLoadFloat3(&this->GetTransform().getPosition()));
-	RigidBody* rb = new RigidBody(info);
+	m_rigidBody = new RigidBody(info);
 
-	world->getPhysicsWorld()->addRigidBody(rb);
+	m_rigidBody->setUserData(this);
 
-
-	m_shape = shape;
-	m_rigidBody = rb;
+	world->getPhysicsWorld()->addRigidBody(m_rigidBody);
 }
 
 void QuEntityPhysicsCollider::OnUpdate(const Timer& timer)

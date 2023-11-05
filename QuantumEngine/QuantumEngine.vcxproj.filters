@@ -56,6 +56,7 @@
     <ClCompile Include="Quantum\Math\AABB.cpp" />
     <ClCompile Include="Quantum\Physics\Collide\PhysicsShape.cpp" />
     <ClCompile Include="Quantum\Physics\Collide\PhysicsShapeSphere.cpp" />
+    <ClCompile Include="QuEntityPhysicsTriggerSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -126,6 +127,8 @@
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
     <ClInclude Include="QuEntityPhysicsCollider.h" />
     <ClInclude Include="Quantum\Math\AABB.h" />
+    <ClInclude Include="QuEntityPhysicsTriggerSphere.h" />
+    <ClInclude Include="Quantum\Physics\Collide\PhysicsContactListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

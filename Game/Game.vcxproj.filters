@@ -4,12 +4,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
     <ClCompile Include="EntityController.cpp" />
+    <ClCompile Include="EntityPlanetarySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="EntityPlanetarySystem.h" />
+    <ClInclude Include="EntityGravityField.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl" />

@@ -5,6 +5,7 @@
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
 
+#include "Model.h"
 #include "TextureCube.h"
 
 #include "QuEntityRenderModel.h"
@@ -21,6 +22,7 @@
 #include <time.h>
 
 #include "EntityController.h"
+#include "EntityPlanetarySystem.h"
 
 
 namespace qm = Quantum::Math;
@@ -69,8 +71,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
 
+		EntityPlanetarySystem* ps = new EntityPlanetarySystem(6.0F, 8.0F);
+		ps->setPosition(DirectX::XMFLOAT3(4.0F, 2.0F, 6.0F));
+		world->attachChild(ps);
+		
 		// Spheres.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 500; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -79,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Boxes.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 500; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -88,7 +94,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Capsules.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 500; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));

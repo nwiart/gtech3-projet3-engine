@@ -1,6 +1,10 @@
 #pragma once
 
+#include <vector>
+
 class PhysicsShape;
+
+class PhysicsContactListener;
 
 
 
@@ -24,6 +28,7 @@ struct RigidBodyCinfo
 	PhysicsShape* m_shape;
 
 	EMotionType m_motionType;
+	ECollisionQuality m_collisionQuality;
 
 		/// Initial transform.
 	DirectX::XMFLOAT4 m_position;
@@ -68,11 +73,15 @@ public:
 		/// This is only possible for objects initially created with a dynamic motion type.
 	void setMotionType(EMotionType m);
 
+	inline void addContactListener(PhysicsContactListener* l) { m_contactListeners.push_back(l); }
+
 	inline void setUserData(void* d) { m_userData = d; }
 
 	inline PhysicsWorld* getWorld() const { return m_world; }
 
 	inline PhysicsShape* getShape() const { return m_shape; }
+
+	inline const std::vector<PhysicsContactListener*>& getContactListeners() const { return m_contactListeners; }
 
 
 
@@ -81,6 +90,8 @@ private:
 	PhysicsWorld* m_world;
 
 	PhysicsShape* m_shape;
+
+	std::vector<PhysicsContactListener*> m_contactListeners;
 
 	DirectX::XMFLOAT4 m_position;
 	DirectX::XMFLOAT4 m_rotation;

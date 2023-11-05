@@ -2,6 +2,8 @@
 
 #include "Quantum/Math/Transform.h"
 
+#include "Timer.h"
+
 #include <string>
 
 class QuWorld;
@@ -15,7 +17,7 @@ class QuEntity
 
 	public:
 		QuEntity();
-		~QuEntity();
+		virtual ~QuEntity();
 
 		virtual void OnSpawn(QuWorld* world) {}
 		virtual void OnUpdate(const Timer& timer) {}

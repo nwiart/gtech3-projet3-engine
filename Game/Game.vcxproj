@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntityController.cpp" />
+    <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
   </ItemGroup>
@@ -28,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="EntityGravityField.h" />
+    <ClInclude Include="EntityPlanetarySystem.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl">
