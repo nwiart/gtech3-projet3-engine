@@ -56,6 +56,13 @@ private:
 
 
 
+public:
+
+	DirectX::XMMATRIX getViewMatrix() const;
+	DirectX::XMMATRIX getProjectionMatrix() const;
+
+
+
 private:
 
 	ScenePass m_passScene;

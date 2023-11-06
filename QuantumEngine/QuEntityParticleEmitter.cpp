@@ -1,12 +1,15 @@
 #include "Quantum/Math/Math.h"
 #include "QuEntityParticleEmitter.h"
 
+#include <stdafx.h>
+#include "Graphics.h"
+
 using namespace DirectX;
 
 
 
 QuEntityParticleEmitter::QuEntityParticleEmitter(float lifeTime, float spawnRate)
-	: m_lifeTime(5.0F), m_spawnRate(1.0F)
+	: m_lifeTime(lifeTime), m_spawnRate(spawnRate)
 	, m_spawnTimer(0.0F), m_spawnIndex(0)
 {
 	int maxParticles = this->getMaxParticles();
@@ -23,7 +26,7 @@ QuEntityParticleEmitter::~QuEntityParticleEmitter()
 	}
 }
 
-void QuEntityParticleEmitter::OnUpdate(Timer timer)
+void QuEntityParticleEmitter::OnUpdate(const Timer& timer)
 {
 	m_spawnTimer += timer.getDeltaTime();
 
@@ -35,7 +38,7 @@ void QuEntityParticleEmitter::OnUpdate(Timer timer)
 	this->UpdateParticles(timer);
 }
 
-void QuEntityParticleEmitter::UpdateParticles(Timer timer)
+void QuEntityParticleEmitter::UpdateParticles(const Timer& timer)
 {
 	// Default movement.
 	for (XMFLOAT4* pos = m_particlePositions; pos != m_particlePositions + this->getMaxParticles(); pos++) {
@@ -65,4 +68,9 @@ void QuEntityParticleEmitter::spawnParticle()
 	if (m_spawnIndex == this->getMaxParticles()) {
 		m_spawnIndex = 0;
 	}
+}
+
+void QuEntityParticleEmitter::ExecuteProcedure()
+{
+	Graphics::getInstance().addParticleEmitter(this);
 }

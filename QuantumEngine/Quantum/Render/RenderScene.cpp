@@ -72,6 +72,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 	m_passSkybox.render(cmdList, cb_frameData_ID);
 
+	m_passParticles.render(cmdList);
+
 
 	// Clear model list.
 	this->freeRenderModel();
@@ -110,7 +112,7 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 
 void RenderScene::addParticleEmitter(QuEntityParticleEmitter* pe)
 {
-
+	m_passParticles.addParticleEmitterData(pe);
 }
 
 void RenderScene::freeRenderModel()
@@ -156,10 +158,10 @@ void RenderScene::updateFrameCB()
 		XMMATRIX view, projection, viewProjection;
 
 		// Combined view and projection matrices.
-		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F);
+		view = this->getViewMatrix();
+		projection = this->getProjectionMatrix();
 
-		viewProjection = XMMatrixMultiplyTranspose(view, projection);
+		viewProjection = XMMatrixMultiply(projection, view);
 		XMStoreFloat4x4(&cb.viewProjection, viewProjection);
 
 		// Camera info.
@@ -214,6 +216,16 @@ void RenderScene::updateFrameCB()
 void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
+}
+
+XMMATRIX RenderScene::getViewMatrix() const
+{
+	return XMMatrixTranspose(XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp));
+}
+
+XMMATRIX RenderScene::getProjectionMatrix() const
+{
+	return XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F));
 }
 
 

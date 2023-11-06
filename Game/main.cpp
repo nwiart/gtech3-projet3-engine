@@ -13,6 +13,7 @@
 #include "QuEntityLightDirectional.h"
 #include "QuEntityLightPoint.h"
 #include "QuEntityPhysicsCollider.h"
+#include "QuEntityParticleEmitter.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -76,6 +77,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
 		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
 		world->attachChild(ps);
+
+
+		QuEntityParticleEmitter* pe = new QuEntityParticleEmitter(5.0F, 0.5F);
+		world->attachChild(pe);
 
 
 		

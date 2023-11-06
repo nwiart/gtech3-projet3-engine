@@ -13,9 +13,9 @@ public:
 	QuEntityParticleEmitter(float lifeTime, float spawnRate);
 	virtual ~QuEntityParticleEmitter();
 
-	virtual void OnUpdate(Timer timer) final override;
+	virtual void OnUpdate(const Timer& timer) final override;
 
-	virtual void UpdateParticles(Timer timer);
+	virtual void UpdateParticles(const Timer& timer);
 
 	inline const DirectX::XMFLOAT4* getParticlePositions() const { return m_particlePositions; }
 	inline const DirectX::XMFLOAT2* getParticleSizes() const { return m_particleSizes; }
@@ -31,6 +31,8 @@ public:
 private:
 
 	void spawnParticle();
+
+	virtual void ExecuteProcedure() override;
 
 
 
