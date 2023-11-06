@@ -15,6 +15,8 @@ public:
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
+	bool mouseUp;
+
 	InputSystem();
 	~InputSystem();
 
@@ -34,7 +36,8 @@ public:
 
 	void RegisterCallback(InputCallback* callback);
 
-
+	int lMouseEvent;
+	int rMouseEvent;
 
 private:
 	bool m_mouseState[3];

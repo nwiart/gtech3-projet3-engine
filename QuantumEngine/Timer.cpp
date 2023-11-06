@@ -2,15 +2,14 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-
+#include "InputSystem.h"
 
 static double qpc_delay;
-
 
 Timer::Timer()
 {
 	__int64 qpc_frequency;
-	QueryPerformanceFrequency((LARGE_INTEGER*) &qpc_frequency);
+	QueryPerformanceFrequency((LARGE_INTEGER*)&qpc_frequency);
 
 	qpc_delay = 1.0 / (double) qpc_frequency;
 
@@ -24,6 +23,16 @@ void Timer::tick()
 	{
 		m_deltaTime = 0.0;
 		return;
+	}
+
+	__int64 qpc_frequency;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&qpc_frequency);
+
+	if (InputSystem::Get().isMouseDown(2)) {
+		qpc_delay = 0.1 / (double)qpc_frequency;
+	}
+	else if  (!InputSystem::Get().isMouseDown(2)) {
+		qpc_delay = 1.0 / (double)qpc_frequency;
 	}
 
 	m_lastTimeStamp = m_currentTimeStamp;

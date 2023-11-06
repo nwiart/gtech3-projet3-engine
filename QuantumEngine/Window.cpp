@@ -89,12 +89,14 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		InputSystem::Get().MouseDown(wparam);
 		break;
 	case WM_LBUTTONUP:
+		InputSystem::Get().lMouseEvent = WM_LBUTTONUP;
 		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_RBUTTONDOWN:
 		InputSystem::Get().MouseDown(wparam);
 		break;
 	case WM_RBUTTONUP:
+		InputSystem::Get().rMouseEvent = WM_RBUTTONUP;
 		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_MOUSEMOVE:
