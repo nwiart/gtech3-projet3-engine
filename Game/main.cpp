@@ -27,6 +27,9 @@
 #include "EntityGravityAffected.h"
 
 
+#include "SpaceShip.h"
+
+
 namespace qm = Quantum::Math;
 
 
@@ -97,13 +100,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Boxes.
-		for (int i = 0; i < 200; i++)
-		{
-			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
-			model->SetModel(box);
-			world->attachChild(model);
-		}
+		//for (int i = 0; i < 200; i++)
+		//{
+		//	QuEntityRenderModel* model = new QuEntityRenderModel();
+		//	model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
+		//	model->SetModel(box);
+		//	world->attachChild(model);
+		//}
 
 		// Capsules.
 		for (int i = 0; i < 200; i++)
@@ -113,6 +116,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			model->SetModel(capsule);
 			world->attachChild(model);
 		}
+
+		SpaceShip* spaceShip = new SpaceShip();
+		spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
+		spaceShip->SetModel(box);
+		world->attachChild(spaceShip);
+
 	}
 
 

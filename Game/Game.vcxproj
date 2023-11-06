@@ -25,6 +25,7 @@
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -34,6 +35,7 @@
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityPlanetarySystem.h" />
+    <ClInclude Include="SpaceShip.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl">

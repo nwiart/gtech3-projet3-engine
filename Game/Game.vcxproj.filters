@@ -7,6 +7,7 @@
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityGravityAffected.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -16,6 +17,7 @@
     <ClInclude Include="EntityPlanetarySystem.h" />
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityGravityAffected.h" />
+    <ClInclude Include="SpaceShip.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl" />
