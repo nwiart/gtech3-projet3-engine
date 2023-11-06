@@ -8,6 +8,10 @@
 class InputSystem
 {
 public:
+	inline bool isMouseDown(int vkCode) const { return m_mouseState[vkCode]; }
+
+	void MouseDown(unsigned short vkCode);
+	void MouseUp(unsigned short vkCode);
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
@@ -33,6 +37,7 @@ public:
 
 
 private:
+	bool m_mouseState[3];
 
 	std::vector<InputCallback*> m_callbacklist;
 

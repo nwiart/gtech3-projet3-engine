@@ -22,6 +22,8 @@
 #include <time.h>
 
 #include "EntityController.h"
+#include "Shooting.h"
+#include "Bullet.h"
 #include "EntityPlanetarySystem.h"
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
@@ -143,7 +145,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
 
-
+	Shooting* s = new Shooting();
+	c->attachChild(s);
 
 	game.openWorld(world);
 

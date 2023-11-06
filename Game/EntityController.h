@@ -13,9 +13,6 @@ public:
 
 	void UpdateCamera(float dt);
 
-
-private:
-
 	float m_camYaw;
 	float m_camPitch;
 

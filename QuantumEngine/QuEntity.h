@@ -53,8 +53,7 @@ class QuEntity
 		void setScale(DirectX::XMFLOAT3 scale);
 
 		void applyRotation(DirectX::XMVECTOR quat);
-
-
+		QuEntity* getWorld();
 
 	private:
 
