@@ -47,6 +47,8 @@ public:
 
 private:
 
+	bool firstStep;
+
 	std::vector<RigidBody*> m_dynamicRigidBodies;
 	std::vector<RigidBody*> m_staticRigidBodies;
 

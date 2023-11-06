@@ -32,6 +32,8 @@ PhysicsWorldCinfo::PhysicsWorldCinfo()
 PhysicsWorld::PhysicsWorld(const PhysicsWorldCinfo& info)
 {
 	m_gravity = info.m_gravity;
+
+	firstStep = true;
 }
 
 void PhysicsWorld::step(float deltaTime)
@@ -57,7 +59,7 @@ void PhysicsWorld::step(float deltaTime)
 		{
 			CollisionAgent* agent = this->getCollisionAgent(rb->getShape(), srb->getShape());
 
-			bool lo = agent->getOverlapping(rb, srb);
+			bool lo = firstStep ? false : agent->getOverlapping(rb, srb);
 			rb->setPosition(nextPos);
 
 			bool co = agent->getOverlapping(rb, srb);
@@ -84,6 +86,8 @@ void PhysicsWorld::step(float deltaTime)
 
 		rb->setPosition(nextPos);
 	}
+
+	firstStep = false;
 }
 
 

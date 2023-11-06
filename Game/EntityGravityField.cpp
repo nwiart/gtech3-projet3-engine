@@ -7,7 +7,7 @@ using namespace DirectX;
 
 
 
-void EntityGravityField::onTriggerEnter(QuEntity* e)
+void EntityGravityField::onTriggerStay(QuEntity* e)
 {
 	EntityGravityAffected* g = e->findSubEntity<EntityGravityAffected>();
 	if (g) {
@@ -23,6 +23,6 @@ void EntityGravityField::onTriggerLeave(QuEntity* e)
 {
 	EntityGravityAffected* g = e->findSubEntity<EntityGravityAffected>();
 	if (g) {
-		g->setLocalGravity(XMVectorSet(-10, 0, 0, 0));
+		g->setLocalGravity(XMVectorZero());
 	}
 }

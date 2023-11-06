@@ -73,13 +73,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
 
-		EntityPlanetarySystem* ps = new EntityPlanetarySystem(6.0F, 8.0F);
+		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
 		ps->setPosition(DirectX::XMFLOAT3(0, 0, 15.0F));
 		world->attachChild(ps);
 
-		EntityGravityField* gf = new EntityGravityField(10.0F);
-		gf->setPosition(DirectX::XMFLOAT3(0, 0, 15.0F));
-		world->attachChild(gf);
+		EntityGravityField* gf = new EntityGravityField(8.0F);
+		ps->attachChild(gf);
 		
 		// Spheres.
 		for (int i = 0; i < 200; i++)
@@ -112,8 +111,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider();
-	physCol->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 0.0F));
-	physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
+	physCol->setPosition(DirectX::XMFLOAT3(-9.0F, 0.0F, 15.0F));
+	physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 6, 0));
 
 	QuEntityRenderModel* physModel = new QuEntityRenderModel();
 	physModel->SetModel(sphere);

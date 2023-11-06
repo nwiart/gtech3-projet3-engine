@@ -14,7 +14,7 @@ public:
 
 	}
 
-	virtual void onTriggerEnter(QuEntity* e) override;
+	virtual void onTriggerStay(QuEntity* e) override;
 
 	virtual void onTriggerLeave(QuEntity* e) override;
 
