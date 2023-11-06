@@ -5,6 +5,7 @@
 #include "InputSystem.h"
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Bullet.h"
+#include "Model.h"
 
 Shooting::Shooting()
 {
@@ -34,7 +35,6 @@ void Shooting::InstantiateBullet() {
 	bullet->setPosition(pos);
 	XMFLOAT4 rot; XMStoreFloat4(&rot, getWorldRotation());
 	bullet->setRotation(rot);
-
 	getWorld()->attachChild(bullet);
 	bullet->Shoot();
 }
