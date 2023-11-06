@@ -25,6 +25,7 @@ void Bullet::Shoot() {
 	XMFLOAT3 pos;
 	XMStoreFloat3(&pos, getWorldPosition());
 	sphereEntity->setPosition(pos);
+	sphereEntity->setScale(XMFLOAT3(0.5f, 0.5f, 0.5f));
 	m_bullets.push_back(sphereEntity);
 }
 
