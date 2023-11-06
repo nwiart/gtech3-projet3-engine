@@ -32,7 +32,7 @@ private:
 	{
 		DirectX::XMFLOAT2 position;
 		DirectX::XMFLOAT2 size;
-		char commetuveux[256-16];
+		char padding[256-16];
 	};
 	std::vector<RectanglesBuffer> renderRectangles;
 
