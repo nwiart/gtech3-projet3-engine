@@ -3,14 +3,15 @@
 #include <iostream>
 #include "stdafx.h"
 #include "Quantum/Generate/SphereGenerator.h"
+#include "Model.h"
 
-void Bullet::OnUpdate(Timer timer)
+void Bullet::OnUpdate(const Timer& timer)
 {
 	MoveBullet(timer.getDeltaTime());
 	DestroyBullet();
 }
 
-void Bullet::OnSpawn()
+void Bullet::OnSpawn(QuWorld* world)
 {
 }
 

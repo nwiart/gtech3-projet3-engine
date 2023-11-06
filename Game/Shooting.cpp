@@ -18,19 +18,24 @@ void Shooting::DetectShooting()
 	}
 }
 
-void Shooting::OnUpdate(Timer timer)
+void Shooting::OnUpdate(const Timer& timer)
 {
 	DetectShooting();
 	CoolDown(timer.getDeltaTime());
 }
 
-void Shooting::OnSpawn()
+void Shooting::OnSpawn(QuWorld* world)
 {
 }
 
 void Shooting::InstantiateBullet() {
 	Bullet* bullet = new Bullet;
-	this->attachChild(bullet);
+	XMFLOAT3 pos; XMStoreFloat3(&pos, getWorldPosition());
+	bullet->setPosition(pos);
+	XMFLOAT4 rot; XMStoreFloat4(&rot, getWorldRotation());
+	bullet->setRotation(rot);
+
+	getWorld()->attachChild(bullet);
 	bullet->Shoot();
 }
 

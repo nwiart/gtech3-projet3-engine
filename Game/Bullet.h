@@ -13,6 +13,6 @@ private:
 	void DestroyBullet();
 	bool alreadyShooting = false;
 	std::vector<QuEntityRenderModel*> m_bullets;
-	void OnUpdate(Timer timer) override;
-	void OnSpawn() override;
+	void OnUpdate(const Timer& timer) override;
+	void OnSpawn(QuWorld* world) override;
 };

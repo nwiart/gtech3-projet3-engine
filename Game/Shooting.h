@@ -9,8 +9,8 @@ public:
 
 private:
 
-	void OnUpdate(Timer timer) override;
-	void OnSpawn() override;
+	void OnUpdate(const Timer& timer) override;
+	void OnSpawn(QuWorld* world) override;
 	void InstantiateBullet();
 	void CoolDown(float dt);
 
