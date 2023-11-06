@@ -54,6 +54,37 @@ void PhysicsWorld::step(float deltaTime)
 		XMVECTOR nextPos = XMVectorAdd(vel, lastPos);
 
 
+		// Test against other dynamic bodies.
+		for (RigidBody* drb : m_dynamicRigidBodies)
+		{
+			if (rb == drb) continue;
+
+			CollisionAgent* agent = this->getCollisionAgent(rb->getShape(), drb->getShape());
+
+			XMVECTOR oVel = XMLoadFloat4(&drb->getLinearVelocity());
+			oVel = XMVectorMultiply(oVel, deltaVec);
+			XMVECTOR oLastPos = XMLoadFloat4(&drb->getPosition());
+			XMVECTOR oNextPos = XMVectorAdd(oVel, oLastPos);
+
+			bool lo = firstStep ? false : agent->getOverlapping(rb, drb);
+			rb->setPosition(nextPos);
+			drb->setPosition(oNextPos);
+
+			bool co = agent->getOverlapping(rb, drb);
+			rb->setPosition(lastPos);
+			drb->setPosition(oLastPos);
+
+			// Simple bounce, and re-evaluate positions.
+			if (co) {
+				XMVECTOR aToB = XMVector3Normalize(XMVectorSubtract(oLastPos, lastPos));
+				rb->setLinearVelocity(-aToB);
+
+				vel = XMLoadFloat4(&rb->getLinearVelocity());
+				vel = XMVectorMultiply(vel, deltaVec);
+				nextPos = XMVectorAdd(vel, lastPos);
+			}
+		}
+
 		// Test against all static bodies.
 		for (RigidBody* srb : m_staticRigidBodies)
 		{

@@ -26,7 +26,7 @@ void EntityController::OnUpdate(const Timer& timer)
 void EntityController::UpdateCamera(float dt)
 {
 	// Move camera.
-	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 3.0F : 1.0F;
+	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 6.0F : 3.0F;
 	speed *= dt;
 	
 	XMVECTOR pos = XMLoadFloat3(&this->GetTransform().getPosition());
