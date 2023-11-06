@@ -3,6 +3,8 @@
 #include "D3D12ConstantBuffer.h"
 #include "TestConstantBuffer.h"
 
+#include "Quantum/Render/FrustumTest.h"
+
 #include "Quantum/Render/ScenePass.h"
 #include "Quantum/Render/SkyboxPass.h"
 
@@ -14,6 +16,7 @@
 
 class Model;
 
+class QuEntityRenderModel;
 class QuEntityCamera;
 class QuEntityLightDirectional;
 class QuEntityLightPoint;
@@ -34,13 +37,13 @@ private:
 
 
 
-	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix);
+	void addRenderModel(QuEntityRenderModel* model);
 
 	void freeRenderModel();
 
 	void setCamera(QuEntityCamera* camera);
 	void setDirectionalLight(QuEntityLightDirectional* en);
-	void setPointLight(int index, QuEntityLightPoint* en);
+	void addPointLight( QuEntityLightPoint* en);
 	void setSkybox(QuEntityRenderSkybox* skybox);
 
 private:
@@ -71,7 +74,15 @@ private:
 		/// Cached data to send to the constant buffer.
 	DirectX::XMVECTOR cameraPos;
 	DirectX::XMVECTOR cameraTarget;
+	DirectX::XMVECTOR cameraRight;
 	DirectX::XMVECTOR cameraUp;
+	float cameraFOV;
+	float cameraAspect;
 
 	QuEntityLightDirectional* m_directionalLight;
+	std::vector<QuEntityLightPoint*> m_ListPointLight;
+
+
+		/// Frustum.
+	Frustum m_frustum;
 };

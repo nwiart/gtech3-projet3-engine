@@ -3,11 +3,13 @@
 
 #include "Graphics.h"
 
+#include "Model.h"
 #include "TextureCube.h"
 
-#include "QuEntity.h"
+#include "QuEntityRenderModel.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityRenderSkybox.h"
+#include "QuEntityLightPoint.h"
 #include "QuEntityCamera.h"
 
 
@@ -18,6 +20,9 @@ void RenderScene::init()
 	cameraPos    = XMVectorSet(0, 0, 0, 0);
 	cameraTarget = XMVectorSet(0, 0, 1, 0);
 	cameraUp     = XMVectorSet(0, 1, 0, 0);
+
+	cameraFOV = 70.0F;
+	cameraAspect = Graphics::getInstance().getRenderWidth() / (float) Graphics::getInstance().getRenderHeight();
 
 	m_cbFrameData.init();
 	m_cbObjectData.init(QU_RENDER_MAX_MESHES);
@@ -39,6 +44,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 {
 	Graphics& g = Graphics::getInstance();
 
+	frustumBuild(m_frustum, cameraPos, cameraTarget, cameraRight, cameraUp, cameraFOV, cameraAspect);
+
 	this->updateFrameCB();
 	this->updateObjectCB();
 
@@ -48,7 +55,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	g.setGlobalDescriptor(cb_frameData_ID, m_cbFrameData.getDescriptor());
 
 	// Material data.
-	UINT cb_materialData_ID = g.allocateDescriptorTable(2);
+	UINT cb_materialData_ID = g.allocateDescriptorTable(3);
+	g.setGlobalDescriptor(cb_materialData_ID + 2, m_passSkybox.getTexture()->getShaderResourceView());
 
 	// Object world matrices.
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(renderList.size());
@@ -69,13 +77,25 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 
 
-void RenderScene::addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix)
+static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FXMVECTOR aabbMax);
+
+void RenderScene::addRenderModel(QuEntityRenderModel* model)
 {
 	assert(renderList.size() < QU_RENDER_MAX_MESHES);
 
+	// Frustum test.
+	XMVECTOR worldPos = model->getWorldPosition();
+	float radius = 0.0F;
+	get_approximate_sphere(radius, XMLoadFloat3(&model->GetModel()->getDimensionsMin()), XMLoadFloat3(&model->GetModel()->getDimensionsMax()));
+
+	if (!frustumSphereIntersect(m_frustum, worldPos, radius)) return;
+
+	XMMATRIX worldMatrix = XMLoadFloat4x4(&model->GetWorldTransformMatrix());
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+
 	RenderModel renderModel =
 	{
-		model,
+		model->GetModel(),
 		renderList.size(),
 	};
 
@@ -90,15 +110,19 @@ void RenderScene::freeRenderModel()
 {
 	renderList.clear();
 	renderWorldMatrices.clear();
+	m_ListPointLight.clear();
 }
 
 void RenderScene::setCamera(QuEntityCamera* en)
 {
-	XMVECTOR fwd = en->GetTransform().getForwardVector();
+	XMVECTOR fwd = en->getForwardVector();
 
 	cameraPos = en->getWorldPosition();
 	cameraTarget = XMVectorAdd(cameraPos, fwd);
+	cameraRight = en->getRightVector();
 	cameraUp = en->getUpVector();
+
+	cameraFOV = en->getFOV();
 }
 
 void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
@@ -106,9 +130,9 @@ void RenderScene::setDirectionalLight(QuEntityLightDirectional* en)
 	m_directionalLight = en;
 }
 
-void RenderScene::setPointLight(int index, QuEntityLightPoint* en)
+void RenderScene::addPointLight( QuEntityLightPoint* en)
 {
-
+	m_ListPointLight.push_back(en);
 }
 
 void RenderScene::setSkybox(QuEntityRenderSkybox* skybox)
@@ -122,16 +146,14 @@ void RenderScene::updateFrameCB()
 {
 	TestConstantBuffer cb;
 	{
-		XMMATRIX view, projection;
+		XMMATRIX view, projection, viewProjection;
 
 		// Combined view and projection matrices.
-		float fov = 70.0F;
-		float aspectRatio = Graphics::getInstance().getRenderWidth() / (float)Graphics::getInstance().getRenderHeight();
-
 		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(fov), aspectRatio, 0.05F, 1000.0F);
+		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F);
 
-		XMStoreFloat4x4(&cb.viewProjection, view * projection);
+		viewProjection = XMMatrixMultiplyTranspose(view, projection);
+		XMStoreFloat4x4(&cb.viewProjection, viewProjection);
 
 		// Camera info.
 		XMStoreFloat4(&cb.cameraPos, cameraPos);
@@ -159,6 +181,23 @@ void RenderScene::updateFrameCB()
 			m_directionalLight->getAmbientColor().toFloat4(&cb.AmbientColor.x);
 		}
 
+		int i;
+		for (i = 0; i < m_ListPointLight.size(); i++)
+		{
+			XMFLOAT4 colorPl;
+			m_ListPointLight[i]->getColor().toFloat4(&colorPl.x);
+			XMVECTOR colorIntensityPl = XMVectorMultiply(XMLoadFloat4(&colorPl), XMVectorReplicate(m_ListPointLight[i]->getIntensity()));
+			XMStoreFloat4(&cb.PointLightColor[i], colorIntensityPl);
+
+			XMStoreFloat4(&cb.PointLightPosition[i], m_ListPointLight[i]->getWorldPosition());
+		}
+
+		for (i; i < MAX_POINT_LIGHT; i++)
+		{
+			cb.PointLightColor[i] = XMFLOAT4(0, 0, 0, 1);
+			cb.PointLightPosition[i] = XMFLOAT4(0, 0, 0, 1);
+		}
+
 		m_cbFrameData.update(0, cb);
 	}
 }
@@ -166,4 +205,14 @@ void RenderScene::updateFrameCB()
 void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
+}
+
+
+
+static void get_approximate_sphere(float& outSphereRadius, FXMVECTOR aabbMin, FXMVECTOR aabbMax)
+{
+	float lenMin = XMVectorGetX(XMVector3Length(aabbMin));
+	float lenMax = XMVectorGetX(XMVector3Length(aabbMax));
+
+	outSphereRadius = max(lenMin, lenMax);
 }

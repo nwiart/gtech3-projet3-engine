@@ -16,13 +16,12 @@ using namespace std;
 
 
 
-void SphereGenerator::generate(Model* outModel)
+void SphereGenerator::generate(Model* outModel, float radius)
 {
 	struct Vertex { float pos[3]; float normal[3]; float uv[2]; UINT color; };
 
 	int m_axisSubdivs = 32;
 	int m_heightSubdivs = 16;
-	float m_radius = 0.5F;
 
 	size_t numVertices = (m_heightSubdivs - 1) * m_axisSubdivs + 2;
 	size_t numFaces = m_axisSubdivs * m_heightSubdivs;
@@ -49,7 +48,7 @@ void SphereGenerator::generate(Model* outModel)
 			float z = cos(phi) * sin_theta;
 
 			Vertex v;
-			v.pos[0] = x * m_radius; v.pos[1] = y * m_radius; v.pos[2] = z * m_radius;
+			v.pos[0] = x * radius; v.pos[1] = y * radius; v.pos[2] = z * radius;
 			v.normal[0] = x; v.normal[1] = y; v.normal[2] = z;
 			v.uv[0] = 1.0F - (iphi / (float)m_axisSubdivs); v.uv[1] = itheta / (float)m_heightSubdivs;
 			v.color = 0xFFFFFFFF;
@@ -84,4 +83,10 @@ void SphereGenerator::generate(Model* outModel)
 	outModel->GetIndexBuffer()->setData(indices.data(), indices.size() * sizeof(UINT));
 
 	outModel->SetNumTriangle(m_axisSubdivs* m_heightSubdivs * 2);
+
+
+	// AABB extends to radius.
+	XMVECTOR aabbMin = XMVectorReplicate(-radius);
+	XMVECTOR aabbMax = XMVectorReplicate(radius);
+	outModel->setDimensions(aabbMin, aabbMax);
 }

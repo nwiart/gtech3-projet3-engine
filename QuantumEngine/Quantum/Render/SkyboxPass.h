@@ -16,6 +16,7 @@ public:
 	void init();
 	void destroy();
 
+	D3D12Texture* getTexture() const { return m_textureCube; }
 	void setTexture(D3D12Texture* tex);
 
 	void render(ID3D12GraphicsCommandList* cmdList, UINT frameData);

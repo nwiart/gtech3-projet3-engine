@@ -115,7 +115,7 @@ static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlo
 			default: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; break;
 			}
 
-			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot, numDescsInRange - 1);
+			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot, 0, numDescsInRange - 1);
 			descriptorTables[update].push_back(r);
 
 			numDescsInRange = 0;

@@ -29,10 +29,11 @@ public:
 
 public:
 
-	void addRenderModel(Model* model, DirectX::FXMMATRIX worldMatrix) { m_renderScene.addRenderModel(model, worldMatrix); }
+	void addRenderModel(class QuEntityRenderModel* model) { m_renderScene.addRenderModel(model); }
 	void setCamera(class QuEntityCamera* camera) { m_renderScene.setCamera(camera); }
 	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
 	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
+	void addPointLight(class QuEntityLightPoint* pl) { m_renderScene.addPointLight(pl); }
 
 
 	void renderFrame();

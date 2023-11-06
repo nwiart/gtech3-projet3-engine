@@ -32,6 +32,11 @@ public:
 	void visitUI(QuWidget* widget);
 
 
+private:
+
+	void openWorld_triggerSpawn(QuWorld* w, QuEntity* en);
+
+
 
 private:
 

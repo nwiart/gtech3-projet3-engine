@@ -1,7 +1,15 @@
 #pragma once
-#include <string>
+
 #include "Quantum/Math/Transform.h"
+
 #include "Timer.h"
+
+#include <string>
+
+class QuWorld;
+class Timer;
+
+
 
 class QuEntity
 {
@@ -9,11 +17,22 @@ class QuEntity
 
 	public:
 		QuEntity();
-		~QuEntity();
+		virtual ~QuEntity();
+
+		virtual void OnSpawn(QuWorld* world) {}
+		virtual void OnUpdate(const Timer& timer) {}
+		virtual void OnDestroy(QuWorld* world) {}
 
 		void attachChild(QuEntity* child);
 		void AttachToParent(QuEntity* Parent);
+
+			/// Removes the entity from its parent, moving it to the root, but does
+			/// not remove from the world.
 		void DetachFromParent();
+
+			/// Looks for an entity of the matching type in this entity's subtree.
+		template<class T>
+		T* findSubEntity() const;
 
 		const Quantum::Transform& GetTransform() const { return m_Transform; }
 
@@ -34,12 +53,13 @@ class QuEntity
 		void setScale(DirectX::XMFLOAT3 scale);
 
 		void applyRotation(DirectX::XMVECTOR quat);
-
-
+		QuEntity* getWorld();
 
 	private:
 
 		void updateWorldMatrix();
+
+		void setDirtyWorldMatrix();
 
 
 	protected:
@@ -56,9 +76,23 @@ class QuEntity
 		bool m_dirtyWorldMatrix;
 
 		virtual void ExecuteProcedure(){}
-		
-		virtual void OnSpawn(){}
-		virtual void OnUpdate(Timer timer){}
-		virtual void OnDestroy(){}
 };
 
+
+
+template<class T>
+T* QuEntity::findSubEntity() const
+{
+	for (QuEntity* c = this->m_FirstChild; c; c = c->m_Sibling) {
+		if (dynamic_cast<T*>(c)) {
+			return reinterpret_cast<T*>(c);
+		}
+
+		QuEntity* cf = c->findSubEntity<T>();
+		if (cf) {
+			return reinterpret_cast<T*>(cf);
+		}
+	}
+
+	return 0;
+}

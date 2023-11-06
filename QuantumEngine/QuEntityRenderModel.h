@@ -1,24 +1,24 @@
 #pragma once
 
 #include "QuEntity.h"
-#include "QuWorld.h"
-#include "Model.h"
+
+class Model;
+
 
 class QuEntityRenderModel : public QuEntity
 {
-
 	public:
+
 		QuEntityRenderModel();
 		~QuEntityRenderModel();
 
 		inline void SetModel(Model* model) { m_model = model; }
-		inline Model* GetModel() { return m_model; }
+		inline Model* GetModel() const { return m_model; }
 
 		virtual void ExecuteProcedure();
 
-	private :
+
+	private:
+
 		Model* m_model;
-
-
 };
-

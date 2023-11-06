@@ -14,6 +14,7 @@ ShaderDefault::ShaderDefault()
 	m_parameters.push_back({ "cb_objectData",   0, TYPE_CONSTANT_BUFFER, UPDATE_PER_INSTANCE });
 	m_parameters.push_back({ "cb_materialData", 1, TYPE_CONSTANT_BUFFER, UPDATE_PER_MATERIAL });
 	m_parameters.push_back({ "textureDiffuse",  0, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
+	m_parameters.push_back({ "textureSkybox",   1, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
 	m_parameters.push_back({ "cb_frameData",    2, TYPE_CONSTANT_BUFFER, UPDATE_PER_FRAME });
 	m_parameters.push_back({ 0,                 0, TYPE_UNKNOWN,         UPDATE_UNKNOWN });
 }

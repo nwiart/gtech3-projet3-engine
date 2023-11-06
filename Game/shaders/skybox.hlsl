@@ -11,7 +11,7 @@ struct PS_INPUT
 
 cbuffer cb_frameData : register(b2)
 {
-	row_major float4x4 viewProjection;
+	float4x4 viewProjection;
 
 	float4 cameraPos;
 	float4 cameraDir;
