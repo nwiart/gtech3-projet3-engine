@@ -6,14 +6,13 @@
 class Bullet : public QuEntity
 {
 public:
-	void MoveBullet(float dt);
 	void Shoot();
-	void DestroyBullet();
-	bool alreadyShooting = false;
 
 private:
+	void MoveBullet(float dt);
+	void DestroyBullet();
+	bool alreadyShooting = false;
 	std::vector<QuEntityRenderModel*> m_bullets;
-	QuEntityRenderModel* sphereEntity;
 	void OnUpdate(Timer timer) override;
 	void OnSpawn() override;
 };

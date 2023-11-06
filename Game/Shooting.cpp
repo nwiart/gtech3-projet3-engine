@@ -4,26 +4,24 @@
 #include "stdafx.h"
 #include "InputSystem.h"
 #include "Quantum/Generate/SphereGenerator.h"
+#include "Bullet.h"
 
 Shooting::Shooting()
 {
 }
 
-void Shooting::Shoot()
+void Shooting::DetectShooting()
 {
-	if (InputSystem::Get().isMouseDown(1) && !bullet->alreadyShooting) {
-		std::cout << "Shoot" << std::endl;
+	if (InputSystem::Get().isMouseDown(1) && !alreadyShooting) {
+		alreadyShooting = true;
 		InstantiateBullet();
 	}
 }
 
 void Shooting::OnUpdate(Timer timer)
 {
-	this->attachChild(bullet);
-	Shoot();
-	bullet->MoveBullet(timer.getDeltaTime());
+	DetectShooting();
 	CoolDown(timer.getDeltaTime());
-	bullet->DestroyBullet();
 }
 
 void Shooting::OnSpawn()
@@ -31,15 +29,17 @@ void Shooting::OnSpawn()
 }
 
 void Shooting::InstantiateBullet() {
+	Bullet* bullet = new Bullet;
+	this->attachChild(bullet);
 	bullet->Shoot();
 }
 
 void Shooting::CoolDown(float dt) {
-	if (bullet->alreadyShooting) {
+	if (alreadyShooting) {
 		m_coolDown -= dt;
 		if (m_coolDown <= 0) {
 			m_coolDown = 0.5f;
-			bullet->alreadyShooting = false;
+			alreadyShooting = false;
 		}
 	}
 }
