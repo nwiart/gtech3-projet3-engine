@@ -7,7 +7,9 @@ using namespace DirectX;
 
 RigidBodyCinfo::RigidBodyCinfo()
 	: m_motionType(MOTION_STATIC)
+	, m_collisionQuality(QUALITY_DEFAULT)
 	, m_shape(0)
+	, m_isTrigger(false)
 {
 
 }
@@ -22,7 +24,10 @@ RigidBody::RigidBody(const RigidBodyCinfo& info)
 {
 	assert(m_shape != 0);
 
+	m_trigger = info.m_isTrigger;
 	m_initiallyStatic = (info.m_motionType != MOTION_DYNAMIC);
+
+	assert(!m_trigger || m_initiallyStatic);
 
 	XMVECTOR zero = XMVectorZero();
 	XMStoreFloat4(&m_position, XMLoadFloat4(&info.m_position));

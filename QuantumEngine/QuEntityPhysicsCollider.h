@@ -2,6 +2,8 @@
 
 #include "QuEntity.h"
 
+#include "Quantum/Physics/RigidBody.h"
+
 class RigidBody;
 class PhysicsShape;
 
@@ -11,7 +13,7 @@ class QuEntityPhysicsCollider : public QuEntity
 {
 public:
 
-	QuEntityPhysicsCollider();
+	QuEntityPhysicsCollider(float radius, EMotionType motionType);
 
 	void applyImpulse(DirectX::FXMVECTOR f);
 
@@ -27,4 +29,7 @@ private:
 	PhysicsShape* m_shape;
 
 	DirectX::XMFLOAT4 m_linearVelocity;
+
+	float m_radius;
+	EMotionType m_motionType;
 };

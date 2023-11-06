@@ -10,9 +10,11 @@ using namespace DirectX;
 
 
 
-QuEntityPhysicsCollider::QuEntityPhysicsCollider()
+QuEntityPhysicsCollider::QuEntityPhysicsCollider(float radius, EMotionType motionType)
 	: m_rigidBody(0)
 	, m_shape(0)
+	, m_radius(radius)
+	, m_motionType(motionType)
 {
 	m_linearVelocity = { 0, 0, 0, 0 };
 }
@@ -30,10 +32,10 @@ void QuEntityPhysicsCollider::applyImpulse(FXMVECTOR f)
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {
-	m_shape = new PhysicsShapeSphere(0.5F);
+	m_shape = new PhysicsShapeSphere(m_radius);
 
 	RigidBodyCinfo info;
-	info.m_motionType = MOTION_DYNAMIC;
+	info.m_motionType = m_motionType;
 	info.m_shape = m_shape;
 	XMStoreFloat4(&info.m_position, XMLoadFloat3(&this->GetTransform().getPosition()));
 	m_rigidBody = new RigidBody(info);

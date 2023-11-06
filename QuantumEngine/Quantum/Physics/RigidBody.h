@@ -29,6 +29,7 @@ struct RigidBodyCinfo
 
 	EMotionType m_motionType;
 	ECollisionQuality m_collisionQuality;
+	bool m_isTrigger;
 
 		/// Initial transform.
 	DirectX::XMFLOAT4 m_position;
@@ -57,6 +58,7 @@ public:
 	inline const DirectX::XMFLOAT4& getLinearVelocity() const { return m_linearVelocity; }
 
 	inline EMotionType getMotionType() const { return m_motionType; }
+	inline bool isTrigger() const { return m_trigger; }
 
 	inline void* getUserData() const { return m_userData; }
 
@@ -104,5 +106,6 @@ private:
 
 	EMotionType m_motionType;
 
+	bool m_trigger : 1;
 	bool m_initiallyStatic : 1;
 };

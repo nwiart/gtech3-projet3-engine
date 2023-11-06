@@ -36,6 +36,38 @@ PhysicsWorld::PhysicsWorld(const PhysicsWorldCinfo& info)
 	firstStep = true;
 }
 
+static bool response(RigidBody* rbA, RigidBody* rbB, bool lo, bool co)
+{
+	if (!rbB->isTrigger()) {
+		// Simple bounce, and re-evaluate positions.
+		if (co) {
+			return true;
+		}
+	}
+	else {
+		// Notify both bodies of collision.
+		if (lo != co) {
+			CollisionEvent rbe;
+			rbe.m_rigidBodyA = rbA;
+			rbe.m_rigidBodyB = rbB;
+
+			if (co) for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionAdded(rbe);
+			else    for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionRemoved(rbe);
+
+			CollisionEvent srbe;
+			srbe.m_rigidBodyA = rbB;
+			srbe.m_rigidBodyB = rbA;
+
+			if (co) for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionAdded(srbe);
+			else    for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionRemoved(srbe);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void PhysicsWorld::step(float deltaTime)
 {
 	XMVECTOR deltaVec = XMVectorReplicate(deltaTime);
@@ -74,10 +106,9 @@ void PhysicsWorld::step(float deltaTime)
 			rb->setPosition(lastPos);
 			drb->setPosition(oLastPos);
 
-			// Simple bounce, and re-evaluate positions.
-			if (co) {
-				XMVECTOR aToB = XMVector3Normalize(XMVectorSubtract(oLastPos, lastPos));
-				rb->setLinearVelocity(-aToB);
+			if (response(rb, drb, lo, co)) {
+				XMVECTOR bToA = XMVector3Normalize(XMVectorSubtract(lastPos, oLastPos));
+				rb->setLinearVelocity(bToA);
 
 				vel = XMLoadFloat4(&rb->getLinearVelocity());
 				vel = XMVectorMultiply(vel, deltaVec);
@@ -96,21 +127,13 @@ void PhysicsWorld::step(float deltaTime)
 			bool co = agent->getOverlapping(rb, srb);
 			rb->setPosition(lastPos);
 
-			// Notify both bodies of collision.
-			if (lo != co) {
-				CollisionEvent rbe;
-				rbe.m_rigidBodyA = rb;
-				rbe.m_rigidBodyB = srb;
+			if (response(rb, srb, lo, co) && !srb->isTrigger()) {
+				XMVECTOR bToA = XMVector3Normalize(XMVectorSubtract(lastPos, XMLoadFloat4(&srb->getPosition())));
+				rb->setLinearVelocity(bToA);
 
-				if (co) for (PhysicsContactListener* l : rb->getContactListeners()) l->onCollisionAdded(rbe);
-				else    for (PhysicsContactListener* l : rb->getContactListeners()) l->onCollisionRemoved(rbe);
-
-				CollisionEvent srbe;
-				srbe.m_rigidBodyA = srb;
-				srbe.m_rigidBodyB = rb;
-
-				if (co) for (PhysicsContactListener* l : srb->getContactListeners()) l->onCollisionAdded(srbe);
-				else    for (PhysicsContactListener* l : srb->getContactListeners()) l->onCollisionRemoved(srbe);
+				vel = XMLoadFloat4(&rb->getLinearVelocity());
+				vel = XMVectorMultiply(vel, deltaVec);
+				nextPos = XMVectorAdd(vel, lastPos);
 			}
 		}
 

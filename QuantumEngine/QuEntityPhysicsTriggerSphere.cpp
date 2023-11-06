@@ -52,6 +52,7 @@ void QuEntityPhysicsTriggerSphere::OnSpawn(QuWorld* world)
 	RigidBodyCinfo info;
 	info.m_motionType = MOTION_STATIC;
 	info.m_shape = m_shape;
+	info.m_isTrigger = true;
 	DirectX::XMStoreFloat4(&info.m_position, this->getWorldPosition());
 	DirectX::XMStoreFloat4(&info.m_rotation, this->getWorldRotation());
 

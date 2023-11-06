@@ -74,7 +74,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(entitySkybox);
 
 		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
-		ps->setPosition(DirectX::XMFLOAT3(0, 0, 15.0F));
 		//world->attachChild(ps);
 
 		EntityGravityField* gf = new EntityGravityField(8.0F);
@@ -83,8 +82,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// Spheres.
 		for (int i = 0; i < 200; i++)
 		{
-			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider();
-			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-10.0F, 10.0F), qm::randomFloat(-10.0F, 10.0F), qm::randomFloat(0, 10.0F)));
+			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
+			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-10.0F, 10.0F), qm::randomFloat(-10.0F, 10.0F), qm::randomFloat(-10.0F, 10.0F)));
 
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->SetModel(sphere);
@@ -117,17 +116,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// Test RB.
-	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider();
-	physCol->setPosition(DirectX::XMFLOAT3(-9.0F, 0.0F, 15.0F));
-	physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 6, 0));
+	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
+	physCol->setPosition(DirectX::XMFLOAT3(0, 0, 0));
 
 	QuEntityRenderModel* physModel = new QuEntityRenderModel();
 	physModel->SetModel(sphere);
-
-	EntityGravityAffected* physGr = new EntityGravityAffected(physCol);
+	physModel->setScale(DirectX::XMFLOAT3(7, 7, 7));
 
 	physCol->attachChild(physModel);
-	physCol->attachChild(physGr);
 
 	world->attachChild(physCol);
 
