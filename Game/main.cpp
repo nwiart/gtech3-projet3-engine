@@ -5,12 +5,14 @@
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
 
+#include "Model.h"
 #include "TextureCube.h"
 
 #include "QuEntityRenderModel.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityLightPoint.h"
+#include "QuEntityPhysicsCollider.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -20,6 +22,9 @@
 #include <time.h>
 
 #include "EntityController.h"
+#include "EntityPlanetarySystem.h"
+#include "EntityGravityField.h"
+#include "EntityGravityAffected.h"
 
 
 namespace qm = Quantum::Math;
@@ -43,11 +48,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// Load resources.
-
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(0.2F);
-
-
 	Model* sphere = new Model();
 	Model* box = new Model();
 	Model* capsule = new Model();
@@ -73,17 +73,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
 
+		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
+		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
+		world->attachChild(ps);
+
+
+		
 		// Spheres.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 100; i++)
 		{
+			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
+			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F)));
+			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
+
 			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
 			model->SetModel(sphere);
-			world->attachChild(model);
+			physCol->attachChild(model);
+
+			EntityGravityAffected* physGr = new EntityGravityAffected(physCol);
+			physCol->attachChild(physGr);
+
+			world->attachChild(physCol);
 		}
 
 		// Boxes.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -92,7 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Capsules.
-		for (int i = 0; i < 3000; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -101,9 +115,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 	}
 
+
+
+	// Test RB.
+	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
+	physCol->setPosition(DirectX::XMFLOAT3(0, 0, 10));
+
+	QuEntityRenderModel* physModel = new QuEntityRenderModel();
+	physModel->SetModel(sphere);
+	physModel->setScale(DirectX::XMFLOAT3(7, 7, 7));
+
+	EntityGravityField* gf = new EntityGravityField(8.0F);
+	physCol->attachChild(gf);
+
+	physCol->attachChild(physModel);
+
+	world->attachChild(physCol);
+
+
+
+	// Player controller.
 	EntityController* c = new EntityController();
-	c->AttachToParent(world);
+	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
+	world->attachChild(c);
+
+	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
+	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
+
 
 
 	game.openWorld(world);

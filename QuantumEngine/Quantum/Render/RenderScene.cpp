@@ -3,6 +3,7 @@
 
 #include "Graphics.h"
 
+#include "Model.h"
 #include "TextureCube.h"
 
 #include "QuEntityRenderModel.h"
