@@ -91,8 +91,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	c->AttachToParent(world);
 
 	QuWidget* Widget = new QuWidget();
-	//mainWidget->SetSize(DirectX::XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT));
-	//mainWidget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+	Widget->SetSize(DirectX::XMFLOAT2(WINDOW_WIDTH, WINDOW_HEIGHT));
+	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
 
 	QuWidgetButton* button = new QuWidgetButton();
 	button->SetSize(DirectX::XMFLOAT2(50.f, 50.f));

@@ -49,6 +49,7 @@ void Game::mainLoop()
 	{
 		visitEntity(m_world);
 
+
 		m_window.pollEvents();
 
 		m_timer.tick();

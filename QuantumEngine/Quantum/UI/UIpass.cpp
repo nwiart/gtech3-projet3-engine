@@ -34,7 +34,7 @@ void UIpass::setTexture(D3D12Texture* tex)
 {
 }
 
-void UIpass::render(ID3D12GraphicsCommandList* cmdList, std::vector<QuWidget*> allWidget)
+void UIpass::render(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix)
 {
 	Graphics& g = Graphics::getInstance();
 
@@ -56,6 +56,13 @@ void UIpass::render(ID3D12GraphicsCommandList* cmdList, std::vector<QuWidget*> a
 	cmdList->IASetVertexBuffers(0, 1, &m_boxVB.getVertexBufferView());
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	m_shader.setConstantBuffer(1, matrix);
 	// Draw.
-	cmdList->DrawInstanced(6,1,0,0);
+	for (int i = 0; i < list.size(); i++)
+	{
+
+		m_shader.setConstantBuffer(0, ObjectBase + i);
+
+		cmdList->DrawInstanced(6, 1, 0, 0);
+	}
 }

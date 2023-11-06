@@ -11,8 +11,8 @@ ShaderUI::ShaderUI()
 {
 	m_parameters.clear();
 
-	m_parameters.push_back({ "generic", 2, TYPE_CONSTANT_BUFFER , UPDATE_PER_FRAME });
-	m_parameters.push_back({ "dimension", 2, TYPE_CONSTANT_BUFFER , UPDATE_PER_INSTANCE });
+	m_parameters.push_back({ "dimension", 0, TYPE_CONSTANT_BUFFER , UPDATE_PER_INSTANCE });
+	m_parameters.push_back({ "generic", 1, TYPE_CONSTANT_BUFFER , UPDATE_PER_FRAME });
 	m_parameters.push_back({ "textureDiffuse",   0, TYPE_TEXTURE_2D,      UPDATE_PER_MATERIAL });
 }
 

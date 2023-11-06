@@ -5,6 +5,7 @@
 
 #include "ShaderUI.h"
 class D3D12Texture;
+class QuWidget;
 
 
 class UIpass
@@ -16,7 +17,7 @@ public:
 
 	void setTexture(D3D12Texture* tex);
 
-	void render(ID3D12GraphicsCommandList* cmdList, std::vector<QuWidget*> allWidget);
+	void render(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix);
 
 
 

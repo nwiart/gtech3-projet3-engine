@@ -42,7 +42,7 @@ PS_INPUT vs_main(VS_INPUT input)
 	output.texCoord = input.texCoord;
 
 	output.color = input.color / 255.0F;
-
+	
 	return output;
 }
 

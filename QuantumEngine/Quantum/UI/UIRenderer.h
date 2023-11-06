@@ -15,6 +15,8 @@ public:
 
 	void render(ID3D12GraphicsCommandList* cmdList);
 
+	void freeList();
+
 	void visitUI(QuWidget* widget);
 
 
@@ -32,11 +34,15 @@ private:
 		DirectX::XMFLOAT2 position;
 		DirectX::XMFLOAT2 size;
 	};
+	std::vector<RectanglesBuffer> renderRectangles;
 
+	D3D12ConstantBuffer<RectanglesBuffer> m_cbRectangleData;
 
 	CanvasConstantBuffer m_matrix;
 
 	std::vector<QuWidget*> allWidget;
+
+	ID3D12DescriptorHeap* m_Heap;
 
 	void updateObjectCB();
 };

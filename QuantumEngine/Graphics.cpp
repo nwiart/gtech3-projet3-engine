@@ -111,6 +111,9 @@ int Graphics::_init(Window* window)
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
 	m_renderScene.init();
+	m_renderUI = new UIRenderer();
+	m_renderUI->init();
+
 
 	return 0;
 }
@@ -207,6 +210,7 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 
 void Graphics::_shutdown()
 {
+	m_renderUI->destroy();
 	m_renderScene.destroy();
 
 	m_cbvHeap->Release();
@@ -242,6 +246,7 @@ void Graphics::renderFrame()
 
 	// Render passes.
 	m_renderScene.renderAll(d3dCommandList);
+	m_renderUI->render(d3dCommandList);
 
 
 	this->endFrame();

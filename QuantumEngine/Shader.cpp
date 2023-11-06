@@ -112,6 +112,7 @@ static void generateSerializedRootSignature(ShaderParameter* rootParams, ID3DBlo
 			switch (type) {
 			case TYPE_CONSTANT_BUFFER: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV; break;
 			case TYPE_TEXTURE_2D: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; break;
+			default: rangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; break;
 			}
 
 			CD3DX12_DESCRIPTOR_RANGE r; r.Init(rangeType, numDescsInRange, baseSlot, numDescsInRange - 1);
