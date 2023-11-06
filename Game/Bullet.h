@@ -2,10 +2,14 @@
 #include "QuEntity.h"
 #include <vector>
 #include "QuEntityRenderModel.h"
+#include "QuEntityPhysicsTriggerSphere.h"
 
-class Bullet : public QuEntity
+class Bullet : public QuEntityPhysicsTriggerSphere
 {
 public:
+	Bullet(float radius);
+
+
 	void Shoot();
 
 private:

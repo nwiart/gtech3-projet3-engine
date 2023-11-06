@@ -15,6 +15,11 @@ void Bullet::OnSpawn(QuWorld* world)
 {
 }
 
+Bullet::Bullet(float radius)
+	: QuEntityPhysicsTriggerSphere(radius)
+{
+}
+
 void Bullet::Shoot() {
 	alreadyShooting = true;
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;

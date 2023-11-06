@@ -130,7 +130,7 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 	sd.SampleDesc.Count = 1;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	sd.OutputWindow = hwnd;
-	sd.Windowed = false;
+	sd.Windowed = true;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
 	dxgiFactory->CreateSwapChain(d3dCommandQueue, &sd, &dxgiSwapChain);

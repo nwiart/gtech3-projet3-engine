@@ -30,7 +30,7 @@ void Shooting::OnSpawn(QuWorld* world)
 }
 
 void Shooting::InstantiateBullet() {
-	Bullet* bullet = new Bullet;
+	Bullet* bullet = new Bullet(2);
 	XMFLOAT3 pos; XMStoreFloat3(&pos, getWorldPosition());
 	bullet->setPosition(pos);
 	XMFLOAT4 rot; XMStoreFloat4(&rot, getWorldRotation());
