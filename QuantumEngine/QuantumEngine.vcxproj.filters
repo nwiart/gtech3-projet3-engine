@@ -58,6 +58,7 @@
     <ClCompile Include="Quantum\Physics\Collide\PhysicsShapeSphere.cpp" />
     <ClCompile Include="QuEntityPhysicsTriggerSphere.cpp" />
     <ClCompile Include="Quantum\Physics\SolverAllocator.cpp" />
+    <ClCompile Include="Quantum\Generate\MeteorGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="QuEntityPhysicsTriggerSphere.h" />
     <ClInclude Include="Quantum\Physics\Collide\PhysicsContactListener.h" />
     <ClInclude Include="Quantum\Physics\Internal\InternalCollisionAgents.h" />
+    <ClInclude Include="Quantum\Generate\MeteorGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

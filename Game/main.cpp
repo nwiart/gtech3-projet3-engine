@@ -4,6 +4,8 @@
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
+#include "Quantum/Generate/MeteorGenerator.h"
+
 
 #include "Model.h"
 #include "TextureCube.h"
@@ -78,46 +80,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
 		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
 		world->attachChild(ps);
-
-
-		
-		// Spheres.
-		for (int i = 0; i < 100; i++)
-		{
-			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
-			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F)));
-			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
-
-			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->SetModel(sphere);
-			physCol->attachChild(model);
-
-			EntityGravityAffected* physGr = new EntityGravityAffected(physCol);
-			physCol->attachChild(physGr);
-
-			world->attachChild(physCol);
-		}
-
-		// Boxes.
-		for (int i = 0; i < 200; i++)
-		{
-			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
-			model->SetModel(box);
-			world->attachChild(model);
-		}
-
-		// Capsules.
-		for (int i = 0; i < 200; i++)
-		{
-			QuEntityRenderModel* model = new QuEntityRenderModel();
-			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
-			model->SetModel(capsule);
-			world->attachChild(model);
-		}
 	}
 
 
+	for (int i = 0; i < 50; i++)
+	{
+		Model* meteor = new Model();
+		Quantum::MeteorGenerator::generate(meteor, qm::randomInt(1, 10.f), qm::randomInt(5,20.f), qm::randomInt(5, 20.f));
+		QuEntityRenderModel* meteorEntity = new QuEntityRenderModel();
+		meteorEntity->SetModel(meteor);
+		meteorEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(1, 300.f), qm::randomFloat(1, 300.f), qm::randomFloat(1, 300.f)));
+		meteorEntity->AttachToParent(world);
+	}
 
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
@@ -141,11 +115,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
 
+	Shooting* s = new Shooting();
+	c->attachChild(s);
+
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
-
-
 
 	game.openWorld(world);
 
