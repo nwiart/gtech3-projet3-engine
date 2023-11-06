@@ -116,8 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			world->attachChild(model);
 		}
 	}
-
-
+	
 
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
@@ -145,6 +144,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
 
+	Shooting* s = new Shooting();
+	c->attachChild(s);
 
 
 	game.openWorld(world);
