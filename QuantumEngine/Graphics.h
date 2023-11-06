@@ -94,6 +94,8 @@ public:
 	inline int getRenderWidth() const { return m_renderWidth; }
 	inline int getRenderHeight() const { return m_renderHeight; }
 
+	inline UIRenderer* getUIRenderer() { return m_renderUI; }
+
 
 
 

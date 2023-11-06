@@ -17,8 +17,7 @@ public:
 
 	void freeList();
 
-	void visitUI(QuWidget* widget);
-
+	void addWidget(QuWidget* widget);
 
 private:
 	UIpass m_pass;
@@ -33,6 +32,7 @@ private:
 	{
 		DirectX::XMFLOAT2 position;
 		DirectX::XMFLOAT2 size;
+		char commetuveux[256-16];
 	};
 	std::vector<RectanglesBuffer> renderRectangles;
 

@@ -32,6 +32,8 @@ int Game::init()
 
 	status = Graphics::initialize(&m_window);
 
+	UIsystem = new UISystem;
+
 	return status;
 }
 
@@ -52,6 +54,7 @@ void Game::mainLoop()
 		m_world->getPhysicsWorld()->step(1.0F / 60.0F);
 
 		visitEntity(m_world);
+		UIsystem->visitUI(m_widget);
 
 
 		m_window.pollEvents();

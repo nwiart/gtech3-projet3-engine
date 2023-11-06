@@ -7,6 +7,8 @@ class UISystem
 public:
 	void visitUI(QuWidget* widget);
 
+	void addWidget(QuWidget* widget);
+
 private:
 
 };

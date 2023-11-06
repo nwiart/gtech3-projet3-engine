@@ -21,7 +21,6 @@ void UIRenderer::destroy()
 
 void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 {
-	visitUI();
 
 	Graphics& g = Graphics::getInstance();
 	this->updateObjectCB();
@@ -29,7 +28,7 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(allWidget.size());
 	for (int i = 0; i < allWidget.size(); i++)
 	{
-		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbCanvasData.getDescriptor(i));
+		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbRectangleData.getDescriptor(i));
 	}
 
 	UINT cb_matrix_IDbase = g.allocateDescriptorTable(1);
@@ -37,29 +36,23 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 	g.setGlobalDescriptor(cb_matrix_IDbase, m_cbCanvasData.getDescriptor());
 
 	m_pass.render(cmdList, allWidget, cb_objectData_IDbase, cb_matrix_IDbase);
+	freeList();
 }
 
 void UIRenderer::freeList()
 {
 	allWidget.clear();
+	renderRectangles.clear();
 }
 
-void UIRenderer::visitUI(QuWidget* widget)
+void UIRenderer::addWidget(QuWidget* widget)
 {
-	if (widget == nullptr) return;
-
-	allWidget.push_back(widget);
-
 	RectanglesBuffer rect;
 	rect.position = widget->GetPosition();
 	rect.size = widget->GetSize();
 
 	renderRectangles.push_back(rect);
-
-	for (QuWidget* child = widget->m_FirstChild; child != nullptr; child = child->m_Sibling)
-	{
-		visitUI(widget);
-	}
+	allWidget.push_back(widget);
 }
 
 void UIRenderer::updateObjectCB()

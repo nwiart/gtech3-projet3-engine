@@ -53,7 +53,6 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
     finalColor = input.color;
 	float4 albedo = textureDiffuse.Sample(samplerLinear, input.texCoord);
 	
-    finalColor *= albedo;
 
 	return finalColor;
 }

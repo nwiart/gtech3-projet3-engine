@@ -4,6 +4,7 @@
 #include "Window.h"
 
 #include "Quantum/UI/QuMainWidget.h"
+#include "Quantum/UI/UISystem.h"
 
 class QuEntity;
 class QuWorld;
@@ -29,7 +30,6 @@ public:
 	int getRenderHeight() const;
 
 	void visitEntity(QuEntity* entity);
-	void visitUI(QuWidget* widget);
 
 
 private:
@@ -45,4 +45,6 @@ private:
 
 	QuWorld* m_world;
 	QuWidget* m_widget;
+
+	UISystem* UIsystem;
 };
