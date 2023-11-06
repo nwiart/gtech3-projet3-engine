@@ -121,16 +121,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			world->attachChild(model);
 		}
 
-		SpaceShip* spaceShip = new SpaceShip();
+		SpaceShip* spaceShip = new SpaceShip(2);
+		QuEntityRenderModel* ship = new QuEntityRenderModel();
+		ship->SetModel(box);
 		//spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
-		spaceShip->SetModel(box);
+		spaceShip->SetRenderModel(ship);
 
-		SpaceShip* spaceShip2 = new SpaceShip();
+		//SpaceShip* spaceShip2 = new SpaceShip();
 		//spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
-		spaceShip2->SetModel(capsule);
+		//spaceShip2->SetModel(capsule);
 
 		EnnemySpawner* spawner = new EnnemySpawner();
-		spawner->SetEntity(spaceShip);
+		spawner->SetRenderEntity(spaceShip->GetRenderModel());
 		world->attachChild(spawner);
 
 	}

@@ -1,6 +1,7 @@
 #include "SpaceShip.h"
 
-SpaceShip::SpaceShip()
+SpaceShip::SpaceShip(float radius)
+	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
 {
 }
 

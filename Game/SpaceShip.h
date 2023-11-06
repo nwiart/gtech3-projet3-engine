@@ -5,14 +5,15 @@
 
 #include "Model.h"
 
-#include "QuEntityRenderModel.h"
+#include "QuEntityPhysicsCollider.h"
 
 
-class SpaceShip : public QuEntityRenderModel
+class SpaceShip : public QuEntityPhysicsCollider
 {
 public:
-	SpaceShip();
+	SpaceShip(float radius);
 	~SpaceShip();
+
 
 
 private:

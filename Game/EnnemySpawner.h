@@ -10,11 +10,16 @@ public:
 	~EnnemySpawner();
 
 
-	inline void SetEntity(QuEntityRenderModel* entityToSpawn) { m_entityToSpawn = entityToSpawn; }
-	inline QuEntityRenderModel* GetEntity() { return m_entityToSpawn; }
+	inline void SetRenderEntity(QuEntityRenderModel* entityToSpawn) { m_entityToSpawn = entityToSpawn; }
+	inline QuEntityRenderModel* GetRenderEntity() { return m_entityToSpawn; }
 
 	virtual void OnSpawn(QuWorld* world) override;
 	virtual void OnUpdate(const Timer& timer) override;
+
+	bool ChildNotEmpty;
+
+
+
 
 private:
 	QuEntityRenderModel* m_entityToSpawn;

@@ -5,6 +5,7 @@ using namespace DirectX;
 EnnemySpawner::EnnemySpawner()
 {
 	m_axisRotation = XMQuaternionRotationRollPitchYaw(0.0F, XMConvertToRadians(-30.0F), XMConvertToRadians(36.0F));
+	ChildNotEmpty = false;
 }
 
 EnnemySpawner::~EnnemySpawner()
@@ -34,5 +35,7 @@ void EnnemySpawner::OnUpdate(const Timer& timer)
 
 	//XMFLOAT4 frot; XMStoreFloat4(&frot, rot);
 	//this->setRotation(frot);
+
+	ChildNotEmpty = this->m_FirstChild;
 
 }

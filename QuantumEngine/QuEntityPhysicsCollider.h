@@ -4,6 +4,8 @@
 
 #include "Quantum/Physics/RigidBody.h"
 
+#include "QuEntityRenderModel.h"
+
 class RigidBody;
 class PhysicsShape;
 
@@ -22,9 +24,10 @@ public:
 	virtual void OnUpdate(const Timer& timer) final override;
 	virtual void OnDestroy(QuWorld* world) final override;
 
+	inline void SetRenderModel(QuEntityRenderModel* renderModel) { m_renderModel = renderModel; }
+	inline QuEntityRenderModel* GetRenderModel() { return m_renderModel; }
 
-private:
-
+protected:
 	RigidBody* m_rigidBody;
 	PhysicsShape* m_shape;
 
@@ -32,4 +35,6 @@ private:
 
 	float m_radius;
 	EMotionType m_motionType;
+
+	QuEntityRenderModel* m_renderModel;
 };
