@@ -17,6 +17,7 @@ public:
 
 	inline double getDeltaTime() const { return m_deltaTime; };
 
+	bool slowMotion;
 
 private:
 

@@ -16,6 +16,31 @@ InputSystem::~InputSystem()
 
 }
 
+void InputSystem::MouseDown(unsigned short vkCode)
+{
+	m_mouseState[vkCode] = true;
+	if (vkCode == 1) {
+		lMouseEvent = 0;
+	}
+	if (vkCode == 2) {
+		rMouseEvent = 0;
+	}
+	for (auto& callback : m_callbacklist)
+	{
+		callback->OnMouseDown(vkCode);
+	}
+}
+
+void InputSystem::MouseUp(unsigned short vkCode)
+{
+	if (rMouseEvent == 517) {
+		m_mouseState[2] = false;
+	}
+	if (lMouseEvent == 514) {
+		m_mouseState[1] = false;
+	}
+}
+
 void InputSystem::FireKeyDown(unsigned short vkCode)
 {
 	m_keyState[vkCode] = true;
@@ -39,15 +64,6 @@ void InputSystem::FireMouseMove(int newX, int newY)
 	m_cursorX = newX;
 	m_cursorY = newY;
 }
-
-void InputSystem::FireMouseDown(int button)
-{
-	for (auto& callback : m_callbacklist)
-	{
-		callback->OnMouseDown(button);
-	}
-}
-
 
 void InputSystem::RegisterCallback(InputCallback* callback)
 {

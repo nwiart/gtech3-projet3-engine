@@ -28,7 +28,7 @@ int Game::init()
 {
 	int status;
 
-	m_window.initialize(1280, 720, WINDOW_TITLE, false);
+	m_window.initialize(1920, 1080, WINDOW_TITLE, true);
 
 	status = Graphics::initialize(&m_window);
 

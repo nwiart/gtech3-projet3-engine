@@ -31,13 +31,14 @@ void Window::initialize(int width, int height, const char* title, bool fullscree
 
 	// Adjust window size so client rectangle matches desired size!
 	RECT rect = {0, 0, width, height};
-	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 
 	// Create window with our parameters.
-	DWORD style = WS_OVERLAPPEDWINDOW;
+	DWORD style = fullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW;
 	if (DISABLE_RESIZE) style = style & ~(WS_MAXIMIZEBOX | WS_THICKFRAME);
 
-	m_hwnd = CreateWindowEx(0, "D3D12TestWindow", title, style, 10, 10, rect.right - rect.left, rect.bottom - rect.top, 0, 0, GetModuleHandle(0), 0);
+	AdjustWindowRect(&rect, style, false);
+
+	m_hwnd = CreateWindowEx(0, "D3D12TestWindow", title, style, 0, 0, rect.right - rect.left, rect.bottom - rect.top, 0, 0, GetModuleHandle(0), 0);
 
 	SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LONG_PTR) this);
 
@@ -86,10 +87,18 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		InputSystem::Get().FireKeyUp(wparam);
 		break;
 	case WM_LBUTTONDOWN:
-		InputSystem::Get().FireMouseDown(1);
+		InputSystem::Get().MouseDown(wparam);
+		break;
+	case WM_LBUTTONUP:
+		InputSystem::Get().lMouseEvent = WM_LBUTTONUP;
+		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_RBUTTONDOWN:
-		InputSystem::Get().FireMouseDown(2);
+		InputSystem::Get().MouseDown(wparam);
+		break;
+	case WM_RBUTTONUP:
+		InputSystem::Get().rMouseEvent = WM_RBUTTONUP;
+		InputSystem::Get().MouseUp(wparam);
 		break;
 	case WM_MOUSEMOVE:
 		InputSystem::Get().FireMouseMove((lparam & 0xFFFF), (lparam >> 16 & 0xFFFF));
