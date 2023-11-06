@@ -29,6 +29,11 @@ public:
 	void visitEntity(QuEntity* entity);
 
 
+private:
+
+	void openWorld_triggerSpawn(QuWorld* w, QuEntity* en);
+
+
 
 private:
 

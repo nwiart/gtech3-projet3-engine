@@ -7,6 +7,9 @@
     <ClCompile Include="Shooting.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="EntityPlanetarySystem.cpp" />
+    <ClCompile Include="EntityGravityField.cpp" />
+    <ClCompile Include="EntityGravityAffected.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -16,5 +19,12 @@
     <ClInclude Include="Shooting.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="EntityPlanetarySystem.h" />
+    <ClInclude Include="EntityGravityField.h" />
+    <ClInclude Include="EntityGravityAffected.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\PointLightPixelShader.hlsl" />
+    <FxCompile Include="shaders\PointLightVertexShader.hlsl" />
   </ItemGroup>
 </Project>

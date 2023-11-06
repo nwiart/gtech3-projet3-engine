@@ -18,7 +18,7 @@ EntityController::EntityController()
 	
 }
 
-void EntityController::OnUpdate(Timer timer)
+void EntityController::OnUpdate(const Timer& timer)
 {
 	UpdateCamera(timer.getDeltaTime());
 }
@@ -26,7 +26,7 @@ void EntityController::OnUpdate(Timer timer)
 void EntityController::UpdateCamera(float dt)
 {
 	// Move camera.
-	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 3.0F : 1.0F;
+	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 6.0F : 3.0F;
 	speed *= dt;
 	
 	XMVECTOR pos = XMLoadFloat3(&this->GetTransform().getPosition());
@@ -52,8 +52,8 @@ void EntityController::UpdateCamera(float dt)
 
 	if (!inDeadZone)
 	{
-		m_camYaw += mouseX * 0.0001f;
-		m_camPitch += mouseY * 0.0001f;
+		m_camYaw += mouseX * dt * 0.005F;
+		m_camPitch += mouseY * dt * 0.005F;
 
 		// Limit pitch to straight up or straight down. To Remove
 		m_camPitch = Quantum::Math::clamp(m_camPitch, -1.570796f, 1.570796f);

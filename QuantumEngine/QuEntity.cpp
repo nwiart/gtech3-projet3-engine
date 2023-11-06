@@ -116,25 +116,25 @@ XMVECTOR QuEntity::getUpVector()
 void QuEntity::setPosition(DirectX::XMFLOAT3 positon) 
 {
 	m_Transform.setPosition(positon);
-	m_dirtyWorldMatrix = true;
+	this->setDirtyWorldMatrix();
 }
 
 void QuEntity::setRotation(DirectX::XMFLOAT4 quat)
 {
 	m_Transform.setRotation(quat);
-	m_dirtyWorldMatrix = true;
+	this->setDirtyWorldMatrix();
 }
 
 void QuEntity::setScale(DirectX::XMFLOAT3 scale)
 {
 	m_Transform.setScale(scale);
-	m_dirtyWorldMatrix = true;
+	this->setDirtyWorldMatrix();
 }
 
 void QuEntity::applyRotation(DirectX::XMVECTOR quat)
 {
 	m_Transform.ApplyRotation(quat);
-	m_dirtyWorldMatrix = true;
+	this->setDirtyWorldMatrix();
 }
 
 
@@ -164,4 +164,13 @@ QuEntity* QuEntity::getWorld() {
 		parent = parent->m_Parent;
 	}
 	return parent;
+}
+
+void QuEntity::setDirtyWorldMatrix()
+{
+	m_dirtyWorldMatrix = true;
+
+	for (QuEntity* c = m_FirstChild; c; c = c->m_Sibling) {
+		c->setDirtyWorldMatrix();
+	}
 }

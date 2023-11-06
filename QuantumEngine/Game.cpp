@@ -11,6 +11,8 @@
 #include <string>
 #include <ctime>
 
+#include "Quantum/Physics/PhysicsWorld.h"
+
 
 
 static const char WINDOW_TITLE[] = "Direct3D 12 Test";
@@ -47,6 +49,8 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
+		m_world->getPhysicsWorld()->step(1.0F / 60.0F);
+
 		visitEntity(m_world);
 
 		m_window.pollEvents();
@@ -74,9 +78,23 @@ void Game::mainLoop()
 	}
 }
 
+
+
+void Game::openWorld_triggerSpawn(QuWorld* w, QuEntity* en)
+{
+	en->OnSpawn(w);
+
+	for (QuEntity* c = en->m_FirstChild; c; c = c->m_Sibling)
+	{
+		this->openWorld_triggerSpawn(w, c);
+	}
+}
+
 void Game::openWorld(QuWorld* world)
 {
 	m_world = world;
+	
+	this->openWorld_triggerSpawn(world, world);
 }
 
 int Game::getRenderWidth() const
