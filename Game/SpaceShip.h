@@ -15,8 +15,6 @@ public:
 	~SpaceShip();
 
 
-
-
 private:
 
 };

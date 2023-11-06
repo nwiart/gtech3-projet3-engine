@@ -8,6 +8,7 @@
     <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityGravityAffected.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
+    <ClCompile Include="EnnemySpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -18,6 +19,7 @@
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="EnnemySpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl" />

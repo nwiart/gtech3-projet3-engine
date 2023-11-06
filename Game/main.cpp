@@ -26,6 +26,8 @@
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
 
+#include "EnnemySpawner.h"
+
 
 #include "SpaceShip.h"
 
@@ -81,6 +83,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(ps);
 
 
+
+
 		
 		// Spheres.
 		for (int i = 0; i < 100; i++)
@@ -118,9 +122,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		SpaceShip* spaceShip = new SpaceShip();
-		spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
+		//spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
 		spaceShip->SetModel(box);
-		world->attachChild(spaceShip);
+
+		SpaceShip* spaceShip2 = new SpaceShip();
+		//spaceShip->setPosition(DirectX::XMFLOAT3(0, 0, 0));
+		spaceShip2->SetModel(capsule);
+
+		EnnemySpawner* spawner = new EnnemySpawner();
+		spawner->SetEntity(spaceShip);
+		world->attachChild(spawner);
 
 	}
 
