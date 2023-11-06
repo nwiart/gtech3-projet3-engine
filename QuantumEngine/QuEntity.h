@@ -25,7 +25,14 @@ class QuEntity
 
 		void attachChild(QuEntity* child);
 		void AttachToParent(QuEntity* Parent);
+
+			/// Removes the entity from its parent, moving it to the root, but does
+			/// not remove from the world.
 		void DetachFromParent();
+
+			/// Looks for an entity of the matching type in this entity's subtree.
+		template<class T>
+		T* findSubEntity() const;
 
 		const Quantum::Transform& GetTransform() const { return m_Transform; }
 
@@ -72,3 +79,21 @@ class QuEntity
 		virtual void ExecuteProcedure(){}
 };
 
+
+
+template<class T>
+T* QuEntity::findSubEntity() const
+{
+	for (QuEntity* c = this->m_FirstChild; c; c = c->m_Sibling) {
+		if (dynamic_cast<T*>(c)) {
+			return reinterpret_cast<T*>(c);
+		}
+
+		QuEntity* cf = c->findSubEntity<T>();
+		if (cf) {
+			return reinterpret_cast<T*>(cf);
+		}
+	}
+
+	return 0;
+}

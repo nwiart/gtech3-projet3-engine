@@ -25,3 +25,8 @@ public:
 		return dist < shapeA->getRadius() + shapeB->getRadius();
 	}
 };
+
+CollisionAgent* CollisionAgent_SphereSphere_factory()
+{
+	return new CollisionAgent_SphereSphere();
+}

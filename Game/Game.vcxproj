@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntityController.cpp" />
+    <ClCompile Include="EntityGravityAffected.cpp" />
+    <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyProgram.cpp" />
@@ -29,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityPlanetarySystem.h" />
   </ItemGroup>

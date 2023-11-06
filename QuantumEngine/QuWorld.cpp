@@ -7,9 +7,10 @@
 QuWorld::QuWorld()
 {
 	PhysicsWorldCinfo info;
-	info.m_gravity = DirectX::XMFLOAT3(0.0F, -1.50F, 0.0F);
+	info.m_gravity = DirectX::XMFLOAT3(0.0F, -0.0F, 0.0F);
 
 	m_physicsWorld = new PhysicsWorld(info);
+	m_physicsWorld->registerCollisionAgents();
 }
 
 QuWorld::~QuWorld()

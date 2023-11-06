@@ -3,6 +3,10 @@
 
 #include "Quantum/Physics/RigidBody.h"
 
+#include "Quantum/Physics/Collide/PhysicsShape.h"
+#include "Quantum/Physics/Collide/CollisionAgent.h"
+#include "Quantum/Physics/Collide/PhysicsContactListener.h"
+
 using namespace DirectX;
 
 
@@ -17,7 +21,8 @@ struct Sphere
 
 PhysicsWorldCinfo::PhysicsWorldCinfo()
 	: m_gravity(0.0F, -9.8F, 0.0F)
-	, m_broadphase(128.0F)
+	, m_broadphaseSize(128.0F)
+	, m_broadphaseDivisions(4)
 {
 
 }
@@ -41,8 +46,43 @@ void PhysicsWorld::step(float deltaTime)
 
 		XMVECTOR vel = XMLoadFloat4(&rb->getLinearVelocity());
 		vel = XMVectorMultiply(vel, deltaVec);
-		vel = XMVectorAdd(vel, XMLoadFloat4(&rb->getPosition()));
-		rb->setPosition(vel);
+
+		// Position prediction.
+		XMVECTOR lastPos = XMLoadFloat4(&rb->getPosition());
+		XMVECTOR nextPos = XMVectorAdd(vel, lastPos);
+
+
+		// Test against all static bodies.
+		for (RigidBody* srb : m_staticRigidBodies)
+		{
+			CollisionAgent* agent = this->getCollisionAgent(rb->getShape(), srb->getShape());
+
+			bool lo = agent->getOverlapping(rb, srb);
+			rb->setPosition(nextPos);
+
+			bool co = agent->getOverlapping(rb, srb);
+			rb->setPosition(lastPos);
+
+			// Notify both bodies of collision.
+			if (lo != co) {
+				CollisionEvent rbe;
+				rbe.m_rigidBodyA = rb;
+				rbe.m_rigidBodyB = srb;
+
+				if (co) for (PhysicsContactListener* l : rb->getContactListeners()) l->onCollisionAdded(rbe);
+				else    for (PhysicsContactListener* l : rb->getContactListeners()) l->onCollisionRemoved(rbe);
+
+				CollisionEvent srbe;
+				srbe.m_rigidBodyA = srb;
+				srbe.m_rigidBodyB = rb;
+
+				if (co) for (PhysicsContactListener* l : srb->getContactListeners()) l->onCollisionAdded(srbe);
+				else    for (PhysicsContactListener* l : srb->getContactListeners()) l->onCollisionRemoved(srbe);
+			}
+		}
+
+
+		rb->setPosition(nextPos);
 	}
 }
 
@@ -90,6 +130,23 @@ bool PhysicsWorld::rayCast(RayHitResult& outHit, DirectX::FXMVECTOR begin, Direc
 bool PhysicsWorld::rayCast(RayHitResult& outHit, const Ray& ray)
 {
 	return false;
+}
+
+
+
+#include "Quantum/Physics/Internal/InternalCollisionAgents.h"
+
+#define KEY(shapeTypeA, shapeTypeB) (uint32_t) ((shapeTypeA) | ((shapeTypeB) << 16))
+
+void PhysicsWorld::registerCollisionAgents()
+{
+	m_collisionAgents.insert(std::pair<uint32_t, CollisionAgent*>(KEY(SHAPE_SPHERE, SHAPE_SPHERE), CollisionAgent_SphereSphere_factory()));
+}
+
+CollisionAgent* PhysicsWorld::getCollisionAgent(PhysicsShape* a, PhysicsShape* b)
+{
+	uint32_t k = KEY(a->getType(), b->getType());
+	return m_collisionAgents.at(k);
 }
 
 

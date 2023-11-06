@@ -3,15 +3,19 @@
 #include "Quantum/Physics/RayCast.h"
 
 #include <vector>
+#include <map>
 
 class RigidBody;
+class PhysicsShape;
+class CollisionAgent;
 
 
 
 struct PhysicsWorldCinfo
 {
 	DirectX::XMFLOAT3 m_gravity;
-	float m_broadphase;
+	float m_broadphaseSize;
+	int m_broadphaseDivisions;
 
 	PhysicsWorldCinfo();
 };
@@ -35,11 +39,18 @@ public:
 	bool rayCast(RayHitResult& outHit, const Ray& ray);
 
 
+	void registerCollisionAgents();
+
+	CollisionAgent* getCollisionAgent(PhysicsShape* a, PhysicsShape* b);
+
+
 
 private:
 
 	std::vector<RigidBody*> m_dynamicRigidBodies;
 	std::vector<RigidBody*> m_staticRigidBodies;
+
+	std::map<uint32_t, CollisionAgent*> m_collisionAgents;
 
 	DirectX::XMFLOAT3 m_gravity;
 };

@@ -8,7 +8,11 @@ class EntityGravityField : public QuEntityPhysicsTriggerSphere
 {
 public:
 
-	EntityGravityField(float intensity);
+	EntityGravityField(float intensity)
+		: QuEntityPhysicsTriggerSphere(10.0F), m_intensity(intensity)
+	{
+
+	}
 
 	virtual void onTriggerEnter(QuEntity* e) override;
 

@@ -23,6 +23,8 @@
 
 #include "EntityController.h"
 #include "EntityPlanetarySystem.h"
+#include "EntityGravityField.h"
+#include "EntityGravityAffected.h"
 
 
 namespace qm = Quantum::Math;
@@ -72,11 +74,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(entitySkybox);
 
 		EntityPlanetarySystem* ps = new EntityPlanetarySystem(6.0F, 8.0F);
-		ps->setPosition(DirectX::XMFLOAT3(4.0F, 2.0F, 6.0F));
+		ps->setPosition(DirectX::XMFLOAT3(0, 0, 15.0F));
 		world->attachChild(ps);
+
+		EntityGravityField* gf = new EntityGravityField(10.0F);
+		gf->setPosition(DirectX::XMFLOAT3(0, 0, 15.0F));
+		world->attachChild(gf);
 		
 		// Spheres.
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -85,7 +91,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Boxes.
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -94,7 +100,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		// Capsules.
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(-40.0F, 40.0F), qm::randomFloat(0, 80.0F)));
@@ -104,16 +110,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 
+	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider();
-	physCol->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 3.0F));
+	physCol->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 0.0F));
+	physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
 
 	QuEntityRenderModel* physModel = new QuEntityRenderModel();
 	physModel->SetModel(sphere);
-	physModel->setPosition(DirectX::XMFLOAT3(0.0F, 0.0F, 0.0F));
+
+	EntityGravityAffected* physGr = new EntityGravityAffected(physCol);
 
 	physCol->attachChild(physModel);
+	physCol->attachChild(physGr);
 
 	world->attachChild(physCol);
+
 
 
 	EntityController* c = new EntityController();

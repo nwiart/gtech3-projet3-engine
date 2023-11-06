@@ -14,20 +14,33 @@ QuEntityPhysicsCollider::QuEntityPhysicsCollider()
 	: m_rigidBody(0)
 	, m_shape(0)
 {
-	
+	m_linearVelocity = { 0, 0, 0, 0 };
 }
+
+void QuEntityPhysicsCollider::applyImpulse(FXMVECTOR f)
+{
+	XMVECTOR newVel = XMVectorAdd(f, XMLoadFloat4(&m_linearVelocity));
+	XMStoreFloat4(&m_linearVelocity, newVel);
+
+	if (m_rigidBody) {
+		m_rigidBody->applyImpulse(f);
+	}
+}
+
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {
 	m_shape = new PhysicsShapeSphere(0.5F);
 
 	RigidBodyCinfo info;
-	info.m_motionType = MOTION_KEYFRAMED;
+	info.m_motionType = MOTION_DYNAMIC;
 	info.m_shape = m_shape;
 	XMStoreFloat4(&info.m_position, XMLoadFloat3(&this->GetTransform().getPosition()));
 	m_rigidBody = new RigidBody(info);
 
 	m_rigidBody->setUserData(this);
+
+	m_rigidBody->applyImpulse(XMLoadFloat4(&m_linearVelocity));
 
 	world->getPhysicsWorld()->addRigidBody(m_rigidBody);
 }

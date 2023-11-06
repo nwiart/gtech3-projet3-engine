@@ -41,6 +41,7 @@
     <ClCompile Include="Quantum\Physics\Internal\InternalCollisionAgents.cpp" />
     <ClCompile Include="Quantum\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="Quantum\Physics\RigidBody.cpp" />
+    <ClCompile Include="Quantum\Physics\SolverAllocator.cpp" />
     <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
     <ClCompile Include="Quantum\Render\ScenePass.cpp" />
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
@@ -78,6 +79,7 @@
     <ClInclude Include="Quantum\Physics\Collide\PhysicsContactListener.h" />
     <ClInclude Include="Quantum\Physics\Collide\PhysicsShape.h" />
     <ClInclude Include="Quantum\Physics\Collide\PhysicsShapeSphere.h" />
+    <ClInclude Include="Quantum\Physics\Internal\InternalCollisionAgents.h" />
     <ClInclude Include="Quantum\Physics\Physics.h" />
     <ClInclude Include="Quantum\Physics\PhysicsWorld.h" />
     <ClInclude Include="Quantum\Physics\RayCast.h" />
