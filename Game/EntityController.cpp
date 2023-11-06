@@ -41,7 +41,6 @@ void EntityController::UpdateCamera(float dt)
 	XMFLOAT3 fpos; XMStoreFloat3(&fpos, pos);
 	this->setPosition(fpos);
 
-
 	// Rotate camera.
 	int mouseX = InputSystem::Get().getMouseX() - Game::getInstance().getRenderWidth() / 2;
 	int mouseY = InputSystem::Get().getMouseY() - Game::getInstance().getRenderHeight() / 2;
