@@ -30,15 +30,17 @@ void EntityController::OnSpawn(QuWorld* world)
 	Model* leftGun = new Model();
 	Quantum::CapsuleGenerator::generate(leftGun);
 	leftGunModel->SetModel(leftGun);
-	leftGunModel->setPosition(XMFLOAT3(-3.0f, -1.0f, 2.0f));
+	leftGunModel->setPosition(XMFLOAT3(-2.5f, -1.0f, 1.7f));
 	leftGunModel->setRotation(XMFLOAT4(0.707, 0, 0, 0.707));
+	leftGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
 	this->attachChild(leftGunModel);
 
 	Model* rightGun = new Model();
 	Quantum::CapsuleGenerator::generate(rightGun);
 	rightGunModel->SetModel(rightGun);
-	rightGunModel->setPosition(XMFLOAT3(3.0f, -1.0f, 2.0f));
+	rightGunModel->setPosition(XMFLOAT3(2.5f, -1.0f, 1.7f));
 	rightGunModel->setRotation(XMFLOAT4(-0.707, 0, 0, -0.707));
+	rightGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
 	this->attachChild(rightGunModel);
 }
 
