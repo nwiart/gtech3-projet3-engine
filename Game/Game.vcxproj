@@ -28,6 +28,7 @@
     <ClCompile Include="MyProgram.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shooting.cpp" />
+    <ClCompile Include="UIMainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -40,6 +41,7 @@
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityPlanetarySystem.h" />
+    <ClInclude Include="UIMainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl">
