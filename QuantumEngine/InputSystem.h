@@ -8,7 +8,7 @@
 class InputSystem
 {
 public:
-	inline bool isMouseDown(int vkCode) const { return m_mouseState[vkCode]; }
+	inline bool isMouseDown(int vkCode) const { return m_keyState[vkCode]; }
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
