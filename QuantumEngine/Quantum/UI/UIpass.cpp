@@ -7,7 +7,7 @@
 
 #include "Graphics.h"
 
-static struct { float pos[3]; } verts[] = {
+static struct { float pos[3]; float uv[2]; } verts[] = {
 	{ {+1.0F, 0.F, 0.F} },
 	{ {0.F, 0.F, 0.F} },
 	{ {0.F, +1.0F, 0.0F} },
@@ -15,6 +15,8 @@ static struct { float pos[3]; } verts[] = {
 	{ {0.F, +1.0F, 0.0F} },
 	{ {+1.0F, 0.F, 0.0F} },
 };
+
+
 
 void UIpass::init()
 {

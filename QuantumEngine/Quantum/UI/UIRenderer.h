@@ -7,6 +7,8 @@
 
 #include"UIpass.h"
 
+class QuWidgetText;
+
 class UIRenderer
 {
 public:
@@ -41,6 +43,8 @@ private:
 	CanvasConstantBuffer m_matrix;
 
 	std::vector<QuWidget*> allWidget;
+
+	std::vector<QuWidgetText*> allWidgetText;
 
 	ID3D12DescriptorHeap* m_Heap;
 

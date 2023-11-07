@@ -1,5 +1,6 @@
 #include "UIRenderer.h"
 #include "Graphics.h"
+#include "QuWidgetText.h"
 
 void UIRenderer::init()
 {
@@ -42,6 +43,7 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 void UIRenderer::freeList()
 {
 	allWidget.clear();
+	allWidgetText.clear();
 	renderRectangles.clear();
 }
 
@@ -51,8 +53,16 @@ void UIRenderer::addWidget(QuWidget* widget)
 	rect.position = widget->GetPosition();
 	rect.size = widget->GetSize();
 
-	renderRectangles.push_back(rect);
-	allWidget.push_back(widget);
+	if (dynamic_cast<QuWidgetText*>(widget))
+	{
+		allWidgetText.push_back(dynamic_cast<QuWidgetText*>(widget));
+	}
+	else
+	{
+		renderRectangles.push_back(rect);
+		allWidget.push_back(widget);
+	}
+
 }
 
 void UIRenderer::updateObjectCB()
