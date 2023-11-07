@@ -87,11 +87,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
 		world->attachChild(ps);
 
-
 		
 		
 		QuEntityPhysicsCollider* pc = new QuEntityPhysicsCollider(0.1F, MOTION_DYNAMIC);
-		pc->applyImpulse(DirectX::XMVectorSet(0,0,0,0));
+		pc->applyImpulse(DirectX::XMVectorSet(0,0,-3,0));
 
 		EntityParticleSmoke* pe = new EntityParticleSmoke(&smoke);
 

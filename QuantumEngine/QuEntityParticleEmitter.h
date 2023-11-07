@@ -18,6 +18,10 @@ public:
 	virtual void UpdateParticles(const Timer& timer);
 	virtual void OnParticleSpawn(int id);
 
+		/// Estimate particle ID based on current queue state and spawn timer.
+	float getParticleLifetime(int id) const;
+
+
 	inline const DirectX::XMFLOAT4* getParticlePositions() const { return m_particlePositions; }
 	inline const float*             getParticleRotations() const { return m_particleRotations; }
 	inline const DirectX::XMFLOAT2* getParticleSizes() const { return m_particleSizes; }

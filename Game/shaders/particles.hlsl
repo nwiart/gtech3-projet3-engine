@@ -50,11 +50,10 @@ PS_INPUT vs_main(VS_INPUT input, uint instanceID : SV_InstanceID)
 	//output.pos.xy += input.pos.xy * particleSizes[instanceID];
 	//output.pos = mul(output.pos, projection);
 	
-	float2 localPos = input.pos.xy * input.particleSize;
-    localPos = mul(localPos, float2x2(input.particleRotation.xy, input.particleRotation.zw));
+	float2x2 rotationMatrix = float2x2(input.particleRotation.xy, input.particleRotation.zw);
 	
 	output.pos = mul(float4(input.particlePos, 1.0F), view);
-	output.pos.xy += localPos;
+	output.pos.xy += mul(input.pos.xy * input.particleSize, rotationMatrix);;
 	output.pos = mul(output.pos, projection);
 	
 	output.texCoord = input.texCoord;

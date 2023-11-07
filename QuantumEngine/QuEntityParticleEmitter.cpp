@@ -62,6 +62,14 @@ void QuEntityParticleEmitter::OnParticleSpawn(int id)
 	XMStoreFloat4(&m_particleColors[id], XMVectorSplatOne());
 }
 
+float QuEntityParticleEmitter::getParticleLifetime(int id) const
+{
+	if (id < m_spawnIndex)
+		return m_spawnTimer + m_spawnRate * (m_spawnIndex - id - 1);
+	else
+		return m_spawnTimer + m_lifeTime - m_spawnRate * (id - m_spawnIndex + 1);
+}
+
 
 
 int QuEntityParticleEmitter::getMaxParticles() const
