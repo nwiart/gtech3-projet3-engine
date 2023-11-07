@@ -1,6 +1,7 @@
 #include "Quantum/Math/Math.h"
 
 #include "QuEntity.h"
+#include "QuWorld.h"
 
 using namespace DirectX;
 
@@ -40,6 +41,10 @@ void QuEntity::AttachToParent(QuEntity* Parent)
 	this->m_Sibling = m_Parent->m_FirstChild;
 	Parent->m_FirstChild = this;
 
+	QuWorld* w = (QuWorld*)this->getWorld();
+	if (w->isOpen()) {
+		this->OnSpawn(w);
+	}
 }
 
 void QuEntity::DetachFromParent()

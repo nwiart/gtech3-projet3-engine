@@ -94,7 +94,8 @@ void Game::openWorld_triggerSpawn(QuWorld* w, QuEntity* en)
 void Game::openWorld(QuWorld* world)
 {
 	m_world = world;
-	
+	m_world->setOpen(true);
+
 	this->openWorld_triggerSpawn(world, world);
 }
 

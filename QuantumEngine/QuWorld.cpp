@@ -11,6 +11,8 @@ QuWorld::QuWorld()
 
 	m_physicsWorld = new PhysicsWorld(info);
 	m_physicsWorld->registerCollisionAgents();
+
+	m_isOpen = false;
 }
 
 QuWorld::~QuWorld()

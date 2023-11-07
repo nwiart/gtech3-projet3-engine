@@ -29,6 +29,7 @@
 #include "EntityPlanetarySystem.h"
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
+#include "MeteorShower.h"
 
 
 namespace qm = Quantum::Math;
@@ -82,26 +83,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(ps);
 	}
 
-	for (int i = 0; i < 50; i++)
-	{
-		Model* meteor = new Model();
-		Quantum::MeteorGenerator::generate(meteor, qm::randomInt(1, 10.f), qm::randomInt(5,20.f), qm::randomInt(5, 20.f));
-		QuEntityRenderModel* meteorEntity = new QuEntityRenderModel();
-		meteorEntity->SetModel(meteor);
-		meteorEntity->setPosition(DirectX::XMFLOAT3(qm::randomFloat(1, 300.f), qm::randomFloat(1, 300.f), qm::randomFloat(1, 300.f)));
-		meteorEntity->AttachToParent(world);
-	}
+	MeteorShower* meteorShower = new MeteorShower();
+	world->attachChild(meteorShower);
 
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
-	physCol->setPosition(DirectX::XMFLOAT3(0, 0, 10));
+	physCol->setPosition(DirectX::XMVectorSet(0, 0, 10, 0));
 
 	QuEntityRenderModel* physModel = new QuEntityRenderModel();
 	physModel->SetModel(sphere);
 	physModel->setScale(DirectX::XMFLOAT3(7, 7, 7));
 
-	EntityGravityField* gf = new EntityGravityField(8.0F);
-	physCol->attachChild(gf);
+	//EntityGravityField* gf = new EntityGravityField(8.0F);
+	//physCol->attachChild(gf);
 
 	physCol->attachChild(physModel);
 
@@ -120,10 +114,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
-
-	Shooting* s = new Shooting();
-	c->attachChild(s);
-
 
 	game.openWorld(world);
 

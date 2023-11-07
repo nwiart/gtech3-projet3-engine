@@ -17,12 +17,9 @@ using namespace std;
 
 #define TO_RADIANS (3.1415926535898 / 180.0)
 
-
-
 void MeteorGenerator::generate(Model* outModel, float radius, int m_axisSubdivs, int m_heightSubdivs)
 {
 	struct Vertex { float pos[3]; float normal[3]; float uv[2]; UINT color; };
-
 
 	size_t numVertices = (m_heightSubdivs - 1) * m_axisSubdivs + 2;
 	size_t numFaces = m_axisSubdivs * m_heightSubdivs;
