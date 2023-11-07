@@ -35,6 +35,10 @@ public:
 	inline const Timer& getTimer() const { return m_timer; }
 	inline       Timer& getTimer()       { return m_timer; }
 
+	inline QuWidget* getOpenWidget() const { return m_widget; }
+
+	inline UISystem& getUISystem() const { return *UIsystem; }
+
 
 private:
 
