@@ -29,6 +29,10 @@ public:
 	void visitEntity(QuEntity* entity);
 
 
+	inline const Timer& getTimer() const { return m_timer; }
+	inline       Timer& getTimer()       { return m_timer; }
+
+
 private:
 
 	void openWorld_triggerSpawn(QuWorld* w, QuEntity* en);

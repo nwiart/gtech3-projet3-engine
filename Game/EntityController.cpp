@@ -15,33 +15,40 @@ using namespace DirectX;
 
 
 EntityController::EntityController()
+	: leftGunModel(0)
+	, rightGunModel(0)
 {
 	
 }
 
-void EntityController::OnUpdate(const Timer& timer)
-{
-	UpdateCamera(timer.getDeltaTime());
-}
-
 void EntityController::OnSpawn(QuWorld* world)
 {
-	//Create guns
-	Model* leftGun = new Model();
-	Quantum::CapsuleGenerator::generate(leftGun);
-	leftGunModel->SetModel(leftGun);
+	// Create guns.
+	Model* gunModel = new Model();
+	Quantum::CapsuleGenerator::generate(gunModel);
+
+	leftGunModel = new QuEntityRenderModel();
+	leftGunModel->SetModel(gunModel);
 	leftGunModel->setPosition(XMFLOAT3(-2.5f, -1.0f, 1.7f));
 	leftGunModel->setRotation(XMFLOAT4(0.707, 0, 0, 0.707));
 	leftGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
 	this->attachChild(leftGunModel);
 
-	Model* rightGun = new Model();
-	Quantum::CapsuleGenerator::generate(rightGun);
-	rightGunModel->SetModel(rightGun);
+	rightGunModel = new QuEntityRenderModel();
+	rightGunModel->SetModel(gunModel);
 	rightGunModel->setPosition(XMFLOAT3(2.5f, -1.0f, 1.7f));
 	rightGunModel->setRotation(XMFLOAT4(-0.707, 0, 0, -0.707));
 	rightGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
 	this->attachChild(rightGunModel);
+
+	// Register callback (slowdown).
+	m_inputCallback = new ControllerInputCallback();
+	InputSystem::Get().RegisterCallback(m_inputCallback);
+}
+
+void EntityController::OnUpdate(const Timer& timer)
+{
+	UpdateCamera(timer.getDeltaTime());
 }
 
 void EntityController::UpdateCamera(float dt)
@@ -88,4 +95,18 @@ void EntityController::UpdateCamera(float dt)
 
 	XMFLOAT4 rot; XMStoreFloat4(&rot, quat);
 	this->setRotation(rot);
+}
+
+
+
+void EntityController::ControllerInputCallback::OnMouseDown(unsigned short btn)
+{
+	if (btn == 2)
+		Game::getInstance().getTimer().setTimeDilation(0.2);
+}
+
+void EntityController::ControllerInputCallback::OnMouseUp(unsigned short btn)
+{
+	if (btn == 2)
+		Game::getInstance().getTimer().setTimeDilation(1.0);
 }

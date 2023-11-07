@@ -49,7 +49,8 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
-		m_world->getPhysicsWorld()->step(1.0F / 60.0F);
+		// TODO : fixed time step.
+		m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
 
 		visitEntity(m_world);
 
