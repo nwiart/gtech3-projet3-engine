@@ -8,10 +8,7 @@
 class InputSystem
 {
 public:
-	inline bool isMouseDown(int vkCode) const { return m_mouseState[vkCode]; }
-
-	void MouseDown(unsigned short vkCode);
-	void MouseUp(unsigned short vkCode);
+	inline bool isMouseDown(int vkCode) const { return m_keyState[vkCode]; }
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
@@ -25,6 +22,7 @@ public:
 
 	void FireMouseMove(int newX, int newY);
 	void FireMouseDown(int button);
+	void FireMouseUp(int button);
 
 	inline bool isKeyDown(int vkCode) const { return m_keyState[vkCode]; }
 
