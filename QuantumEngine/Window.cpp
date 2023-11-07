@@ -80,26 +80,14 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 		window->setWantsToClose(true);
 		break;
 
-	case WM_KEYDOWN:
-		InputSystem::Get().FireKeyDown(wparam);
-		break;
-	case WM_KEYUP:
-		InputSystem::Get().FireKeyUp(wparam);
-		break;
-	case WM_LBUTTONDOWN:
-		InputSystem::Get().MouseDown(wparam);
-		break;
-	case WM_LBUTTONUP:
-		InputSystem::Get().lMouseEvent = WM_LBUTTONUP;
-		InputSystem::Get().MouseUp(wparam);
-		break;
-	case WM_RBUTTONDOWN:
-		InputSystem::Get().MouseDown(wparam);
-		break;
-	case WM_RBUTTONUP:
-		InputSystem::Get().rMouseEvent = WM_RBUTTONUP;
-		InputSystem::Get().MouseUp(wparam);
-		break;
+	case WM_KEYDOWN: InputSystem::Get().FireKeyDown(wparam); break;
+	case WM_KEYUP:   InputSystem::Get().FireKeyUp(wparam);   break;
+
+	case WM_LBUTTONDOWN: InputSystem::Get().FireMouseDown(VK_LBUTTON); break;
+	case WM_LBUTTONUP:   InputSystem::Get().FireMouseUp(VK_LBUTTON);   break;
+	case WM_RBUTTONDOWN: InputSystem::Get().FireMouseDown(VK_RBUTTON); break;
+	case WM_RBUTTONUP:   InputSystem::Get().FireMouseUp(VK_RBUTTON);   break;
+
 	case WM_MOUSEMOVE:
 		InputSystem::Get().FireMouseMove((lparam & 0xFFFF), (lparam >> 16 & 0xFFFF));
 		break;
