@@ -8,6 +8,7 @@ friend class UISystem;
 friend class UIRenderer;
 public:
 	QuWidget();
+	virtual ~QuWidget();
 
 	void attachChild(QuWidget* child);
 	void AttachToParent(QuWidget* Parent);

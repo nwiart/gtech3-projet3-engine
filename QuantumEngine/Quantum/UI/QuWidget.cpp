@@ -6,6 +6,10 @@ QuWidget::QuWidget()
 	m_size = DirectX::XMFLOAT2(0, 0);
 }
 
+QuWidget::~QuWidget()
+{
+}
+
 void QuWidget::attachChild(QuWidget* child)
 {
 	// Undo previous attachments.

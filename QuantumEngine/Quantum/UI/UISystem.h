@@ -9,7 +9,10 @@ public:
 
 	void addWidget(QuWidget* widget);
 
+	bool OnLeftClick(int mouseX, int mouseY, QuWidget* widget);
+
 private:
+
 
 };
 
