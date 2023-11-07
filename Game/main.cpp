@@ -150,16 +150,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Shooting* s = new Shooting();
 	c->attachChild(s);
 
-	//QuWidget* Widget = new QuWidget();
-	//Widget->SetSize(DirectX::XMFLOAT2(10, 10));
-	//Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+	QuWidget* Widget = new QuWidget();
+	Widget->SetSize(DirectX::XMFLOAT2(10, 10));
+	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
 
-	//QuWidgetButton* button = new QuWidgetButton();
-	//button->SetSize(DirectX::XMFLOAT2(500.f, 500.f));
-	//button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
-	//Widget->attachChild(button);
+	QuWidgetButton* button = new QuWidgetButton();
+	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f));
+	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
+	Widget->attachChild(button);
 	
-	//game.openWidget(Widget);
+	game.openWidget(Widget);
 
 	game.openWorld(world);
 
