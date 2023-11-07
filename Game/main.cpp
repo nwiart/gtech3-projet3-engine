@@ -82,7 +82,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(ps);
 	}
 
-
 	for (int i = 0; i < 50; i++)
 	{
 		Model* meteor = new Model();
@@ -121,6 +120,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
+
+	Shooting* s = new Shooting();
+	c->attachChild(s);
+
 
 	game.openWorld(world);
 
