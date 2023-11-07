@@ -7,15 +7,6 @@
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
 
-XMVECTOR DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-XMVECTOR DefaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-XMVECTOR camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-XMVECTOR camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-
-
 // Loading resources from the executable.
 void loadResource(std::string& out, UINT id)
 {
@@ -29,8 +20,6 @@ void loadResource(std::string& out, UINT id)
 
 	FreeResource(resg);
 }
-
-
 
 //
 // Public API.
@@ -141,7 +130,7 @@ void Graphics::createSwapChain(HWND hwnd, int width, int height)
 	sd.SampleDesc.Count = 1;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	sd.OutputWindow = hwnd;
-	sd.Windowed = true;
+	sd.Windowed = false;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
 	dxgiFactory->CreateSwapChain(d3dCommandQueue, &sd, &dxgiSwapChain);
