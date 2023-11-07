@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
     <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
     <ClCompile Include="D3D12ConstantBuffer.cpp" />
@@ -63,12 +64,14 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
     <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -123,6 +126,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureBase.h" />
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VertexBuffer.h" />

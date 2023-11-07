@@ -1,33 +1,38 @@
 #include "Game.h"
 
-#include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
 
 #include "Model.h"
+#include "Texture2D.h"
 #include "TextureCube.h"
-
-#include "QuEntityRenderModel.h"
-#include "QuEntityRenderSkybox.h"
-#include "QuEntityLightDirectional.h"
-#include "QuEntityLightPoint.h"
-#include "QuEntityPhysicsCollider.h"
-#include "QuEntityParticleEmitter.h"
 
 #include "Quantum/Math/Math.h"
 
 #include "resource.h"
 
-#include <stdlib.h>
-#include <time.h>
+// Engine entities.
+#include "QuWorld.h"
+#include "QuEntityRenderModel.h"
+#include "QuEntityRenderSkybox.h"
+#include "QuEntityLightDirectional.h"
+#include "QuEntityLightPoint.h"
+#include "QuEntityPhysicsCollider.h"
 
+// Game entities.
 #include "EntityController.h"
 #include "Shooting.h"
 #include "Bullet.h"
 #include "EntityPlanetarySystem.h"
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
+
+#include "EntityParticleSmoke.h"
+
+// Standard lib.
+#include <stdlib.h>
+#include <time.h>
 
 
 namespace qm = Quantum::Math;
@@ -59,6 +64,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
+	Texture2D awesome("textures/awesome.dds");
+	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 
 
@@ -81,8 +88,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(ps);
 
 
-		QuEntityParticleEmitter* pe = new QuEntityParticleEmitter(5.0F, 0.5F);
-		world->attachChild(pe);
+		
+		
+		QuEntityPhysicsCollider* pc = new QuEntityPhysicsCollider(0.1F, MOTION_DYNAMIC);
+		pc->applyImpulse(DirectX::XMVectorSet(0,0,0,0));
+
+		EntityParticleSmoke* pe = new EntityParticleSmoke(&smoke);
+
+		pc->attachChild(pe);
+		world->attachChild(pc);
 
 
 		
@@ -91,7 +105,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
 			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F)));
-			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
+			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 2, 0));
 
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->SetModel(sphere);

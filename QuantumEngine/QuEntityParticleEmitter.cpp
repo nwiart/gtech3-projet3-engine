@@ -15,14 +15,18 @@ QuEntityParticleEmitter::QuEntityParticleEmitter(float lifeTime, float spawnRate
 	int maxParticles = this->getMaxParticles();
 
 	m_particlePositions = reinterpret_cast<XMFLOAT4*>(malloc(maxParticles * sizeof(XMFLOAT4)));
-	m_particleSizes = reinterpret_cast<XMFLOAT2*>(malloc(maxParticles * sizeof(XMFLOAT2)));
+	m_particleRotations = reinterpret_cast<float*>(malloc(maxParticles * sizeof(float)));
+	m_particleSizes     = reinterpret_cast<XMFLOAT2*>(malloc(maxParticles * sizeof(XMFLOAT2)));
+	m_particleColors    = reinterpret_cast<XMFLOAT4*>(malloc(maxParticles * sizeof(XMFLOAT4)));
 }
 
 QuEntityParticleEmitter::~QuEntityParticleEmitter()
 {
 	if (m_particlePositions) {
 		free(m_particlePositions);
+		free(m_particleRotations);
 		free(m_particleSizes);
+		free(m_particleColors);
 	}
 }
 
@@ -48,6 +52,16 @@ void QuEntityParticleEmitter::UpdateParticles(const Timer& timer)
 	}
 }
 
+void QuEntityParticleEmitter::OnParticleSpawn(int id)
+{
+	XMVECTOR worldPos = this->getWorldPosition();
+
+	XMStoreFloat4(&m_particlePositions[id], worldPos);
+	m_particleRotations[id] = 0.0F;
+	XMStoreFloat2(&m_particleSizes[id], XMVectorSet(0.5F, 0.5F, 0, 0));
+	XMStoreFloat4(&m_particleColors[id], XMVectorSplatOne());
+}
+
 
 
 int QuEntityParticleEmitter::getMaxParticles() const
@@ -58,10 +72,7 @@ int QuEntityParticleEmitter::getMaxParticles() const
 
 void QuEntityParticleEmitter::spawnParticle()
 {
-	XMVECTOR worldPos = this->getWorldPosition();
-
-	XMStoreFloat4(&m_particlePositions[m_spawnIndex], worldPos);
-	m_particleSizes[m_spawnIndex] = XMFLOAT2(0.5F, 0.5F);
+	this->OnParticleSpawn(m_spawnIndex);
 
 	// Increment spawn index and loop around.
 	m_spawnIndex++;

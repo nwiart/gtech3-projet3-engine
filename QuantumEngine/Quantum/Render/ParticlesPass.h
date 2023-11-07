@@ -33,7 +33,6 @@ private:
 	struct Batch
 	{
 		D3D12Texture* m_texture;
-		D3D12_VERTEX_BUFFER_VIEW m_particleDataView;
 		int m_numParticles;
 	};
 

@@ -25,6 +25,8 @@ struct ParticleInstanceData
 {
 	XMFLOAT3 position;
 	XMFLOAT2 size;
+	XMFLOAT4 color;
+	float    rotation[4];
 };
 
 
@@ -61,12 +63,21 @@ void ParticlesPass::destroy()
 
 void ParticlesPass::addParticleEmitterData(QuEntityParticleEmitter* em)
 {
+	const QuEntityParticleEmitter* pem = em;
+
 	ParticleInstanceData* data;
 	m_particleBuffers[0]->Map(0, 0, (void**) &data);
 
 	for (int i = 0; i < em->getMaxParticles(); ++i) {
-		XMStoreFloat3(&data[i].position, XMLoadFloat4(&em->getParticlePositions()[i]));
-		XMStoreFloat2(&data[i].size, XMLoadFloat2(&em->getParticleSizes()[i]));
+		XMStoreFloat3(&data[i].position, XMLoadFloat4(pem->getParticlePositions() + i));
+		XMStoreFloat2(&data[i].size, XMLoadFloat2(pem->getParticleSizes() + i));
+		XMStoreFloat4(&data[i].color, XMLoadFloat4(pem->getParticleColors() + i));
+
+		float s = sin(XMConvertToRadians(pem->getParticleRotations()[i]));
+		float c = cos(XMConvertToRadians(pem->getParticleRotations()[i]));
+		data[i].rotation[0] = data[i].rotation[3] = c;
+		data[i].rotation[1] = s;
+		data[i].rotation[2] = -s;
 	}
 
 	m_particleBuffers[0]->Unmap(0, 0);
@@ -104,9 +115,6 @@ void ParticlesPass::render(ID3D12GraphicsCommandList* cmdList)
 		2,
 		CD3DX12_GPU_DESCRIPTOR_HANDLE(g.getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), frameDataID, g.getCBVDescriptorSize()));
 
-	//g.setGlobalDescriptor(matData + 1, m_texture.getShaderResourceView());
-	//m_shader.setTexture2D(0, matData);
-
 	// Set quad geometry and particle data.
 	D3D12_VERTEX_BUFFER_VIEW vbViews[2];
 	vbViews[0] = m_quadVB.getVertexBufferView();
@@ -119,6 +127,12 @@ void ParticlesPass::render(ID3D12GraphicsCommandList* cmdList)
 	int numProcessedParticles = 0;
 	for (const Batch& b : m_renderBatches)
 	{
+		if (b.m_texture) {
+			UINT texID = g.allocateDescriptorTable(1);
+			g.setGlobalDescriptor(texID, b.m_texture->getShaderResourceView());
+			m_shader.setTexture2D(0, texID);
+		}
+
 		cmdList->DrawInstanced(6, b.m_numParticles, 0, numProcessedParticles);
 
 		numProcessedParticles += b.m_numParticles;

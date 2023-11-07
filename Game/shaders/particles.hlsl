@@ -1,15 +1,22 @@
 struct VS_INPUT
 {
+	// Quad geometry.
 	float3 pos : POSITION0;
 	float2 texCoord : TEXCOORD0;
+	
+	// Per-particle data.
 	float3 particlePos : POSITION1;
 	float2 particleSize : TEXCOORD1;
+	float4 particleColor : COLOR1;
+	float4 particleRotation : TEXCOORD2;
 };
 
 struct PS_INPUT
 {
 	float4 pos : SV_Position;
 	float2 texCoord : TEXCOORD;
+	
+	float4 particleColor : COLOR1;
 };
 
 
@@ -43,20 +50,27 @@ PS_INPUT vs_main(VS_INPUT input, uint instanceID : SV_InstanceID)
 	//output.pos.xy += input.pos.xy * particleSizes[instanceID];
 	//output.pos = mul(output.pos, projection);
 	
+	float2 localPos = input.pos.xy * input.particleSize;
+    localPos = mul(localPos, float2x2(input.particleRotation.xy, input.particleRotation.zw));
+	
 	output.pos = mul(float4(input.particlePos, 1.0F), view);
-	output.pos.xy += input.pos.xy * input.particleSize;
+	output.pos.xy += localPos;
 	output.pos = mul(output.pos, projection);
 	
 	output.texCoord = input.texCoord;
+	
+	output.particleColor = input.particleColor;
 	
 	return output;
 }
 
 float4 ps_main(PS_INPUT input) : SV_Target
 {
-	float4 color = float4(1, 1, 1, 1); //textureDiffuse.Sample(samplerLinear, input.texCoord);
-	//if (color.a == 0.0F)
-		//discard;
+	float4 color = textureDiffuse.Sample(samplerLinear, input.texCoord);
+	color *= input.particleColor;
+	
+	if (color.a == 0.0F)
+		discard;
 	
 	return color;
 }

@@ -7,12 +7,8 @@
 
 TextureCube::TextureCube(const char* filePath)
 {
-	m_texture = new D3D12Texture();
-	m_texture->loadFromDisk(filePath, D3D12_SRV_DIMENSION_TEXTURECUBE);
-}
+	D3D12Texture* tex = new D3D12Texture();
+	tex->loadFromDisk(filePath, D3D12_SRV_DIMENSION_TEXTURECUBE);
 
-TextureCube::~TextureCube()
-{
-	m_texture->destroy();
-	delete m_texture;
+	this->setTexture(tex);
 }
