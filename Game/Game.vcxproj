@@ -24,6 +24,7 @@
     <ClCompile Include="EntityEnemySwarm.cpp" />
     <ClCompile Include="EntityGravityAffected.cpp" />
     <ClCompile Include="EntityGravityField.cpp" />
+    <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="EntityController.h" />
     <ClInclude Include="EntityEnemySwarm.h" />
     <ClInclude Include="MeteorShower.h" />
+    <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shooting.h" />
     <ClInclude Include="EntityGravityAffected.h" />
