@@ -78,3 +78,13 @@ void QuEntityPhysicsCollider::OnDestroy(QuWorld* world)
 		m_shape = 0;
 	}
 }
+
+XMVECTOR QuEntityPhysicsCollider::GetLinearVelocity()
+{
+	return XMLoadFloat4(&m_rigidBody->getLinearVelocity());
+}
+
+void QuEntityPhysicsCollider::setLinearVelocity(DirectX::FXMVECTOR p)
+{
+	m_rigidBody->setLinearVelocity(p);
+}

@@ -20,6 +20,9 @@ public:
 	void setPosition(DirectX::FXMVECTOR f);
 
 
+	DirectX::XMVECTOR GetLinearVelocity();
+	void setLinearVelocity(DirectX::FXMVECTOR p);
+
 	virtual void OnSpawn(QuWorld* world) final override;
 	virtual void OnUpdate(const Timer& timer) final override;
 	virtual void OnDestroy(QuWorld* world) final override;
