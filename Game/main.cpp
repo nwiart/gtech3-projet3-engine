@@ -56,7 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Game& game = Game::getInstance();
 
 	int res = game.init();
-	if ( res != 0 ) {
+	if (res != 0) {
 		return res;
 	}
 
@@ -73,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Texture2D awesome("textures/awesome.dds");
 	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
-	
+
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -129,7 +129,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	MeteorShower* meteorShower = new MeteorShower();
 	world->attachChild(meteorShower);
 
-
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
 	physCol->setPosition(DirectX::XMVectorSet(0, 0, 10, 0));
@@ -144,19 +143,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	physCol->attachChild(physModel);
 
 	world->attachChild(physCol);
-		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
-		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
-		world->attachChild(ps);
 
-		MeteorShower* meteorShower = new MeteorShower();
-		world->attachChild(meteorShower);
-
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
-		world->attachChild(EnemySwarm);
-	}
-
-
-
+	EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
+	world->attachChild(EnemySwarm);
 
 	// Player controller.
 	EntityController* c = new EntityController();
@@ -165,7 +154,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// Planet background.
 	PlanetBackground* planetBackground = new PlanetBackground();
-	c->attachChild(planetBackground);
+	world->attachChild(planetBackground);
 
 	// TODO : remove later
 	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);

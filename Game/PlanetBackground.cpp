@@ -4,8 +4,8 @@
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Model.h"
 #include "QuEntityRenderModel.h"
-#include "EntityPlanetarySystem.h"
-#include "EntityController.h"
+#include "Player.h"
+#include "QuWorld.h"
 #include "Quantum/Math/Math.h"
 
 namespace qm = Quantum::Math;
@@ -16,17 +16,14 @@ PlanetBackground::PlanetBackground()
 
 void PlanetBackground::OnUpdate(const Timer& timer)
 {
-	for (int i = 0; i < m_planets.size(); i++) {
-		m_planets[i]->setPosition(m_planets[i]->GetTransform().getPosition());
-	}
 }
 
 void PlanetBackground::OnSpawn(QuWorld* world)
 {
 	for (int i = 0; i < 5; i++) {
-		float radius = qm::randomFloat(20, 50);
+		float radius = qm::randomFloat(5, 20);
 		int childCount = qm::randomInt(0, 7);
-		int distance = qm::randomInt(50, 200);
+		int distance = qm::randomInt(5, 20);
 
 		EntityPlanetarySystem* planet = new EntityPlanetarySystem(radius, distance, childCount);
 

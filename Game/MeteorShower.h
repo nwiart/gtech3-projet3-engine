@@ -2,7 +2,7 @@
 #include "QuEntity.h"
 #include "QuEntityRenderModel.h"
 #include <vector>
-#define METEOR_COUNT 200
+#define METEOR_COUNT 50
 
 class MeteorShower : public QuEntity
 {
