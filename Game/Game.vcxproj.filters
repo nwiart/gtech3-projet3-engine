@@ -12,6 +12,7 @@
     <ClCompile Include="EntityGravityAffected.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="EntityEnemySwarm.cpp" />
+    <ClCompile Include="EntityParticleSmoke.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -26,6 +27,7 @@
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityEnemySwarm.h" />
+    <ClInclude Include="EntityParticleSmoke.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PointLightPixelShader.hlsl" />

@@ -1,6 +1,5 @@
 #include "Game.h"
 
-#include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
@@ -8,21 +7,22 @@
 
 
 #include "Model.h"
+#include "Texture2D.h"
 #include "TextureCube.h"
 
+#include "Quantum/Math/Math.h"
+
+#include "resource.h"
+
+// Engine entities.
+#include "QuWorld.h"
 #include "QuEntityRenderModel.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
 #include "QuEntityLightPoint.h"
 #include "QuEntityPhysicsCollider.h"
 
-#include "Quantum/Math/Math.h"
-
-#include "resource.h"
-
-#include <stdlib.h>
-#include <time.h>
-
+// Game entities.
 #include "EntityController.h"
 #include "Shooting.h"
 #include "Bullet.h"
@@ -32,6 +32,12 @@
 #include "MeteorShower.h"
 #include "EntityEnemySwarm.h"
 #include "Player.h"
+
+#include "EntityParticleSmoke.h"
+
+// Standard lib.
+#include <stdlib.h>
+#include <time.h>
 
 
 namespace qm = Quantum::Math;
@@ -54,6 +60,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 
+	// Load resources.
+	Model* sphere = new Model();
+	Model* box = new Model();
+	Model* capsule = new Model();
+
+	Quantum::SphereGenerator::generate(sphere);
+	Quantum::BoxGenerator::generate(box, 0.5f);
+	Quantum::CapsuleGenerator::generate(capsule);
+
+	Texture2D awesome("textures/awesome.dds");
+	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 	
 
@@ -90,6 +107,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
 
+	// TODO : remove later
+	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
+	pe0->setPosition(DirectX::XMFLOAT3(-3, -1.0F, 3));
+	c->attachChild(pe0);
+	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
+	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
+	c->attachChild(pe1);
 
 	Player::SetEntityController(c);
 

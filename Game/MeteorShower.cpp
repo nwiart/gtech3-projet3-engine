@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Quantum/Math/Math.h"
 #include "QuEntityPhysicsCollider.h"
+#include "QuWorld.h"
 
 MeteorShower::MeteorShower()
 {
