@@ -21,22 +21,23 @@ void PlanetBackground::OnUpdate(const Timer& timer)
 void PlanetBackground::OnSpawn(QuWorld* world)
 {
 	for (int i = 0; i < 5; i++) {
-		float radius = qm::randomFloat(5, 20);
+		float radius = qm::randomFloat(50, 200);
+		int distance = qm::randomInt(50, 100);
 		int childCount = qm::randomInt(0, 7);
-		int distance = qm::randomInt(5, 20);
 
 		EntityPlanetarySystem* planet = new EntityPlanetarySystem(radius, distance, childCount);
 
-		float posX = qm::randomFloat(-100, 100);
-		float posY = qm::randomFloat(-100, 100);
-		float posZ = qm::randomFloat(-100, 100);
-		while (posX < 10 && posX > -10) {
+		float posX = qm::randomFloat(-1000, 1000);
+		float posY = qm::randomFloat(-1000, 1000);
+		float posZ = qm::randomFloat(-1000, 1000);
+
+		while (posX < 100 && posX > -100) {
 			posX = qm::randomFloat(-1000, 1000);
 		}
-		while (posY < 10 && posY > -10) {
+		while (posY < 100 && posY > -100) {
 			posY = qm::randomFloat(-1000, 1000);
 		}
-		while (posZ < 10 && posZ > -10) {
+		while (posZ < 100 && posZ > -100) {
 			posZ = qm::randomFloat(-1000, 1000);
 		}
 

@@ -40,7 +40,7 @@ void EntityPlanetarySystem::OnSpawn(QuWorld* world)
 		m = new QuEntityRenderModel();
 		m->setScale(DirectX::XMFLOAT3(m_childRadius, m_childRadius, m_childRadius));
 
-		m->setPosition(DirectX::XMFLOAT3(m_childDistance*Quantum::Math::randomInt(-1,1), 0, m_childDistance * Quantum::Math::randomInt(-1, 1)));
+		m->setPosition(DirectX::XMFLOAT3(m_childDistance * Quantum::Math::randomInt(-1,1), 0, m_childDistance * Quantum::Math::randomInt(-1, 1)));
 		m->SetModel(unitSphere);
 		this->attachChild(m);
 	}
