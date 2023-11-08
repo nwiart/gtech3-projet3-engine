@@ -1,13 +1,21 @@
 #include "Game.h"
 
-#include "QuWorld.h"
 #include "Quantum/Generate/SphereGenerator.h"
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
+#include "Quantum/Generate/MeteorGenerator.h"
+
 
 #include "Model.h"
+#include "Texture2D.h"
 #include "TextureCube.h"
 
+#include "Quantum/Math/Math.h"
+
+#include "resource.h"
+
+// Engine entities.
+#include "QuWorld.h"
 #include "QuEntityRenderModel.h"
 #include "QuEntityRenderSkybox.h"
 #include "QuEntityLightDirectional.h"
@@ -24,12 +32,20 @@
 #include <stdlib.h>
 #include <time.h>
 
+// Game entities.
 #include "EntityController.h"
 #include "Shooting.h"
 #include "Bullet.h"
 #include "EntityPlanetarySystem.h"
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
+#include "MeteorShower.h"
+
+#include "EntityParticleSmoke.h"
+
+// Standard lib.
+#include <stdlib.h>
+#include <time.h>
 
 
 namespace qm = Quantum::Math;
@@ -60,6 +76,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
+	Texture2D awesome("textures/awesome.dds");
+	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 
 
@@ -87,8 +105,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		for (int i = 0; i < 100; i++)
 		{
 			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
-			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F)));
-			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 1, 0));
+			physCol->setPosition(DirectX::XMVectorSet(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F),0));
+			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 2, 0));
 
 			QuEntityRenderModel* model = new QuEntityRenderModel();
 			model->SetModel(sphere);
@@ -118,18 +136,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			world->attachChild(model);
 		}
 	}
-	
+
+	MeteorShower* meteorShower = new MeteorShower();
+	world->attachChild(meteorShower);
 
 	// Test RB.
 	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
-	physCol->setPosition(DirectX::XMFLOAT3(0, 0, 10));
+	physCol->setPosition(DirectX::XMVectorSet(0, 0, 10, 0));
 
 	QuEntityRenderModel* physModel = new QuEntityRenderModel();
 	physModel->SetModel(sphere);
 	physModel->setScale(DirectX::XMFLOAT3(7, 7, 7));
 
-	EntityGravityField* gf = new EntityGravityField(8.0F);
-	physCol->attachChild(gf);
+	//EntityGravityField* gf = new EntityGravityField(8.0F);
+	//physCol->attachChild(gf);
 
 	physCol->attachChild(physModel);
 
@@ -141,6 +161,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
+
+	// TODO : remove later
+	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
+	pe0->setPosition(DirectX::XMFLOAT3(-3, -1.0F, 3));
+	c->attachChild(pe0);
+	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
+	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
+	c->attachChild(pe1);
 
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);

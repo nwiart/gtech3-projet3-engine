@@ -14,6 +14,7 @@ class Timer;
 class QuEntity
 {
 	friend class Game;
+	friend class QuWorld;
 
 	public:
 		QuEntity();
@@ -29,6 +30,11 @@ class QuEntity
 			/// Removes the entity from its parent, moving it to the root, but does
 			/// not remove from the world.
 		void DetachFromParent();
+
+			/// Marks this entity for deletion.
+			/// Entity is deleted next frame.
+			/// Optionally, children entities can be destroyed along with it.
+		void Destroy(bool destroyChildren = false);
 
 			/// Looks for an entity of the matching type in this entity's subtree.
 		template<class T>
@@ -53,13 +59,17 @@ class QuEntity
 		void setScale(DirectX::XMFLOAT3 scale);
 
 		void applyRotation(DirectX::XMVECTOR quat);
-		QuEntity* getWorld();
+		QuWorld* getWorld() const;
 
 	private:
 
 		void updateWorldMatrix();
 
 		void setDirtyWorldMatrix();
+
+			/// Removes this entity from its parent, leaving it completely alone.
+		void removeAllAttachments();
+
 
 
 	protected:

@@ -28,7 +28,7 @@ int Game::init()
 {
 	int status;
 
-	m_window.initialize(1920, 1080, WINDOW_TITLE, true);
+	m_window.initialize(1600, 900, WINDOW_TITLE, false);
 
 	status = Graphics::initialize(&m_window);
 
@@ -51,12 +51,16 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
-		// TODO : fixed time step.
-		m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
+		if (m_world) {
+			m_world->deletePendingEntities();
+			
+			// TODO : fixed time step.
+			m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
 
-		visitEntity(m_world);
+			visitEntity(m_world);
+		}
+
 		UIsystem->visitUI(m_widget);
-
 
 		m_window.pollEvents();
 
@@ -98,7 +102,8 @@ void Game::openWorld_triggerSpawn(QuWorld* w, QuEntity* en)
 void Game::openWorld(QuWorld* world)
 {
 	m_world = world;
-	
+	m_world->setOpen(true);
+
 	this->openWorld_triggerSpawn(world, world);
 }
 void Game::openWidget(QuWidget* widget)

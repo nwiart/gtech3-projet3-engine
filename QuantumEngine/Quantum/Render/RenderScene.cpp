@@ -29,10 +29,12 @@ void RenderScene::init()
 
 	m_passScene.init();
 	m_passSkybox.init();
+	m_passParticles.init();
 }
 
 void RenderScene::destroy()
 {
+	m_passParticles.destroy();
 	m_passSkybox.destroy();
 	m_passScene.destroy();
 
@@ -56,7 +58,9 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 
 	// Material data.
 	UINT cb_materialData_ID = g.allocateDescriptorTable(3);
-	g.setGlobalDescriptor(cb_materialData_ID + 2, m_passSkybox.getTexture()->getShaderResourceView());
+	if (m_passSkybox.getTexture()) {
+		g.setGlobalDescriptor(cb_materialData_ID + 2, m_passSkybox.getTexture()->getShaderResourceView());
+	}
 
 	// Object world matrices.
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(renderList.size());
@@ -69,6 +73,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	m_passScene.renderAll(cmdList, renderList, cb_frameData_ID, cb_materialData_ID, cb_objectData_IDbase);
 
 	m_passSkybox.render(cmdList, cb_frameData_ID);
+
+	m_passParticles.render(cmdList);
 
 
 	// Clear model list.
@@ -104,6 +110,11 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 
 	renderList.push_back(renderModel);
 	renderWorldMatrices.push_back(cb);
+}
+
+void RenderScene::addParticleEmitter(QuEntityParticleEmitter* pe)
+{
+	m_passParticles.addParticleEmitterData(pe);
 }
 
 void RenderScene::freeRenderModel()
@@ -149,10 +160,10 @@ void RenderScene::updateFrameCB()
 		XMMATRIX view, projection, viewProjection;
 
 		// Combined view and projection matrices.
-		view = XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp);
-		projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F);
+		view = this->getViewMatrix();
+		projection = this->getProjectionMatrix();
 
-		viewProjection = XMMatrixMultiplyTranspose(view, projection);
+		viewProjection = XMMatrixMultiply(projection, view);
 		XMStoreFloat4x4(&cb.viewProjection, viewProjection);
 
 		// Camera info.
@@ -161,8 +172,10 @@ void RenderScene::updateFrameCB()
 		// Directional light.
 		if (m_directionalLight == NULL)
 		{
-			cb.DirColors = XMFLOAT4(0, 0, 0, 0);
-			cb.AmbientColor = XMFLOAT4(0, 0, 0, 0);
+			XMVECTOR zero = XMVectorZero();
+			XMStoreFloat4(&cb.DirColors, zero);
+			XMStoreFloat4(&cb.DirDirection, zero);
+			XMStoreFloat4(&cb.AmbientColor, zero);
 		}
 		else
 		{
@@ -205,6 +218,16 @@ void RenderScene::updateFrameCB()
 void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
+}
+
+XMMATRIX RenderScene::getViewMatrix() const
+{
+	return XMMatrixTranspose(XMMatrixLookAtLH(cameraPos, cameraTarget, cameraUp));
+}
+
+XMMATRIX RenderScene::getProjectionMatrix() const
+{
+	return XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 1000.0F));
 }
 
 

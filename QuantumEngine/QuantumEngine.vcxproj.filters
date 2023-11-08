@@ -46,6 +46,11 @@
     <ClCompile Include="Quantum\UI\UIRenderer.cpp" />
     <ClCompile Include="Quantum\UI\UISystem.cpp" />
     <ClCompile Include="Quantum\UI\UIpass.cpp" />
+    <ClCompile Include="Quantum\Render\ParticlesPass.cpp" />
+    <ClCompile Include="QuEntityParticleEmitter.cpp" />
+    <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderParticles.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="QuEntityLightDirectional.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
     <ClCompile Include="QuEntityRenderSkybox.cpp" />
@@ -66,6 +71,9 @@
     <ClCompile Include="Quantum\Physics\Collide\PhysicsShapeSphere.cpp" />
     <ClCompile Include="QuEntityPhysicsTriggerSphere.cpp" />
     <ClCompile Include="Quantum\Physics\SolverAllocator.cpp" />
+    <ClCompile Include="Quantum\Generate\MeteorGenerator.cpp" />
+    <ClCompile Include="TextureBase.cpp" />
+    <ClCompile Include="Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -144,12 +152,19 @@
     <ClInclude Include="Quantum\UI\UIRenderer.h" />
     <ClInclude Include="Quantum\UI\UISystem.h" />
     <ClInclude Include="Quantum\UI\UIpass.h" />
+    <ClInclude Include="Quantum\Render\ParticlesPass.h" />
+    <ClInclude Include="QuEntityParticleEmitter.h" />
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
+    <ClInclude Include="Quantum\Render\ShaderParticles.h" />
+    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="QuEntityPhysicsCollider.h" />
     <ClInclude Include="Quantum\Math\AABB.h" />
     <ClInclude Include="QuEntityPhysicsTriggerSphere.h" />
     <ClInclude Include="Quantum\Physics\Collide\PhysicsContactListener.h" />
     <ClInclude Include="Quantum\Physics\Internal\InternalCollisionAgents.h" />
+    <ClInclude Include="Quantum\Generate\MeteorGenerator.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="TextureBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

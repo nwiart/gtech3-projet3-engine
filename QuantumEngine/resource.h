@@ -5,6 +5,7 @@
 #define ID_SHADER_DEFAULT            101
 #define ID_SHADER_SKYBOX             102
 #define ID_SHADER_UI				 103
+#define ID_SHADER_PARTICLES          104
 
 // Next default values for new objects
 // 

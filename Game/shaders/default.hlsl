@@ -45,9 +45,7 @@ cbuffer cb_frameData : register(b2)
 	
     float4 PointLightPos[MAX_POINT_LIGHT];
     float4 PointLightColor[MAX_POINT_LIGHT];
-    float4 PointLightAttenuation[MAX_POINT_LIGHT];
-
-	
+    float4 PointLightAttenuation[MAX_POINT_LIGHT];	
 };
 
 Texture2D textureDiffuse : register(t0);
@@ -142,13 +140,14 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
     finalColor.rgb += pl;
 	
 	
+	// Environment mapping.
     float3 camToPixel = normalize(input.pixelWorldPos - cameraPos.xyz);
     float3 ref = reflect(camToPixel, normal);
     finalColor.rgb += textureSkybox.Sample(samplerLinear, ref).rgb * 0.6F;
 	
 	
 	// Fresnel.
-    float3 F = pow(1 - dot(normal, V), 3) * 0.4F;
+    float3 F = pow(1 - dot(normal, V), 2) * 0.4F;
 	finalColor.rgb += F;
 	
 

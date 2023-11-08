@@ -30,10 +30,11 @@ public:
 public:
 
 	void addRenderModel(class QuEntityRenderModel* model) { m_renderScene.addRenderModel(model); }
+	void addParticleEmitter(class QuEntityParticleEmitter* pe) { m_renderScene.addParticleEmitter(pe); }
 	void setCamera(class QuEntityCamera* camera) { m_renderScene.setCamera(camera); }
 	void setDirectionalLight(class QuEntityLightDirectional* dl) { m_renderScene.setDirectionalLight(dl); }
-	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
 	void addPointLight(class QuEntityLightPoint* pl) { m_renderScene.addPointLight(pl); }
+	void setSkybox(class QuEntityRenderSkybox* skybox) { m_renderScene.setSkybox(skybox); }
 
 
 	void renderFrame();
@@ -53,7 +54,7 @@ public:
 	void beginFrame();
 	void endFrame();
 	void swapBuffers();
-	void OnKeyDown(WPARAM wparam);
+
 
 
 	/// Initialization methods.
@@ -90,6 +91,8 @@ public:
 	inline UINT getCBVDescriptorSize() const { return cbvDescriptorSize; }
 
 	inline D3D12ResourceTransferUtility& getResourceTransferUtility() { return m_resourceTransferUtility; }
+
+	inline const RenderScene& getRenderScene() const { return m_renderScene; }
 
 	inline int getRenderWidth() const { return m_renderWidth; }
 	inline int getRenderHeight() const { return m_renderHeight; }
