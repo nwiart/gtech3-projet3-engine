@@ -21,7 +21,7 @@ void EntityParticleSmoke::UpdateParticles(const Timer& t)
 		siz->x = siz->y += t.getDeltaTime() * 1.4F;
 
 		// Fade in and out.
-		col->w = sin(this->getParticleLifetime(i) / 4.0F * DirectX::XM_PI);
+		col->w = sin(this->getParticleLifetime(i) / 4.0F * DirectX::XM_PI) * 0.6F;
 	}
 }
 

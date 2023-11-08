@@ -40,6 +40,8 @@ void ParticlesPass::init()
 
 	m_shader.init();
 
+	m_numTotalParticles = 0;
+
 
 	for (int i = 0; i < 1; ++i) {
 		g.getDevice()->CreateCommittedResource(
@@ -65,8 +67,16 @@ void ParticlesPass::addParticleEmitterData(QuEntityParticleEmitter* em)
 {
 	const QuEntityParticleEmitter* pem = em;
 
+	// Can't display anything, particles require a texture!
+	if (!em->getTexture()) {
+		return;
+	}
+
+	// Copy particle data.
 	ParticleInstanceData* data;
 	m_particleBuffers[0]->Map(0, 0, (void**) &data);
+
+	data += m_numTotalParticles;
 
 	for (int i = 0; i < em->getMaxParticles(); ++i) {
 		XMStoreFloat3(&data[i].position, XMLoadFloat4(pem->getParticlePositions() + i));
@@ -83,11 +93,13 @@ void ParticlesPass::addParticleEmitterData(QuEntityParticleEmitter* em)
 	m_particleBuffers[0]->Unmap(0, 0);
 
 
+	// Register a render batch.
 	Batch batch;
 	batch.m_numParticles = em->getMaxParticles();
-	batch.m_texture = em->getTexture() ? em->getTexture()->getTexture() : 0;
+	batch.m_texture = em->getTexture()->getTexture();
 
 	m_renderBatches.push_back(batch);
+	m_numTotalParticles += em->getMaxParticles();
 }
 
 void ParticlesPass::render(ID3D12GraphicsCommandList* cmdList)
@@ -138,5 +150,7 @@ void ParticlesPass::render(ID3D12GraphicsCommandList* cmdList)
 		numProcessedParticles += b.m_numParticles;
 	}
 
+	// Clean up.
 	m_renderBatches.clear();
+	m_numTotalParticles = 0;
 }

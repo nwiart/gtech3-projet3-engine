@@ -30,6 +30,9 @@ public:
 	inline Texture2D* getTexture() const { return m_texture; }
 	inline void setTexture(Texture2D* t) { m_texture = t; }
 
+	inline bool isEmitting() const { return m_emitting; }
+	inline void setEmitting(bool b) { m_emitting = b; }
+
 		/// Calculate the maximum number of particles that can exist at a time
 		/// from this emitter.
 	int getMaxParticles() const;
@@ -67,4 +70,7 @@ private:
 	int m_spawnIndex;
 
 	Texture2D* m_texture;
+
+		/// Is this particle system currently emitting particles?
+	bool m_emitting;
 };

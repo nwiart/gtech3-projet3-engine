@@ -11,6 +11,7 @@ using namespace DirectX;
 QuEntityParticleEmitter::QuEntityParticleEmitter(float lifeTime, float spawnRate)
 	: m_lifeTime(lifeTime), m_spawnRate(spawnRate)
 	, m_spawnTimer(0.0F), m_spawnIndex(0)
+	, m_emitting(true)
 {
 	int maxParticles = this->getMaxParticles();
 
@@ -32,11 +33,13 @@ QuEntityParticleEmitter::~QuEntityParticleEmitter()
 
 void QuEntityParticleEmitter::OnUpdate(const Timer& timer)
 {
-	m_spawnTimer += timer.getDeltaTime();
+	if (m_emitting) {
+		m_spawnTimer += timer.getDeltaTime();
 
-	while (m_spawnTimer >= m_spawnRate) {
-		m_spawnTimer -= m_spawnRate;
-		this->spawnParticle();
+		while (m_spawnTimer >= m_spawnRate) {
+			m_spawnTimer -= m_spawnRate;
+			this->spawnParticle();
+		}
 	}
 
 	this->UpdateParticles(timer);

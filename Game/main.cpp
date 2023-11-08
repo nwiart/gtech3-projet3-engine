@@ -87,16 +87,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
 		world->attachChild(ps);
 
-		
-		
-		QuEntityPhysicsCollider* pc = new QuEntityPhysicsCollider(0.1F, MOTION_DYNAMIC);
-		pc->applyImpulse(DirectX::XMVectorSet(0,0,-3,0));
-
-		EntityParticleSmoke* pe = new EntityParticleSmoke(&smoke);
-
-		pc->attachChild(pe);
-		world->attachChild(pc);
-
 
 		
 		// Spheres.
@@ -157,6 +147,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
+
+	// TODO : remove later
+	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
+	pe0->setPosition(DirectX::XMFLOAT3(-3, -1.0F, 3));
+	c->attachChild(pe0);
+	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
+	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
+	c->attachChild(pe1);
 
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);

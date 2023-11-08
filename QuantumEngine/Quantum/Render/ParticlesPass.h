@@ -37,6 +37,7 @@ private:
 	};
 
 	std::vector<Batch> m_renderBatches;
+	int m_numTotalParticles;
 
 
 	struct FrameData
