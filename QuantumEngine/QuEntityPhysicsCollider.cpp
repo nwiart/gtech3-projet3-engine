@@ -29,6 +29,16 @@ void QuEntityPhysicsCollider::applyImpulse(FXMVECTOR f)
 	}
 }
 
+void QuEntityPhysicsCollider::setPosition(FXMVECTOR f)
+{
+	XMFLOAT3 pos; XMStoreFloat3(&pos, f);
+	QuEntity::setPosition(pos);
+
+	if (m_rigidBody) {
+		m_rigidBody->setPosition(f);
+	}
+}
+
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {
@@ -50,9 +60,8 @@ void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 void QuEntityPhysicsCollider::OnUpdate(const Timer& timer)
 {
 	if (m_rigidBody) {
-		XMFLOAT3 pos;
-		XMStoreFloat3(&pos, XMLoadFloat4(&m_rigidBody->getPosition()));
-		this->setPosition(pos);
+		XMVECTOR v = XMLoadFloat4(&m_rigidBody->getPosition());
+		this->setPosition(v);
 	}
 }
 

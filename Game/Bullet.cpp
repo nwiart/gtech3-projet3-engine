@@ -14,8 +14,11 @@ void Bullet::OnUpdate(const Timer& timer)
 {
 	MoveBullet(timer.getDeltaTime());
 
-	if (this->GetTransform().getPosition().z > 100)
+	time += timer.getDeltaTime();
+
+	if (time > 5) {
 		this->Destroy(true);
+	}
 }
 
 void Bullet::OnSpawn(QuWorld* world)

@@ -17,6 +17,8 @@ public:
 
 	void applyImpulse(DirectX::FXMVECTOR f);
 
+	void setPosition(DirectX::FXMVECTOR f);
+
 
 	virtual void OnSpawn(QuWorld* world) final override;
 	virtual void OnUpdate(const Timer& timer) final override;

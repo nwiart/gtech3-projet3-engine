@@ -23,6 +23,8 @@ public:
 
 	inline PhysicsWorld* getPhysicsWorld() const { return m_physicsWorld; }
 
+	inline bool isOpen() const { return m_isOpen; }
+	inline void setOpen(bool b) { m_isOpen = b; }
 private:
 
 		/// Performs destroy on all entities marked for deletion.
@@ -33,5 +35,6 @@ private:
 
 	PhysicsWorld* m_physicsWorld;
 
+	bool m_isOpen;
 	std::vector<QuEntity*> m_markedForDelete;
 };

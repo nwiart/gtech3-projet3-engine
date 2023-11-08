@@ -41,11 +41,6 @@ void Shooting::InstantiateBullet() {
 	bullet->setRotation(rot);
 	getWorld()->attachChild(bullet);
 	bullet->Shoot();
-
-	QuEntity* e = this->getWorld()->findSubEntity<EntityController>();
-	if (e) {
-		e->Destroy(true);
-	}
 }
 
 void Shooting::CoolDown(float dt) {

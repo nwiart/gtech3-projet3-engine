@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Quantum\Generate\MeteorGenerator.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
     <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
@@ -71,6 +72,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Quantum\Generate\MeteorGenerator.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
     <ClInclude Include="Quantum\Generate\BoxGenerator.h" />

@@ -26,6 +26,7 @@
     <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="MyProgram.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shooting.cpp" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shooting.h" />
