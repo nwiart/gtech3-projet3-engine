@@ -23,7 +23,8 @@
 #include "QuEntityPhysicsCollider.h"
 
 #include "Quantum/UI/QuWidgetButton.h"
-#include "Quantum/UI/QuMainWidget.h"
+#include "Quantum/UI/QuWidgetText.h"
+#include "Quantum/UI/UIRenderer.h"
 
 #include "Quantum/Math/Math.h"
 
@@ -47,6 +48,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "stdafx.h"
+#include "Graphics.h"
 
 namespace qm = Quantum::Math;
 
@@ -78,8 +81,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	Texture2D awesome("textures/awesome.dds");
 	Texture2D smoke("textures/smoke.dds");
+	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
-
+	Texture2D buttonTexture("textures/button.dds");
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -177,18 +181,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Shooting* s = new Shooting();
 	c->attachChild(s);
 
+
+
+
 	QuWidget* Widget = new QuWidget();
 	Widget->SetSize(DirectX::XMFLOAT2(10, 10));
 	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
 
 	QuWidgetButton* button = new QuWidgetButton();
-	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f));
+	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f/4));
 	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
+	button->setTexture(&buttonTexture);
 
+	QuWidgetText* text = new QuWidgetText();
+	text->SetSize(DirectX::XMFLOAT2(1, 1));
+	text->SetPosition(DirectX::XMFLOAT2(50.f, 450.f));
+	text->SetText("QuantumEngine : made by you for you with you");
 
+	 
 
 
 	Widget->attachChild(button);
+	//Widget->attachChild(text);
 
 	
 	game.openWidget(Widget);

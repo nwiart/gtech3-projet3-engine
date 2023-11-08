@@ -29,8 +29,4 @@
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shaders\PointLightPixelShader.hlsl" />
-    <FxCompile Include="shaders\PointLightVertexShader.hlsl" />
-  </ItemGroup>
 </Project>

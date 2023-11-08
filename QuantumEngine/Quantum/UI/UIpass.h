@@ -18,7 +18,7 @@ public:
 
 	void setTexture(D3D12Texture* tex);
 
-	void renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix);
+	void renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix, UINT texture);
 	void renderText(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidgetText*>& list, UINT ObjectBase, UINT matrix, UINT texture);
 
 

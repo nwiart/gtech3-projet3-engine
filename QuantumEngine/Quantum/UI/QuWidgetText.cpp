@@ -22,14 +22,17 @@ void QuWidgetText::SetText(std::string text)
 	std::vector<textVertex> m_data;
 	for(char cara : m_text)
 	{
-		float X = m_data.size() * 32;
-		float u = (cara % 16) / 16.0F;
-		float v = (cara / 16) / 16.0F;
-		m_data.push_back({ { X, 0, 0 }, { u, v } });
-		m_data.push_back({ { X+32, 0, 0 }, { u + 1 / 16.0F, v } });
-		m_data.push_back({ { X, 64, 0 }, { u, v + 1 / 16.0F} });
-		m_data.push_back({ { X, 64, 0 }, { u, v + 1 / 16.0F} });
-		m_data.push_back({ { X+32, 0, 0 }, { u + 1 / 16.0F, v } });
+		unsigned char i = *((unsigned char*)&cara);
+
+		float X = m_data.size() / 6 * 32;
+		float u = (i % 16) / 16.0F;
+		float v = (i / 16) / 16.0F;
+
+		m_data.push_back({ { X,    0,  0 }, { u,             v } });
+		m_data.push_back({ { X+32, 0,  0 }, { u + 1 / 16.0F, v } });
+		m_data.push_back({ { X,    64, 0 }, { u,             v + 1 / 16.0F} });
+		m_data.push_back({ { X,    64, 0 }, { u,             v + 1 / 16.0F} });
+		m_data.push_back({ { X+32, 0,  0 }, { u + 1 / 16.0F, v } });
 		m_data.push_back({ { X+32, 64, 0 }, { u + 1 / 16.0F, v + 1 / 16.0F } });
 
 		numbOfVertices += 6;

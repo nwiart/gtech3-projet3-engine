@@ -1,8 +1,12 @@
 #include "UIRenderer.h"
 #include "Graphics.h"
 
+
+
 #include "QuWidgetText.h"
+#include "QuWidgetButton.h"
 #include "D3D12Texture.h"
+
 
 void UIRenderer::init()
 {
@@ -39,12 +43,19 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 
 
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(allWidget.size());
+	UINT cb_textureData_ID = g.allocateDescriptorTable(allWidget.size());
+
 	for (int i = 0; i < allWidget.size(); i++)
 	{
 		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbRectangleData.getDescriptor(i));
+		
+		if(dynamic_cast<QuWidgetButton*>(allWidget[i]))
+			g.setGlobalDescriptor(cb_textureData_ID + i, dynamic_cast<QuWidgetButton*>(allWidget[i])->GetTexture()->getTexture()->getShaderResourceView());
 	}
 
-	m_pass.renderRectangles(cmdList, allWidget, cb_objectData_IDbase, cb_matrix_IDbase);
+	
+
+	m_pass.renderRectangles(cmdList, allWidget, cb_objectData_IDbase, cb_matrix_IDbase, cb_textureData_ID);
 
 
 	cb_objectData_IDbase = g.allocateDescriptorTable(allWidgetText.size());
@@ -53,7 +64,6 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbRectangleData.getDescriptor(allWidget.size() + i));
 	}
 
-	UINT cb_textureData_ID = g.allocateDescriptorTable(1);
 	g.setGlobalDescriptor(cb_textureData_ID, m_UITexture->getShaderResourceView());
 
 	m_pass.renderText(cmdList, allWidgetText, cb_objectData_IDbase, cb_matrix_IDbase, cb_textureData_ID);
@@ -77,6 +87,8 @@ void UIRenderer::addWidget(QuWidget* widget)
 
 	if (dynamic_cast<QuWidgetText*>(widget))
 	{
+		rect.size = XMFLOAT2(1, 1);
+		renderRectangles.push_back(rect);
 		allWidgetText.push_back(dynamic_cast<QuWidgetText*>(widget));
 	}
 	else
@@ -90,5 +102,6 @@ void UIRenderer::addWidget(QuWidget* widget)
 void UIRenderer::updateObjectCB()
 {
 	m_cbCanvasData.update(0, m_matrix);
+
 	m_cbRectangleData.updateRange(0, renderRectangles.size(),renderRectangles.data());
 }

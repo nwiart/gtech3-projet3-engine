@@ -10,12 +10,12 @@
 #include "Graphics.h"
 
 static struct { float pos[3]; float uv[2]; } verts[] = {
-	{ {+1.0F, 0.F, 0.F} },
-	{ {0.F, 0.F, 0.F} },
-	{ {0.F, +1.0F, 0.0F} },
-	{ {+1.0F, +1.0F, 0.0F} },
-	{ {0.F, +1.0F, 0.0F} },
-	{ {+1.0F, 0.F, 0.0F} },
+	{ {+1.0F, 0.F, 0.F}, {1, 0} },
+	{ {0.F, 0.F, 0.F}, {0, 0} },
+	{ {0.F, +1.0F, 0.0F}, {0, 1} },
+	{ {+1.0F, +1.0F, 0.0F}, {1, 1} },
+	{ {0.F, +1.0F, 0.0F}, {0, 1} },
+	{ {+1.0F, 0.F, 0.0F}, {1, 0} },
 };
 
 
@@ -24,7 +24,7 @@ void UIpass::init()
 {
 	m_texture = 0;
 
-	m_boxVB.setData(verts, sizeof(verts), 3 * sizeof(float));
+	m_boxVB.setData(verts, sizeof(verts), 5 * sizeof(float));
 
 	m_shader.init();
 }
@@ -38,7 +38,7 @@ void UIpass::setTexture(D3D12Texture* tex)
 {
 }
 
-void UIpass::renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix)
+void UIpass::renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix, UINT texture)
 {
 	Graphics& g = Graphics::getInstance();
 
@@ -64,6 +64,10 @@ void UIpass::renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vec
 	// Draw.
 	for (int i = 0; i < list.size(); i++)
 	{
+		cmdList->SetGraphicsRootDescriptorTable(
+			1,
+			CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(),
+				texture + i, Graphics::getInstance().getCBVDescriptorSize()));
 
 		m_shader.setConstantBuffer(0, ObjectBase + i);
 

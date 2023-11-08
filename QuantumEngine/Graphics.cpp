@@ -7,6 +7,8 @@
 #include "QuEntityLightDirectional.h"
 #include "InputSystem.h"
 
+#include "resource.h"
+
 // Loading resources from the executable.
 void loadResource(std::string& out, UINT id)
 {
@@ -94,8 +96,12 @@ int Graphics::_init(Window* window)
 	spDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	d3dDevice->CreateDescriptorHeap(&spDesc, IID_PPV_ARGS(&m_samplerHeap));
 
+	char path[MAX_PATH];
+	LoadString(0, IDS_FONT_TEXTURE, path, MAX_PATH);
+
 	m_renderScene.init();
 	m_renderUI = new UIRenderer();
+	m_renderUI->initCharTexture(path);
 	m_renderUI->init();
 
 

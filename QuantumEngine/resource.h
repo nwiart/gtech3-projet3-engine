@@ -7,6 +7,8 @@
 #define ID_SHADER_UI				 103
 #define ID_SHADER_PARTICLES          104
 
+#define IDS_FONT_TEXTURE		     105
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

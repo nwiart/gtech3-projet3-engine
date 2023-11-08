@@ -1,8 +1,8 @@
 struct VS_INPUT
 {
-	float2 pos : POSITION;
+	float3 pos : POSITION;
 	float2 texCoord : TEXCOORD0;
-	uint4 color : COLOR;
+	//uint4 color : COLOR;
 };
 
 struct PS_INPUT
@@ -33,7 +33,7 @@ PS_INPUT vs_main(VS_INPUT input)
 {
 	PS_INPUT output;
 
-	output.pos = float4(input.pos, 0, 1.0F);
+	output.pos = float4(input.pos, 1.0F);
 
     output.pos.xy *= size;
     output.pos.xy += position;
@@ -41,7 +41,7 @@ PS_INPUT vs_main(VS_INPUT input)
 
 	output.texCoord = input.texCoord;
 
-	output.color = input.color / 255.0F;
+    output.color = float4(1, 1, 1, 1);//input.color / 255.0F;
 	
 	return output;
 }
@@ -53,6 +53,7 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
     finalColor = input.color;
 	float4 albedo = textureDiffuse.Sample(samplerLinear, input.texCoord);
 	
+    finalColor *= albedo;
 
 	return finalColor;
 }
