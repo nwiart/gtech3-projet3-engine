@@ -49,26 +49,28 @@ void QuEntity::AttachToParent(QuEntity* Parent)
 
 void QuEntity::DetachFromParent()
 {
-	QuEntity* PreviousChild = m_Parent->m_FirstChild;
-	if (m_Parent->m_FirstChild == this)
-	{
-		m_Parent->m_FirstChild = this->m_Sibling;
-		this->m_Sibling = NULL;
-		
-	}
-	else
-	{
-		while (this != PreviousChild->m_Sibling)
-		{
-			PreviousChild = PreviousChild->m_Sibling;
+	QuWorld* w = this->getWorld();
+
+	this->removeAllAttachments();
+	w->attachChild(this);
+}
+
+void QuEntity::Destroy(bool children)
+{
+	QuWorld* world = (QuWorld*) this->getWorld();
+	if (!world) return;
+
+	// Destroy children recursively.
+	if (children) {
+		for (QuEntity* c = this->m_FirstChild; c; c = c->m_Sibling) {
+			c->Destroy(children);
 		}
-		PreviousChild = this->m_Sibling;
-		this->m_Sibling = NULL;
 	}
 
-	this->m_Parent = NULL;
-	
+	// Mark this entity for deletion.
+	world->markForDeletion(this);
 }
+
 
 
 XMVECTOR QuEntity::getWorldPosition()
@@ -162,13 +164,13 @@ void QuEntity::updateWorldMatrix()
 	DirectX::XMStoreFloat4x4(&m_cachedWorldMatrix, res);
 }
 
-QuEntity* QuEntity::getWorld() {
+QuWorld* QuEntity::getWorld() const {
 	QuEntity* parent = this->m_Parent;
 	while (parent->m_Parent != NULL)
 	{
 		parent = parent->m_Parent;
 	}
-	return parent;
+	return dynamic_cast<QuWorld*>(parent);
 }
 
 void QuEntity::setDirtyWorldMatrix()
@@ -178,4 +180,26 @@ void QuEntity::setDirtyWorldMatrix()
 	for (QuEntity* c = m_FirstChild; c; c = c->m_Sibling) {
 		c->setDirtyWorldMatrix();
 	}
+}
+
+void QuEntity::removeAllAttachments()
+{
+	QuEntity* PreviousChild = m_Parent->m_FirstChild;
+
+	if (m_Parent->m_FirstChild == this)
+	{
+		m_Parent->m_FirstChild = this->m_Sibling;
+		this->m_Sibling = NULL;
+	}
+	else
+	{
+		while (this != PreviousChild->m_Sibling)
+		{
+			PreviousChild = PreviousChild->m_Sibling;
+		}
+		PreviousChild->m_Sibling = this->m_Sibling;
+		this->m_Sibling = NULL;
+	}
+
+	this->m_Parent = NULL;
 }
