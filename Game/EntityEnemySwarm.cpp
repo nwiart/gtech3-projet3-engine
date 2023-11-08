@@ -6,6 +6,7 @@
 #include "QuEntityPhysicsCollider.h"
 #include "EntityController.h"
 #include "Player.h"
+#include "QuWorld.h"
 #include "Timer.h"
 
 EntityEnemySwarm::EntityEnemySwarm()
