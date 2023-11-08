@@ -5,6 +5,8 @@
 
 #include "UIRenderer.h"
 
+#include "QuWidgetText.h"
+
 #include "Graphics.h"
 
 static struct { float pos[3]; float uv[2]; } verts[] = {
@@ -36,7 +38,7 @@ void UIpass::setTexture(D3D12Texture* tex)
 {
 }
 
-void UIpass::render(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix)
+void UIpass::renderRectangles(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidget*>& list, UINT ObjectBase, UINT matrix)
 {
 	Graphics& g = Graphics::getInstance();
 
@@ -66,5 +68,38 @@ void UIpass::render(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidg
 		m_shader.setConstantBuffer(0, ObjectBase + i);
 
 		cmdList->DrawInstanced(6, 1, 0, 0);
+	}
+}
+
+void UIpass::renderText(ID3D12GraphicsCommandList* cmdList, const std::vector<QuWidgetText*>& list, UINT ObjectBase, UINT matrix, UINT texture)
+{
+	Graphics& g = Graphics::getInstance();
+
+	// No texture bound.
+	//if (!m_textureCube) return;
+
+	// Bind shader data.
+	cmdList->SetPipelineState(m_shader.getPipelineStateObject());
+	cmdList->SetGraphicsRootSignature(m_shader.getRootSignature());
+
+	// Set texture atlas.
+	cmdList->SetGraphicsRootDescriptorTable(
+		1,
+		CD3DX12_GPU_DESCRIPTOR_HANDLE(Graphics::getInstance().getShaderVisibleCBVHeap()->GetGPUDescriptorHandleForHeapStart(), 
+			texture, Graphics::getInstance().getCBVDescriptorSize()));
+
+	m_shader.setConstantBuffer(1, matrix);
+
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Draw.
+	for (int i = 0; i < list.size(); i++)
+	{
+		// Bind model.
+		cmdList->IASetVertexBuffers(0, 1, &list[i]->GetVertexBuffer()->getVertexBufferView());
+
+		m_shader.setConstantBuffer(0, ObjectBase + i);
+
+		cmdList->DrawInstanced(list[i]->GetNumOfVertices(), 1, 0, 0);
 	}
 }

@@ -32,7 +32,7 @@ void QuWidgetText::SetText(std::string text)
 		m_data.push_back({ { X+32, 0, 0 }, { u + 1 / 16.0F, v } });
 		m_data.push_back({ { X+32, 64, 0 }, { u + 1 / 16.0F, v + 1 / 16.0F } });
 
-		numbOfVetices += 6;
+		numbOfVertices += 6;
 	}
 	m_vBuffer->setData(m_data.data(), m_data.size()*sizeof(textVertex), sizeof(textVertex));
 }

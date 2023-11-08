@@ -8,11 +8,13 @@
 #include"UIpass.h"
 
 class QuWidgetText;
+class D3D12Texture;
 
 class UIRenderer
 {
 public:
 	void init();
+	void initCharTexture(const char* path);
 	void destroy();
 
 	void render(ID3D12GraphicsCommandList* cmdList);
@@ -21,7 +23,10 @@ public:
 
 	void addWidget(QuWidget* widget);
 
+
 private:
+	D3D12Texture* m_UITexture;
+
 	UIpass m_pass;
 
 	struct CanvasConstantBuffer

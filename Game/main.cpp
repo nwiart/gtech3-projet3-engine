@@ -51,7 +51,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		return res;
 	}
 
-
 	// Load resources.
 	Model* sphere = new Model();
 	Model* box = new Model();
@@ -157,6 +156,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	QuWidgetButton* button = new QuWidgetButton();
 	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f));
 	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
+
+
 
 
 	Widget->attachChild(button);
