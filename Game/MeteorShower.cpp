@@ -15,7 +15,7 @@ void MeteorShower::OnUpdate(const Timer& timer)
 	{
 		if (m_meteors[i]->GetTransform().getPosition().z > 1000)
 		{
-			//m_meteors[i]->DetachFromParent();
+
 			m_meteors.erase(m_meteors.begin() + i);
 			m_axis.erase(m_axis.begin() + i);
 		}

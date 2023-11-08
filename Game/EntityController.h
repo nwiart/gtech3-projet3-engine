@@ -15,6 +15,11 @@ public:
 	virtual void OnSpawn(QuWorld* world) override;
 	virtual void OnUpdate(const Timer& timer) override;
 
+	void SetPosition(DirectX::XMVECTOR Position);
+	DirectX::XMVECTOR GetPosition();
+
+	DirectX::XMVECTOR m_Position;
+
 
 private:
 

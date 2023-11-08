@@ -30,6 +30,8 @@
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
 #include "MeteorShower.h"
+#include "EntityEnemySwarm.h"
+#include "Player.h"
 
 
 namespace qm = Quantum::Math;
@@ -52,17 +54,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 
-	// Load resources.
-	Model* sphere = new Model();
-	Model* box = new Model();
-	Model* capsule = new Model();
-
-	Quantum::SphereGenerator::generate(sphere);
-	Quantum::BoxGenerator::generate(box, 0.5f);
-	Quantum::CapsuleGenerator::generate(capsule);
-
 	TextureCube skyboxTexture("textures/milkyway.dds");
-
+	
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -81,25 +74,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
 		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
 		world->attachChild(ps);
+
+		MeteorShower* meteorShower = new MeteorShower();
+		world->attachChild(meteorShower);
+
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
+		world->attachChild(EnemySwarm);
 	}
 
-	MeteorShower* meteorShower = new MeteorShower();
-	world->attachChild(meteorShower);
-
-	// Test RB.
-	QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(3.5F, MOTION_STATIC);
-	physCol->setPosition(DirectX::XMVectorSet(0, 0, 10, 0));
-
-	QuEntityRenderModel* physModel = new QuEntityRenderModel();
-	physModel->SetModel(sphere);
-	physModel->setScale(DirectX::XMFLOAT3(7, 7, 7));
-
-	//EntityGravityField* gf = new EntityGravityField(8.0F);
-	//physCol->attachChild(gf);
-
-	physCol->attachChild(physModel);
-
-	world->attachChild(physCol);
 
 
 
@@ -107,6 +89,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
+
+
+	Player::SetEntityController(c);
 
 	Shooting* s = new Shooting();
 	c->attachChild(s);
