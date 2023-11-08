@@ -192,6 +192,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f/4));
 	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
 	button->setTexture(&buttonTexture);
+	button->createText("option");
 
 	QuWidgetText* text = new QuWidgetText();
 	text->SetSize(DirectX::XMFLOAT2(1, 1));
