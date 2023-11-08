@@ -7,6 +7,8 @@
 #include "Bullet.h"
 #include "Model.h"
 
+#include "QuWorld.h"
+
 Shooting::Shooting()
 {
 }
@@ -25,8 +27,10 @@ void Shooting::OnUpdate(const Timer& timer)
 	CoolDown(timer.getDeltaTime());
 }
 
+#include "EntityController.h"
 void Shooting::OnSpawn(QuWorld* world)
 {
+	
 }
 
 void Shooting::InstantiateBullet() {
@@ -37,6 +41,11 @@ void Shooting::InstantiateBullet() {
 	bullet->setRotation(rot);
 	getWorld()->attachChild(bullet);
 	bullet->Shoot();
+
+	QuEntity* e = this->getWorld()->findSubEntity<EntityController>();
+	if (e) {
+		e->Destroy(true);
+	}
 }
 
 void Shooting::CoolDown(float dt) {

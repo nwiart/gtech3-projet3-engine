@@ -49,10 +49,14 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
-		// TODO : fixed time step.
-		m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
+		if (m_world) {
+			m_world->deletePendingEntities();
 
-		visitEntity(m_world);
+			// TODO : fixed time step.
+			m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
+
+			visitEntity(m_world);
+		}
 
 		m_window.pollEvents();
 

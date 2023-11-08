@@ -17,3 +17,26 @@ QuWorld::~QuWorld()
 {
 	delete m_physicsWorld;
 }
+
+
+void QuWorld::markForDeletion(QuEntity* e)
+{
+	m_markedForDelete.push_back(e);
+}
+
+
+void QuWorld::deletePendingEntities()
+{
+	for (QuEntity* e : m_markedForDelete) {
+		// Move children up.
+		for (QuEntity* c = e->m_FirstChild; c; c = c->m_Sibling) {
+			c->AttachToParent(e->m_Parent);
+		}
+
+		e->removeAllAttachments();
+
+		delete e;
+	}
+
+	m_markedForDelete.clear();
+}
