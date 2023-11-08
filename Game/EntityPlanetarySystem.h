@@ -7,8 +7,7 @@
 class EntityPlanetarySystem : public QuEntity
 {
 public:
-
-	EntityPlanetarySystem(float parentRadius, float childDistance);
+	EntityPlanetarySystem(float parentRadius, float childDistance, int numberofChild);
 
 	virtual void OnSpawn(QuWorld* world) override;
 
@@ -22,4 +21,5 @@ private:
 	float m_parentRadius;
 	float m_childRadius;
 	float m_childDistance;
+	int m_numberofChild;
 };

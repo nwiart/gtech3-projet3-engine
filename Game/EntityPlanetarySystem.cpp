@@ -13,10 +13,11 @@ static Model* unitSphere = 0;
 
 
 
-EntityPlanetarySystem::EntityPlanetarySystem(float parentRadius, float childDistance)
+EntityPlanetarySystem::EntityPlanetarySystem(float parentRadius, float childDistance, int numberofChild)
 	: m_parentRadius(parentRadius)
-	, m_childRadius(1.0F)
-	, m_childDistance(childDistance)
+	, m_childRadius(parentRadius / 4)
+	, m_childDistance(childDistance + parentRadius)
+	, m_numberofChild(numberofChild)
 {
 	if (!unitSphere) {
 		unitSphere = new Model();
@@ -35,25 +36,14 @@ void EntityPlanetarySystem::OnSpawn(QuWorld* world)
 	m->SetModel(unitSphere);
 	this->attachChild(m);
 
-	m = new QuEntityRenderModel();
-	m->setPosition(DirectX::XMFLOAT3(0, 0, m_childDistance));
-	m->SetModel(unitSphere);
-	this->attachChild(m);
+	for (int i = 0; i < m_numberofChild; i++) {
+		m = new QuEntityRenderModel();
+		m->setScale(DirectX::XMFLOAT3(m_childRadius, m_childRadius, m_childRadius));
 
-	m = new QuEntityRenderModel();
-	m->setPosition(DirectX::XMFLOAT3(0, 0, -m_childDistance));
-	m->SetModel(unitSphere);
-	this->attachChild(m);
-
-	m = new QuEntityRenderModel();
-	m->setPosition(DirectX::XMFLOAT3(m_childDistance, 0, 0));
-	m->SetModel(unitSphere);
-	this->attachChild(m);
-
-	m = new QuEntityRenderModel();
-	m->setPosition(DirectX::XMFLOAT3(-m_childDistance, 0, 0));
-	m->SetModel(unitSphere);
-	this->attachChild(m);
+		m->setPosition(DirectX::XMFLOAT3(m_childDistance*Quantum::Math::randomInt(-1,1), 0, m_childDistance * Quantum::Math::randomInt(-1, 1)));
+		m->SetModel(unitSphere);
+		this->attachChild(m);
+	}
 }
 
 void EntityPlanetarySystem::OnUpdate(const Timer& timer)

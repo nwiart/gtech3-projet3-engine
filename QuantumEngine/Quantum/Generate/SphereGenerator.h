@@ -12,7 +12,7 @@ class SphereGenerator
 {
 public:
 
-	static void generate(Model* outModel, float radius = 0.5F);
+	static void generate(Model* outModel, float radius);
 
 private:
 };

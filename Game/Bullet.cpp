@@ -30,7 +30,7 @@ void Bullet::Shoot() {
 	alreadyShooting = true;
 
 	Model* sphere = new Model();
-	Quantum::SphereGenerator::generate(sphere);
+	Quantum::SphereGenerator::generate(sphere, 0.5);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);
