@@ -15,4 +15,5 @@ private:
 
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
+	float time = 0;
 };

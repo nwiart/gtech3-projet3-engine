@@ -96,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		for (int i = 0; i < 100; i++)
 		{
 			QuEntityPhysicsCollider* physCol = new QuEntityPhysicsCollider(0.5F, MOTION_DYNAMIC);
-			physCol->setPosition(DirectX::XMFLOAT3(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F)));
+			physCol->setPosition(DirectX::XMVectorSet(qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F), qm::randomFloat(-8.0F, 8.0F),0));
 			physCol->applyImpulse(DirectX::XMVectorSet(0, 0, 2, 0));
 
 			QuEntityRenderModel* model = new QuEntityRenderModel();
@@ -167,10 +167,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	Shooting* s = new Shooting();
 	c->attachChild(s);
-
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(1.0F);
-	c->attachChild(pointLight);
 
 	game.openWorld(world);
 
