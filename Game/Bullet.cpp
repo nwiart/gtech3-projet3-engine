@@ -15,7 +15,6 @@ void Bullet::OnUpdate(const Timer& timer)
 	MoveBullet(timer.getDeltaTime());
 
 	time += timer.getDeltaTime();
-
 	if (time > 5) {
 		this->Destroy(true);
 	}

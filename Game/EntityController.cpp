@@ -9,6 +9,8 @@
 #include "QuEntityRenderModel.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
 #include "Model.h"
+#include "Player.h"
+#include "QuEntityPhysicsCollider.h"
 
 using namespace DirectX;
 
@@ -49,6 +51,17 @@ void EntityController::OnSpawn(QuWorld* world)
 void EntityController::OnUpdate(const Timer& timer)
 {
 	UpdateCamera(timer.getDeltaTime());
+
+}
+
+void EntityController::SetPosition(DirectX::XMVECTOR Position)
+{
+	m_Position = Position;
+}
+
+DirectX::XMVECTOR EntityController::GetPosition()
+{
+	return m_Position;
 }
 
 void EntityController::UpdateCamera(float dt)

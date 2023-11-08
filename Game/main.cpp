@@ -31,6 +31,8 @@
 #include "EntityGravityAffected.h"
 #include "MeteorShower.h"
 #include "PlanetBackground.h"
+#include "EntityEnemySwarm.h"
+#include "Player.h"
 
 #include "EntityParticleSmoke.h"
 
@@ -71,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Texture2D awesome("textures/awesome.dds");
 	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
-
+	
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -142,6 +144,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	physCol->attachChild(physModel);
 
 	world->attachChild(physCol);
+		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
+		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
+		world->attachChild(ps);
+
+		MeteorShower* meteorShower = new MeteorShower();
+		world->attachChild(meteorShower);
+
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
+		world->attachChild(EnemySwarm);
+	}
+
 
 
 
@@ -162,12 +175,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
 	c->attachChild(pe1);
 
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(1.0F);
-	c->attachChild(pointLight);
+	Player::SetEntityController(c);
 
 	Shooting* s = new Shooting();
 	c->attachChild(s);
+
+	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
+	pointLight->setIntensity(1.0F);
+	c->attachChild(pointLight);
 
 	game.openWorld(world);
 
