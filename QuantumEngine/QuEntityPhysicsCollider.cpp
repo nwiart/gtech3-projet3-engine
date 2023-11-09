@@ -56,6 +56,16 @@ void QuEntityPhysicsCollider::setPosition(FXMVECTOR f)
 	}
 }
 
+void QuEntityPhysicsCollider::setRotation(FXMVECTOR f)
+{
+	XMFLOAT4 rot; XMStoreFloat4(&rot, f);
+	QuEntity::setRotation(rot);
+
+	if (m_rigidBody) {
+		m_rigidBody->setRotation(f);
+	}
+}
+
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {

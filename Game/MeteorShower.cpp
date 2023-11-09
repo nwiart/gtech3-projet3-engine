@@ -31,14 +31,13 @@ void MeteorShower::OnUpdate(const Timer& timer)
 {
 	for (im = 0; im < m_meteors.size(); im++)
 	{
-		XMFLOAT4 pos; XMStoreFloat4(&pos, m_meteors[im]->getWorldPosition());
-		if (pos.x > 1000 || pos.x < -1000 || pos.y > 1000 || pos.y < -1000 || pos.z > 1000 || pos.z < -1000)
+		//XMFLOAT4 pos; XMStoreFloat4(&pos, m_meteors[im]->getWorldPosition());
+		if (m_meteors[im]->GetTransform().getPosition().z > 1000)
 		{
 			m_meteors.erase(m_meteors.begin() + im);
 			m_axis.erase(m_axis.begin() + im);
 		}
 	}
-	std::cout << m_meteors.size() << std::endl;
 	if (m_meteors.size() < METEOR_COUNT)
 		SpawnMeteor();
 

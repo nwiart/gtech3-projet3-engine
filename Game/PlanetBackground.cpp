@@ -27,18 +27,18 @@ void PlanetBackground::OnSpawn(QuWorld* world)
 
 		EntityPlanetarySystem* planet = new EntityPlanetarySystem(radius, distance, childCount);
 
-		float posX = qm::randomFloat(-1000, 1000);
-		float posY = qm::randomFloat(-1000, 1000);
-		float posZ = qm::randomFloat(-1000, 1000);
+		float posX = qm::randomFloat(-2000, 2000);
+		float posY = qm::randomFloat(-2000, 2000);
+		float posZ = qm::randomFloat(-2000, 2000);
 
-		while (posX < 100 && posX > -100) {
-			posX = qm::randomFloat(-1000, 1000);
+		while (posX < 1000 && posX > -1000) {
+			posX = qm::randomFloat(-2000, 2000);
 		}
-		while (posY < 100 && posY > -100) {
-			posY = qm::randomFloat(-1000, 1000);
+		while (posY < 1000 && posY > -1000) {
+			posY = qm::randomFloat(-2000, 2000);
 		}
-		while (posZ < 100 && posZ > -100) {
-			posZ = qm::randomFloat(-1000, 1000);
+		while (posZ < 1000 && posZ > -1000) {
+			posZ = qm::randomFloat(-2000, 2000);
 		}
 
 		planet->setPosition(XMFLOAT3(posX, posY, posZ));
