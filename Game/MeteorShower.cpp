@@ -5,6 +5,7 @@
 #include "Quantum/Math/Math.h"
 #include "QuEntityPhysicsCollider.h"
 #include "QuWorld.h"
+#include "ResourceLibrary.h"
 #include "Player.h"
 
 
@@ -57,7 +58,9 @@ void MeteorShower::SpawnMeteor()
 	m_axis.push_back(axis);
 
 	Model* meteor = new Model();
-	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
+	meteor->setDefaultTexture(&ResourceLibrary::Get().asteroid);
+	meteor->setSpecularIntensity(0.0F);
+	float radius = Quantum::Math::randomFloat(1.F, 5.0F);
 	Quantum::MeteorGenerator::generate(meteor, radius, Quantum::Math::randomInt(5, 20), Quantum::Math::randomInt(5, 20));
 	MeteorCollider* meteorCollider = new MeteorCollider(radius);
 	

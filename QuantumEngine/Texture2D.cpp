@@ -5,7 +5,17 @@
 
 
 
+Texture2D::Texture2D()
+{
+
+}
+
 Texture2D::Texture2D(const char* filePath)
+{
+	this->load(filePath);
+}
+
+void Texture2D::load(const char* filePath)
 {
 	D3D12Texture* tex = new D3D12Texture();
 	tex->loadFromDisk(filePath, D3D12_SRV_DIMENSION_TEXTURE2D);

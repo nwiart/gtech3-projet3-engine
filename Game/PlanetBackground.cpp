@@ -20,12 +20,17 @@ void PlanetBackground::OnUpdate(const Timer& timer)
 
 void PlanetBackground::OnSpawn(QuWorld* world)
 {
-	for (int i = 0; i < 5; i++) {
+	texture.push_back(&ResourceLibrary::Get().neptune);
+	texture.push_back(&ResourceLibrary::Get().mercure);
+	texture.push_back(&ResourceLibrary::Get().asteroid);
+	texture.push_back(&ResourceLibrary::Get().mars);
+
+	for (int i = 0; i < 4; i++) {
 		float radius = qm::randomFloat(50, 200);
 		int distance = qm::randomInt(50, 100);
 		int childCount = qm::randomInt(0, 7);
 
-		EntityPlanetarySystem* planet = new EntityPlanetarySystem(radius, distance, childCount);
+		EntityPlanetarySystem* planet = new EntityPlanetarySystem(radius, distance, childCount, texture[i]);
 
 		float posX = qm::randomFloat(-2000, 2000);
 		float posY = qm::randomFloat(-2000, 2000);

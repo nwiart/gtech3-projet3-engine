@@ -27,6 +27,7 @@ void RenderScene::init()
 
 	m_cbFrameData.init();
 	m_cbObjectData.init(QU_RENDER_MAX_MESHES);
+	m_cbMaterialData.init(QU_RENDER_MAX_MESHES);
 
 	m_passScene.init();
 	m_passSkybox.init();
@@ -66,6 +67,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	for (int i = 0; i < renderList.size(); i++)
 	{
 		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbObjectData.getDescriptor(i));
+
+		g.setGlobalDescriptor(cb_materialData_ID + i * 3, m_cbMaterialData.getDescriptor(i));
 
 		// Set texture.
 		D3D12Texture* tex = &m_passScene.m_texture;
@@ -122,8 +125,12 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 	ObjectConstantBuffer cb;
 	XMStoreFloat4x4(&cb.world, worldMatrix);
 
+	MaterialConstantBuffer matCb;
+	matCb.specularIntensity = model->GetModel()->getSpecularIntensity();
+
 	renderList.push_back(renderModel);
 	renderWorldMatrices.push_back(cb);
+	renderMaterials.push_back(matCb);
 }
 
 void RenderScene::addParticleEmitter(QuEntityParticleEmitter* pe)
@@ -135,6 +142,7 @@ void RenderScene::freeRenderModel()
 {
 	renderList.clear();
 	renderWorldMatrices.clear();
+	renderMaterials.clear();
 	m_ListPointLight.clear();
 }
 
@@ -232,6 +240,7 @@ void RenderScene::updateFrameCB()
 void RenderScene::updateObjectCB()
 {
 	m_cbObjectData.updateRange(0, renderWorldMatrices.size(), renderWorldMatrices.data());
+	m_cbMaterialData.updateRange(0, renderMaterials.size(), renderMaterials.data());
 }
 
 XMMATRIX RenderScene::getViewMatrix() const

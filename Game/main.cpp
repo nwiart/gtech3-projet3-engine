@@ -37,6 +37,8 @@
 
 #include "EntityParticleSmoke.h"
 
+#include "ResourceLibrary.h"
+
 // Standard lib.
 #include <stdlib.h>
 #include <time.h>
@@ -73,7 +75,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
-	Texture2D smoke("textures/smoke.dds");
+	//Texture2D smoke("textures/smoke.dds");
 	Texture2D awesome("textures/awesome.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 
@@ -97,7 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(meteorShower);
 
 		//Spawn multiple enemy
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&ResourceLibrary::Get().smoke);
 		world->attachChild(EnemySwarm);
 
 		// Planet background.

@@ -66,6 +66,12 @@ public:
 
 private:
 
+	struct MaterialConstantBuffer
+	{
+		float specularIntensity;
+		char padding[256 - 4];
+	};
+
 	ScenePass m_passScene;
 	SkyboxPass m_passSkybox;
 	ParticlesPass m_passParticles;
@@ -76,6 +82,7 @@ private:
 		/// List of objects to render.
 	std::vector<RenderModel> renderList;
 	std::vector<ObjectConstantBuffer> renderWorldMatrices;
+	std::vector<MaterialConstantBuffer> renderMaterials;
 
 
 		/// Frame-invariant data (camera, view & projection, light sources...).
@@ -83,6 +90,8 @@ private:
 
 		/// Array of constant buffers for object transforms.
 	D3D12ConstantBuffer<ObjectConstantBuffer> m_cbObjectData;
+
+	D3D12ConstantBuffer<MaterialConstantBuffer> m_cbMaterialData;
 
 
 		/// Cached data to send to the constant buffer.

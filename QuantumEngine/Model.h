@@ -24,6 +24,9 @@ public:
 	inline Texture2D* getDefaultTexture() const { return m_defaultTexture; }
 	inline void setDefaultTexture(Texture2D* t) { m_defaultTexture = t; }
 
+	inline float getSpecularIntensity() const { return m_specularIntensity; }
+	inline void setSpecularIntensity(float f) { m_specularIntensity = f; }
+
 	inline const DirectX::XMFLOAT3& getDimensionsMin() const { return m_dimensionsMin; }
 	inline const DirectX::XMFLOAT3& getDimensionsMax() const { return m_dimensionsMax; }
 
@@ -39,6 +42,7 @@ private:
 	IndexBuffer* IB;
 
 	Texture2D* m_defaultTexture;
+	float m_specularIntensity;
 
 		/// Object-space AABB describing a rough bounding volume.
 		/// Used for culling and collisions.

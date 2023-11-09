@@ -3,7 +3,7 @@
 #include "QuEntityRenderModel.h"
 #include "QuEntityPhysicsCollider.h"
 #include <vector>
-#define METEOR_COUNT 50
+#define METEOR_COUNT 100
 
 
 class MeteorShower;

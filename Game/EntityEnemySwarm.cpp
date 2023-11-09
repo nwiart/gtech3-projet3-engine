@@ -69,5 +69,3 @@ void EntityEnemySwarm::UpdateDirection(XMVECTOR axis, int i , const Timer& timer
 	}
 	
 }
-
-
