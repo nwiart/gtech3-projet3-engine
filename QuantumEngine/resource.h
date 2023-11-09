@@ -9,7 +9,7 @@
 
 #define IDS_FONT_TEXTURE		     105
 
-#define ID_SHADER_PP_SUN             104
+#define ID_SHADER_PP_SUN             106
 
 // Next default values for new objects
 // 

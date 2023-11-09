@@ -91,6 +91,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 	Texture2D buttonTexture("textures/button.dds");
+	Texture2D smoke("textures/smoke.dds");
 
 	MainMenu* mainMenu = new MainMenu();
 	mainMenu->createMainMenu(buttonTexture);
