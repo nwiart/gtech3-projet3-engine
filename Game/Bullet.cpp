@@ -7,6 +7,7 @@
 
 #include "QuWorld.h"
 #include "EntityController.h"
+#include "ResourceLibrary.h"
 
 #include "QuEntityRenderModel.h"
 
@@ -40,11 +41,12 @@ void Bullet::Shoot() {
 	alreadyShooting = true;
 
 	Model* sphere = new Model();
+	sphere->setDefaultTexture(&ResourceLibrary::Get().metalic);
 	Quantum::SphereGenerator::generate(sphere, 1.0F);
 
 	BulletCollider* collider = new BulletCollider(this);
 	collider->setPosition(this->getWorldPosition());
-	collider->applyImpulse(this->getForwardVector() * 100 + m_sourceVelocity);
+	collider->applyImpulse(this->getForwardVector() * 500 + m_sourceVelocity);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);
