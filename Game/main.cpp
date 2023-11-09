@@ -116,7 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		world->attachChild(meteorShower);
 
 		//Spawn multiple enemy
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
 		world->attachChild(EnemySwarm);
 
 		// Planet background.

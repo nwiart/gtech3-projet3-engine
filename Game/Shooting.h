@@ -6,7 +6,11 @@ class Shooting : public QuEntity
 public:
 	Shooting();
 	void DetectShooting();
+
+	void EnemyShooting();
+
 	bool alreadyShooting = false;
+
 
 private:
 

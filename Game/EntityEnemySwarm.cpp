@@ -1,5 +1,5 @@
-#include "EntityEnemySwarm.h"
 #include "stdafx.h"
+#include "EntityEnemySwarm.h"
 #include "Quantum/Generate/BoxGenerator.h"
 #include "Model.h"
 #include "Quantum/Math/Math.h"
@@ -8,66 +8,156 @@
 #include "Player.h"
 #include "QuWorld.h"
 #include "Timer.h"
+#include "Shooting.h"
 
-EntityEnemySwarm::EntityEnemySwarm(Texture2D* tex)
+DirectX::XMVECTOR m_PlayerPosition;
+
+
+ShipCollider::ShipCollider(float radius )
+	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
 {
-	m_texture = tex;
+}
+
+void ShipCollider::onCollide(QuEntity* e)
+{
+	this->Destroy(true);
+
+}
+
+
+EntityEnemySwarm::EntityEnemySwarm()
+{
 	m_PlayerPosition = XMVectorSet(0, 0, 0, 0);
 }
 	
 void EntityEnemySwarm::OnUpdate(const Timer& timer)
 {
-	m_PlayerPosition = Player::GetEntityController()->getWorldPosition();
-
-	for (int i = 0; i < m_Ship.size(); i++)
-	{
-		XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, m_Collider[i]->getWorldPosition()));
-		UpdateDirection(dir, i, timer);
-		m_axis.push_back(dir);
-		if (m_Ship[i]->GetTransform().getPosition().z > 1000)
-		{
-			m_Ship.erase(m_Ship.begin() + i);
-			m_axis.erase(m_axis.begin() + i);
-			m_Collider.erase(m_Collider.begin() + 1);
-		}
-	}
-	if (m_Ship.size() < ENEMY_COUNT)
-		SpawnEntityEnemySwarm();
+	if (m_Enemy.size() < ENEMY_COUNT)
+		SpawnEntityEnemySwarm(timer);
 
 }
 
 void EntityEnemySwarm::OnSpawn(QuWorld* world)
 {
-}
-
-void EntityEnemySwarm::SpawnEntityEnemySwarm()
-{
-	XMVECTOR pos = XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0);
-	m_Pos.push_back(pos);
-	QuEntityRenderModel* EnemyShipEntity = new QuEntityRenderModel;
-	m_Ship.push_back(EnemyShipEntity);
-	Model* Ship = new Model();
-	Ship->setDefaultTexture(m_texture);
-	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
-	Quantum::BoxGenerator::generate(Ship, radius);
-	QuEntityPhysicsCollider* shipCollider = new QuEntityPhysicsCollider(radius, MOTION_DYNAMIC);
-	m_Collider.push_back(shipCollider);
 	
-	EnemyShipEntity->SetModel(Ship);
-	shipCollider->AttachToParent(getWorld());
-	EnemyShipEntity->AttachToParent(shipCollider);
-	shipCollider->setPosition(pos);
 }
 
-void EntityEnemySwarm::UpdateDirection(XMVECTOR axis, int i , const Timer& timer)
+void EntityEnemySwarm::SpawnEntityEnemySwarm(const Timer& timer)
 {
-	m_Collider[i]->applyImpulse(XMVectorMultiply(axis, XMVectorReplicate(timer.getDeltaTime())));
-
-	if (XMVectorGetX(XMVector3Length(m_Collider[i]->GetLinearVelocity())) > 10)
+	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		m_Collider[i]->setLinearVelocity(XMVector3Normalize(m_Collider[i]->GetLinearVelocity())*10);
+		Enemy* e = new Enemy();
+		getWorld()->attachChild(e);
+		m_Enemy.push_back(e);
+	}
+}
+
+void EntityEnemySwarm::UpdateDirection(XMVECTOR axis , const Timer& timer, ShipCollider* shipCollider)
+{
+	shipCollider->applyImpulse(XMVectorMultiply(axis, XMVectorReplicate(timer.getDeltaTime())));
+
+	if (XMVectorGetX(XMVector3Length(shipCollider->GetLinearVelocity())) > 10)
+	{
+		shipCollider->setLinearVelocity(XMVector3Normalize(shipCollider->GetLinearVelocity())*10);
 	}
 	
 }
 
+Enemy::Enemy()
+{
+	m_State = (EnemyState*) new StatePatrol();
+	
+}
 
+Enemy::~Enemy()
+{
+}
+
+void Enemy::OnUpdate(const Timer& timer)
+{
+	if(this->m_State != nullptr)
+	this->m_State->Update(timer, this);
+}
+
+void Enemy::OnSpawn(QuWorld* world)
+{
+	XMVECTOR pos = XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0);
+	QuEntityRenderModel* EnemyShipEntity = new QuEntityRenderModel;
+	Model* Ship = new Model();
+	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
+	Quantum::BoxGenerator::generate(Ship, radius);
+	m_collider = new ShipCollider(radius);
+	EnemyShipEntity->SetModel(Ship);
+	m_collider->AttachToParent(getWorld());
+	EnemyShipEntity->AttachToParent(m_collider);
+	m_collider->setPosition(pos);
+	
+}
+
+void EnemyState::Update(const Timer& timer, Enemy* e)
+{
+}
+
+
+StatePatrol::StatePatrol()
+{
+}
+
+StatePatrol::~StatePatrol()
+{
+}
+
+void StatePatrol::Update(const Timer& timer, Enemy* e)
+{
+	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
+	if ( XMVectorGetX(XMVector3Length( XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) > 100)
+	{
+		delete  e->m_State;
+		e->m_State = (EnemyState*) new StateCharge();
+	}
+}
+
+StateShoot::StateShoot()
+{
+}
+
+StateShoot::~StateShoot()
+{
+}
+
+void StateShoot::Update(const Timer& timer, Enemy* e)
+{
+	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
+	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
+
+	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 10)
+	{
+		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 10);
+	}	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
+	e->m_Shoot->EnemyShooting();
+
+}
+
+StateCharge::StateCharge()
+{
+}
+
+StateCharge::~StateCharge()
+{
+}
+
+void StateCharge::Update(const Timer& timer, Enemy* e)
+{
+	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
+	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
+
+	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 10)
+	{
+		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 10);
+	}	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
+	if (XMVectorGetX(XMVector3Length(XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) > 50)
+	{
+		delete  e->m_State;
+		e->m_State = (EnemyState*) new StateShoot();
+	}
+}
