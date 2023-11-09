@@ -1,6 +1,22 @@
 #pragma once
 
-#include "QuEntity.h"
+#include "QuEntityPhysicsCollider.h"
+
+
+class Bullet;
+
+class BulletCollider : public QuEntityPhysicsCollider
+{
+public:
+
+	BulletCollider(Bullet* b);
+
+	virtual void onCollide(QuEntity* e) override;
+
+private:
+
+	Bullet* m_bullet;
+};
 
 
 class Bullet : public QuEntity

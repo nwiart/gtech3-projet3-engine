@@ -19,6 +19,8 @@ public:
 
 	void setPosition(DirectX::FXMVECTOR f);
 
+	virtual void onCollide(QuEntity* e) { }
+
 
 	DirectX::XMVECTOR GetLinearVelocity();
 	void setLinearVelocity(DirectX::FXMVECTOR p);
@@ -32,6 +34,7 @@ private:
 
 	RigidBody* m_rigidBody;
 	PhysicsShape* m_shape;
+	class MyCollideListener* m_listener;
 
 	DirectX::XMFLOAT4 m_linearVelocity;
 

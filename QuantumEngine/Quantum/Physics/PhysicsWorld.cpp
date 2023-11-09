@@ -38,34 +38,48 @@ PhysicsWorld::PhysicsWorld(const PhysicsWorldCinfo& info)
 
 static bool response(RigidBody* rbA, RigidBody* rbB, bool lo, bool co)
 {
+	bool collide = false;
+
 	if (!rbB->isTrigger()) {
 		// Simple bounce, and re-evaluate positions.
 		if (co) {
-			return true;
-		}
-	}
-	else {
-		// Notify both bodies of collision.
-		if (lo != co) {
+			collide = true;
+
 			CollisionEvent rbe;
 			rbe.m_rigidBodyA = rbA;
 			rbe.m_rigidBodyB = rbB;
 
-			if (co) for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionAdded(rbe);
-			else    for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionRemoved(rbe);
+			for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionAdded(rbe);
 
 			CollisionEvent srbe;
 			srbe.m_rigidBodyA = rbB;
 			srbe.m_rigidBodyB = rbA;
 
-			if (co) for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionAdded(srbe);
-			else    for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionRemoved(srbe);
-
-			return true;
+			for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionAdded(srbe);
 		}
 	}
+	else {
+		// Notify both bodies of collision.
+		if (lo != co) {
+			collide = true;
+		}
 
-	return false;
+		CollisionEvent rbe;
+		rbe.m_rigidBodyA = rbA;
+		rbe.m_rigidBodyB = rbB;
+
+		if (co) for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionAdded(rbe);
+		else    for (PhysicsContactListener* l : rbA->getContactListeners()) l->onCollisionRemoved(rbe);
+
+		CollisionEvent srbe;
+		srbe.m_rigidBodyA = rbB;
+		srbe.m_rigidBodyB = rbA;
+
+		if (co) for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionAdded(srbe);
+		else    for (PhysicsContactListener* l : rbB->getContactListeners()) l->onCollisionRemoved(srbe);
+	}
+
+	return collide;
 }
 
 void PhysicsWorld::step(float deltaTime)
@@ -159,7 +173,14 @@ void PhysicsWorld::addRigidBody(RigidBody* rb)
 
 void PhysicsWorld::removeRigidBody(RigidBody* rb)
 {
+	if (rb->m_initiallyStatic) {
+		m_staticRigidBodies.erase(std::remove(m_staticRigidBodies.begin(), m_staticRigidBodies.end(), rb));
+	}
+	else {
+		m_dynamicRigidBodies.erase(std::remove(m_dynamicRigidBodies.begin(), m_dynamicRigidBodies.end(), rb));
+	}
 
+	rb->m_world = 0;
 }
 
 bool PhysicsWorld::rayCast(RayHitResult& outHit, DirectX::FXMVECTOR origin, DirectX::FXMVECTOR direction, float length)

@@ -5,8 +5,25 @@
 #include "Quantum/Physics/PhysicsWorld.h"
 #include "Quantum/Physics/RigidBody.h"
 #include "Quantum/Physics/Collide/PhysicsShapeSphere.h"
+#include "Quantum/Physics/Collide/PhysicsContactListener.h"
 
 using namespace DirectX;
+
+
+
+class MyCollideListener : public PhysicsContactListener
+{
+public:
+
+	virtual void onCollisionAdded(const CollisionEvent& event) override
+	{
+		QuEntityPhysicsCollider* myRb = reinterpret_cast<QuEntityPhysicsCollider*>(event.m_rigidBodyA->getUserData());
+		if (myRb) {
+
+			myRb->onCollide(reinterpret_cast<QuEntity*>(event.m_rigidBodyB->getUserData()));
+		}
+	}
+};
 
 
 
@@ -50,7 +67,9 @@ void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 	XMStoreFloat4(&info.m_position, XMLoadFloat3(&this->GetTransform().getPosition()));
 	m_rigidBody = new RigidBody(info);
 
+	m_listener = new MyCollideListener();
 	m_rigidBody->setUserData(this);
+	m_rigidBody->addContactListener(m_listener);
 
 	m_rigidBody->applyImpulse(XMLoadFloat4(&m_linearVelocity));
 
@@ -73,9 +92,11 @@ void QuEntityPhysicsCollider::OnDestroy(QuWorld* world)
 
 		delete m_rigidBody;
 		delete m_shape;
+		delete m_listener;
 
 		m_rigidBody = 0;
 		m_shape = 0;
+		m_listener = 0;
 	}
 }
 
