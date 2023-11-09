@@ -30,6 +30,8 @@ void QuWorld::markForDeletion(QuEntity* e)
 void QuWorld::deletePendingEntities()
 {
 	for (QuEntity* e : m_markedForDelete) {
+		e->OnDestroy(this);
+
 		// Move children up.
 		for (QuEntity* c = e->m_FirstChild; c; c = c->m_Sibling) {
 			c->AttachToParent(e->m_Parent);

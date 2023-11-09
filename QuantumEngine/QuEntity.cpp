@@ -9,6 +9,7 @@ using namespace DirectX;
 QuEntity::QuEntity()
 	: m_Parent(0), m_FirstChild(0), m_Sibling(0)
 	, m_dirtyWorldMatrix(true)
+	, m_markedForDeletion(false)
 {
 	//init to null
 }
@@ -28,6 +29,11 @@ void QuEntity::attachChild(QuEntity* child)
 	child->m_Parent = this;
 	child->m_Sibling = this->m_FirstChild;
 	this->m_FirstChild = child;
+
+	QuWorld* w = (QuWorld*)child->getWorld();
+	if (w && w->isOpen()) {
+		child->OnSpawn(w);
+	}
 }
 
 void QuEntity::AttachToParent(QuEntity* Parent)
@@ -58,7 +64,7 @@ void QuEntity::DetachFromParent()
 void QuEntity::Destroy(bool children)
 {
 	QuWorld* world = (QuWorld*) this->getWorld();
-	if (!world) return;
+	if (!world || m_markedForDeletion) return;
 
 	// Destroy children recursively.
 	if (children) {
@@ -68,6 +74,7 @@ void QuEntity::Destroy(bool children)
 	}
 
 	// Mark this entity for deletion.
+	m_markedForDeletion = true;
 	world->markForDeletion(this);
 }
 
@@ -165,7 +172,8 @@ void QuEntity::updateWorldMatrix()
 }
 
 QuWorld* QuEntity::getWorld() const {
-	QuEntity* parent = this->m_Parent;
+	QuEntity* parent = (QuEntity*) this;
+
 	while (parent->m_Parent != NULL)
 	{
 		parent = parent->m_Parent;
