@@ -13,15 +13,16 @@
 DirectX::XMVECTOR m_PlayerPosition;
 
 
-ShipCollider::ShipCollider(float radius )
+ShipCollider::ShipCollider(Enemy* e, float radius)
 	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
 {
+	m_enemy = e;
 }
 
 void ShipCollider::onCollide(QuEntity* e)
 {
 	this->Destroy(true);
-
+	m_enemy->Destroy(true);
 }
 
 
@@ -86,7 +87,7 @@ void Enemy::OnSpawn(QuWorld* world)
 	Model* Ship = new Model();
 	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
 	Quantum::BoxGenerator::generate(Ship, radius);
-	m_collider = new ShipCollider(radius);
+	m_collider = new ShipCollider(this, radius);
 	EnemyShipEntity->SetModel(Ship);
 	m_collider->AttachToParent(getWorld());
 	EnemyShipEntity->AttachToParent(m_collider);
@@ -133,8 +134,8 @@ void StateShoot::Update(const Timer& timer, Enemy* e)
 	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 10)
 	{
 		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 10);
-	}	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
-	e->m_Shoot->EnemyShooting();
+	}
+	e->m_Shoot->EnemyShooting(e->m_collider->GetLinearVelocity());
 
 }
 

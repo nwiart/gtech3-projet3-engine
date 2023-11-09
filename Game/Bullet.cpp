@@ -47,7 +47,7 @@ void Bullet::Shoot() {
 
 	BulletCollider* collider = new BulletCollider(this);
 	collider->setPosition(this->getWorldPosition());
-	collider->applyImpulse(this->getForwardVector() * 100);
+	collider->applyImpulse(this->getForwardVector() * 100 + m_sourceVelocity);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);

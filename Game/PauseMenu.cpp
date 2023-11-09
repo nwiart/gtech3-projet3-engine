@@ -35,6 +35,13 @@ void PauseMenu::createPauseMenu(Texture2D& buttonTexture)
 	Exit->setTexture(&buttonTexture);
 	Exit->createText("Exit");
 	this->attachChild(Exit);
+
+
+	Crosshair = new QuWidgetButton();
+	Crosshair->SetSize(DirectX::XMFLOAT2(128.0F, 64.0F));
+	Crosshair->SetPosition(DirectX::XMFLOAT2(alignCenter(Crosshair->GetSize().x, Game::getInstance().getRenderWidth()), 500.f));
+	Crosshair->setTexture(new Texture2D("textures/crosshair.dds"));
+	this->attachChild(Crosshair);
 }
 
 void PauseMenu::onButtonResume(int x, int y)

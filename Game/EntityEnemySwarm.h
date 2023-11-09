@@ -64,11 +64,13 @@ private:
 class ShipCollider : public QuEntityPhysicsCollider
 {
 public:
-	ShipCollider(float r);
+	ShipCollider(Enemy* e, float r);
 
 	virtual void onCollide(QuEntity* e) override;
 	
 private:
+
+	Enemy* m_enemy;
 };
 
 

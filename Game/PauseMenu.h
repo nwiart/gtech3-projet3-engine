@@ -19,5 +19,6 @@ private:
 	QuWidgetButton* Resume;
 	QuWidgetButton* Exit;
 
+	QuWidgetButton* Crosshair;
 };
 

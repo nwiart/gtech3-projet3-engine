@@ -98,6 +98,8 @@ void EntityController::OnUpdate(const Timer& timer)
 		}
 	}
 	UpdateCamera(timer.getDeltaTime());
+
+	shooting->DetectShooting(controllerCollider->GetLinearVelocity());
 }
 
 QuEntityPhysicsCollider* EntityController::GetCollider()
