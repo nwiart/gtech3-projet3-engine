@@ -86,12 +86,16 @@ void Enemy::OnUpdate(const Timer& timer)
 	if(this->m_State != nullptr)
 	this->m_State->Update(timer, this);
 
-	XMVECTOR q = XMQuaternionRotationAxis(
-		XMVector3Normalize(XMVector3Cross(XMVectorSet(0, 0, 1, 0), m_collider->GetLinearVelocity())),
-		acos(XMVectorGetX(XMVector3Dot(XMVector3Normalize(m_collider->GetLinearVelocity()), XMVectorSet(0, 0, 1, 0))))
-	);
-	XMFLOAT4 fq; XMStoreFloat4(&fq, q);
-	this->m_collider->setRotation(q);
+	XMVECTOR axis = XMVector3Cross(XMVectorSet(0, 0, 1, 0), m_collider->GetLinearVelocity());
+	if (!XMVector3Equal(axis, XMVectorZero()))
+	{
+		XMVECTOR q = XMQuaternionRotationAxis(
+			XMVector3Normalize(axis),
+			acos(XMVectorGetX(XMVector3Dot(XMVector3Normalize(m_collider->GetLinearVelocity()), XMVectorSet(0, 0, 1, 0))))
+		);
+		XMFLOAT4 fq; XMStoreFloat4(&fq, q);
+		this->m_collider->setRotation(q);
+	}
 }
 
 void Enemy::OnSpawn(QuWorld* world)
@@ -169,11 +173,14 @@ StatePatrol::~StatePatrol()
 
 void StatePatrol::Update(const Timer& timer, Enemy* e)
 {
-	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
-	if ( XMVectorGetX(XMVector3Length( XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) > 100)
+	XMVECTOR playerPos = Player::GetEntityController()->controllerCollider->getWorldPosition();
+	XMVECTOR enemyPos = e->m_collider->getWorldPosition();
+
+	//e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
+	if (XMVectorGetX(XMVector3Length( XMVectorSubtract(enemyPos, playerPos))) < 300.0F)
 	{
-		delete  e->m_State;
-		e->m_State = (EnemyState*) new StateCharge();
+		delete e->m_State;
+		e->m_State = new StateCharge();
 	}
 }
 
@@ -208,10 +215,13 @@ StateCharge::~StateCharge()
 
 void StateCharge::Update(const Timer& timer, Enemy* e)
 {
-	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
-	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
+	XMVECTOR playerPos = Player::GetEntityController()->controllerCollider->getWorldPosition();
+	XMVECTOR enemyPos = e->m_collider->getWorldPosition();
 
-	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 10)
+	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(playerPos, enemyPos));
+	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime() * 10.0F)));
+
+	/*if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 10)
 	{
 		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 10);
 	}	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
@@ -219,5 +229,5 @@ void StateCharge::Update(const Timer& timer, Enemy* e)
 	{
 		delete  e->m_State;
 		e->m_State = (EnemyState*) new StateShoot();
-	}
+	}*/
 }
