@@ -136,22 +136,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	c->attachChild(pointLight);
 
 
-	/*
-	QuWidget* Widget = new QuWidget();
-	Widget->SetSize(DirectX::XMFLOAT2(10, 10));
-	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
 
-	QuWidgetButton* button = new QuWidgetButton();
-	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f/4));
-	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
-	button->setTexture(&buttonTexture);
-	button->createText("option");
-
-	QuWidgetText* text = new QuWidgetText();
-	text->SetSize(DirectX::XMFLOAT2(1, 1));
-	text->SetPosition(DirectX::XMFLOAT2(50.f, 450.f));
-	text->SetText("QuantumEngine : made by you for you with you");
-	*/
 	
 	//MainMenu* mainMenu = new MainMenu();
 	//mainMenu->createMainMenu(buttonTexture);
