@@ -30,6 +30,7 @@
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
 #include "MeteorShower.h"
+#include "PlanetBackground.h"
 #include "EntityEnemySwarm.h"
 #include "Player.h"
 
@@ -57,7 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Game& game = Game::getInstance();
 
 	int res = game.init();
-	if ( res != 0 ) {
+	if (res != 0) {
 		return res;
 	}
 
@@ -67,14 +68,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Model* box = new Model();
 	Model* capsule = new Model();
 
-	Quantum::SphereGenerator::generate(sphere);
+	Quantum::SphereGenerator::generate(sphere, 0.5);
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
 	Texture2D awesome("textures/awesome.dds");
-	Texture2D smoke("textures/smoke.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
-	
+
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -90,44 +90,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
 
-		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
-		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
-		world->attachChild(ps);
-
+		//Spawn asteroid
 		MeteorShower* meteorShower = new MeteorShower();
 		world->attachChild(meteorShower);
 
+		//Spawn multiple enemy
 		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
 		world->attachChild(EnemySwarm);
+
+		// Planet background.
+		PlanetBackground* planetBackground = new PlanetBackground();
+		world->attachChild(planetBackground);
 	}
-
-
-
 
 	// Player controller.
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
 
-	// TODO : remove later
-	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
-	pe0->setPosition(DirectX::XMFLOAT3(-3, -1.0F, 3));
-	c->attachChild(pe0);
-	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
-	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
-	c->attachChild(pe1);
-
 	Player::SetEntityController(c);
-
-	Shooting* s = new Shooting();
-	c->attachChild(s);
 
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
 
 	game.openWorld(world);
-
 
 	game.mainLoop();
 

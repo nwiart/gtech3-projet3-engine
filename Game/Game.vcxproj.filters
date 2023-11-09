@@ -13,6 +13,7 @@
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="EntityEnemySwarm.cpp" />
     <ClCompile Include="EntityParticleSmoke.cpp" />
+    <ClCompile Include="PlanetBackground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -28,5 +29,6 @@
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityEnemySwarm.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
+    <ClInclude Include="PlanetBackground.h" />
   </ItemGroup>
 </Project>

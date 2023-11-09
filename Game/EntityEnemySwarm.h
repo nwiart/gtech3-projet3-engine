@@ -3,7 +3,7 @@
 #include "QuEntityRenderModel.h"
 #include "QuEntityPhysicsCollider.h"
 #include <vector>
-#define ENEMY_COUNT 200
+#define ENEMY_COUNT 5
 
 class Texture2D;
 

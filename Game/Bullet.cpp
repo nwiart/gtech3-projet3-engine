@@ -10,12 +10,26 @@
 #include "QuEntityRenderModel.h"
 
 
+BulletCollider::BulletCollider(Bullet* b): QuEntityPhysicsCollider(0.25F, MOTION_DYNAMIC), m_bullet(b)
+{
+
+}
+
+void BulletCollider::onCollide(QuEntity* e)
+{
+	m_bullet->Destroy(true);
+	this->Destroy(true);
+}
+
+
 void Bullet::OnUpdate(const Timer& timer)
 {
-	MoveBullet(timer.getDeltaTime());
+	//MoveBullet(timer.getDeltaTime());
 
 	time += timer.getDeltaTime();
-	if (time > 5) {
+
+
+	if (time > 50) {
 		this->Destroy(true);
 	}
 }
@@ -29,22 +43,17 @@ void Bullet::Shoot() {
 	alreadyShooting = true;
 
 	Model* sphere = new Model();
-	Quantum::SphereGenerator::generate(sphere);
+	Quantum::SphereGenerator::generate(sphere, 1.0F);
+
+	BulletCollider* collider = new BulletCollider(this);
+	collider->setPosition(this->getWorldPosition());
+	collider->applyImpulse(this->getForwardVector() * 100);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);
-	sphereEntity->setScale(XMFLOAT3(0.5f, 0.5f, 0.5f));
-	this->attachChild(sphereEntity);
+	sphereEntity->setScale(XMFLOAT3(0.25f, 0.25f, 0.25f));
+
+	getWorld()->attachChild(collider);
+	collider->attachChild(sphereEntity);
 }
 
-void Bullet::MoveBullet(float dt) {
-	XMVECTOR vectForward = this->getForwardVector();
-	XMVECTOR pos = XMLoadFloat3(&this->GetTransform().getPosition());
-
-	pos += vectForward * dt * 100;
-
-	XMFLOAT3 fpos;
-	XMStoreFloat3(&fpos, pos);
-
-	this->setPosition(fpos);
-}
