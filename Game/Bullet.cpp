@@ -37,12 +37,16 @@ void Bullet::OnSpawn(QuWorld* world)
 	this->Shoot();
 }
 
+static Model* sphere = 0;
+
 void Bullet::Shoot() {
 	alreadyShooting = true;
 
-	Model* sphere = new Model();
-	sphere->setDefaultTexture(&ResourceLibrary::Get().metalic);
-	Quantum::SphereGenerator::generate(sphere, 1.0F);
+	if (!sphere) {
+		sphere = new Model();
+		sphere->setDefaultTexture(&ResourceLibrary::Get().metalic);
+		Quantum::SphereGenerator::generate(sphere, 1.0F);
+	}
 
 	BulletCollider* collider = new BulletCollider(this);
 	collider->setPosition(this->getWorldPosition());
