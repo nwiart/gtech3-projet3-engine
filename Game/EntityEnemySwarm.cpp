@@ -123,6 +123,9 @@ void Enemy::OnSpawn(QuWorld* world)
 	m_collider->setPosition(XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0));
 	world->attachChild(m_collider);
 
+	m_Shoot = new Shooting();
+	m_collider->attachChild(m_Shoot);
+
 	QuEntityRenderModel* modelShipBody = new QuEntityRenderModel;
 	modelShipBody->SetModel(shipBody);
 	modelShipBody->setScale(XMFLOAT3(4.0F, 4.0F, 4.0F));
@@ -231,5 +234,5 @@ void StateCharge::Update(const Timer& timer, Enemy* e)
 	{
 		delete  e->m_State;
 		e->m_State = (EnemyState*) new StateShoot();
-	}*/
+	}
 }

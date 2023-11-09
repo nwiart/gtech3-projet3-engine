@@ -250,7 +250,7 @@ XMMATRIX RenderScene::getViewMatrix() const
 
 XMMATRIX RenderScene::getProjectionMatrix() const
 {
-	return XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 3000.0F));
+	return XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(cameraFOV), cameraAspect, 0.05F, 5000.0F));
 }
 
 
