@@ -13,6 +13,7 @@
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -28,5 +29,6 @@
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="PauseMenu.h" />
   </ItemGroup>
 </Project>

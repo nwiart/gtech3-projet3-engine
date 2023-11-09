@@ -21,6 +21,8 @@ public:
 	int init();
 	void shutdown();
 
+	void mainMenuLoop();
+
 	void mainLoop();
 
 	void openWorld(QuWorld* world);

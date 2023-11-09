@@ -29,6 +29,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="MyProgram.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shooting.cpp" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shooting.h" />
     <ClInclude Include="EntityGravityAffected.h" />

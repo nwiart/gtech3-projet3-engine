@@ -12,7 +12,6 @@ MainMenu::MainMenu()
 
 void MainMenu::createMainMenu(Texture2D& buttonTexture)
 {
-	
 	std::string textTilte = "A Game Made By Quantum Engine";
 	Title->SetPosition(DirectX::XMFLOAT2(alignCenter(textTilte.size() * 32, Game::getInstance().getRenderWidth()), 100.f));
 	Title->SetText(textTilte);

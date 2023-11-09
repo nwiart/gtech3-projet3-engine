@@ -52,6 +52,7 @@
 #include "Graphics.h"
 
 #include "MainMenu.h"
+#include "PauseMenu.h"
 
 namespace qm = Quantum::Math;
 
@@ -86,6 +87,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
 	Texture2D buttonTexture("textures/button.dds");
+
+	MainMenu* mainMenu = new MainMenu();
+	mainMenu->createMainMenu(buttonTexture);
+	game.openWidget(mainMenu);
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -203,14 +208,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	text->SetText("QuantumEngine : made by you for you with you");
 	*/
 	
-	MainMenu* mainMenu = new MainMenu();
-	mainMenu->createMainMenu(buttonTexture);
+	//MainMenu* mainMenu = new MainMenu();
+	//mainMenu->createMainMenu(buttonTexture);
+
+	PauseMenu* Pmenu = new PauseMenu();
+	Pmenu->createPauseMenu(buttonTexture);
 
 
 	//Widget->attachChild(text);
 
 	
-	game.openWidget(mainMenu);
+	game.openWidget(Pmenu);
 
 	game.openWorld(world);
 

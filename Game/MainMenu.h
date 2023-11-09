@@ -12,7 +12,7 @@ public:
 	void createMainMenu(Texture2D& buttonTexture);
 	void onButtonPlay(int x, int y);
 	void onButtonExit(int x, int y);
-	float MainMenu::alignCenter(float objectTo, float objectIn);
+	float alignCenter(float objectTo, float objectIn);
 
 
 private:
