@@ -28,6 +28,7 @@ public :
 	QuEntityPhysicsCollider* GetCollider();
 
 private:
+	float time = 0;
 	std::vector <QuEntityPhysicsCollider*> m_meteors;
 	std::vector <DirectX::XMFLOAT3> m_axis;
 };
