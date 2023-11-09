@@ -50,7 +50,9 @@
     <ClCompile Include="Quantum\Render\RenderScene.cpp" />
     <ClCompile Include="Quantum\Render\ShaderParticles.cpp" />
     <ClCompile Include="Quantum\Render\ShaderSkybox.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderSun.cpp" />
     <ClCompile Include="Quantum\Render\SkyboxPass.cpp" />
+    <ClCompile Include="Quantum\Render\SunPass.cpp" />
     <ClCompile Include="Quantum\Types\Color.cpp" />
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityCamera.cpp" />
@@ -96,6 +98,8 @@
     <ClInclude Include="Quantum\Physics\RigidBody.h" />
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
     <ClInclude Include="Quantum\Render\ShaderParticles.h" />
+    <ClInclude Include="Quantum\Render\ShaderSun.h" />
+    <ClInclude Include="Quantum\Render\SunPass.h" />
     <ClInclude Include="QuEntityCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />

@@ -31,6 +31,8 @@ void RenderScene::init()
 	m_passScene.init();
 	m_passSkybox.init();
 	m_passParticles.init();
+
+	m_passSun.init();
 }
 
 void RenderScene::destroy()
@@ -84,6 +86,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	m_passSkybox.render(cmdList, cb_frameData_ID);
 
 	m_passParticles.render(cmdList);
+
+	m_passSun.render(cmdList);
 
 
 	// Clear model list.

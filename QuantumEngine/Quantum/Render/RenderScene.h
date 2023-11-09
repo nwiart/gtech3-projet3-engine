@@ -8,6 +8,7 @@
 #include "Quantum/Render/ScenePass.h"
 #include "Quantum/Render/SkyboxPass.h"
 #include "Quantum/Render/ParticlesPass.h"
+#include "Quantum/Render/SunPass.h"
 
 #include "Quantum/Render/RenderModel.h"
 
@@ -68,6 +69,8 @@ private:
 	ScenePass m_passScene;
 	SkyboxPass m_passSkybox;
 	ParticlesPass m_passParticles;
+
+	SunPass m_passSun;
 
 
 		/// List of objects to render.
