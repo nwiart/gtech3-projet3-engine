@@ -46,8 +46,6 @@
     <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="EntityEnemySwarm.h" />
-    <ClInclude Include="MeteorShower.h" />
-    <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="PlanetBackground.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shooting.h" />
