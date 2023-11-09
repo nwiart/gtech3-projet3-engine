@@ -18,6 +18,9 @@
 #include "EntityParticleSmoke.h"
 #include "ResourceLibrary.h"
 
+
+#include "PauseMenu.h"
+
 using namespace DirectX;
 
 EntityController::EntityController()
@@ -105,6 +108,16 @@ void EntityController::OnUpdate(const Timer& timer)
 	UpdateCamera(timer.getDeltaTime());
 
 	shooting->DetectShooting(controllerCollider->GetLinearVelocity());
+
+	if (!timer.IsPause()) 
+	{
+		if (InputSystem::Get().isKeyDown(VK_ESCAPE)) 
+		{
+			PauseMenu* Pmenu = new PauseMenu();
+			Pmenu->createPauseMenu(ResourceLibrary::Get().button);
+			Game::getInstance().openWidget(Pmenu);
+		}
+	}
 }
 
 QuEntityPhysicsCollider* EntityController::GetCollider()

@@ -19,6 +19,8 @@ public:
 
 	inline double getDeltaTime() const { return m_deltaTime; };
 
+	inline bool IsPause() const { return m_paused; }
+
 	
 private:
 

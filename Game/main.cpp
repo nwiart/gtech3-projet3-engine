@@ -123,8 +123,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	text->SetText("QuantumEngine : made by you for you with you");
 	*/
 	
-	//MainMenu* mainMenu = new MainMenu();
-	//mainMenu->createMainMenu(buttonTexture);
 
 	//PauseMenu* Pmenu = new PauseMenu();
 	//Pmenu->createPauseMenu(ResourceLibrary::Get().button);
@@ -133,6 +131,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//Widget->attachChild(text);
 
 	
+	//MainMenu* mainMenu = new MainMenu();
+	//mainMenu->createMainMenu(buttonTexture);
 	//game.openWidget(Pmenu);
 
 
