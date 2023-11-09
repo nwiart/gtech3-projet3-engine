@@ -10,7 +10,7 @@ HUDGame::HUDGame()
 
 void HUDGame::createHUD()
 {
-	int m_scoreValue = 0;
+	m_scoreValue = 0;
 	scoreText = std::to_string(m_scoreValue);
 	score = new QuWidgetText();
 	score->SetPosition(DirectX::XMFLOAT2(alignCenter(scoreText.size() * 32, Game::getInstance().getRenderWidth()), 0.f));
@@ -33,6 +33,6 @@ float HUDGame::alignCenter(float objectTo, float objectIn)
 void HUDGame::setScore(int scoreValue)
 {
 	m_scoreValue += scoreValue;
-	scoreText = std::to_string(scoreValue);
+	scoreText = std::to_string(m_scoreValue);
 	score->SetText(scoreText);
 }
