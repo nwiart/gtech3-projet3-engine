@@ -12,7 +12,7 @@ namespace Quantum
 	{
 	public:
 
-		static void generate(Model* outModel, float size);
+		static void generate(Model* outModel, DirectX::FXMVECTOR halfSize);
 
 	private:
 	};

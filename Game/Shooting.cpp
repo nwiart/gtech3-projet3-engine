@@ -13,32 +13,37 @@ Shooting::Shooting()
 {
 }
 
-void Shooting::DetectShooting()
+void Shooting::DetectShooting(DirectX::FXMVECTOR addedVelocity)
 {
 	if (InputSystem::Get().isMouseDown(1) && !alreadyShooting) {
 		alreadyShooting = true;
-		InstantiateBullet();
+		InstantiateBullet(addedVelocity);
 	}
+}
+void Shooting::EnemyShooting(DirectX::FXMVECTOR addedVelocity)
+{
+		alreadyShooting = true;
+		InstantiateBullet(addedVelocity);
+	
 }
 
 void Shooting::OnUpdate(const Timer& timer)
 {
-	DetectShooting();
 	CoolDown(timer.getDeltaTime());
 }
 
-#include "EntityController.h"
 void Shooting::OnSpawn(QuWorld* world)
 {
 	
 }
 
-void Shooting::InstantiateBullet() {
+void Shooting::InstantiateBullet(DirectX::FXMVECTOR addedVelocity) {
 	Bullet* bullet = new Bullet;
 	XMFLOAT3 pos; XMStoreFloat3(&pos, getWorldPosition());
 	bullet->setPosition(pos);
 	XMFLOAT4 rot; XMStoreFloat4(&rot, getWorldRotation());
 	bullet->setRotation(rot);
+	bullet->setSourceVelocity(addedVelocity);
 	getWorld()->attachChild(bullet);
 }
 

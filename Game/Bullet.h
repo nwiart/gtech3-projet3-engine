@@ -23,13 +23,16 @@ class Bullet : public QuEntity
 {
 public:
 	void Shoot();
+	inline void setSourceVelocity(DirectX::FXMVECTOR vel) { m_sourceVelocity = vel; }
 
 private:
-	void MoveBullet(float dt);
 
 	bool alreadyShooting = false;
 
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
 	float time = 0;
+
+
+	DirectX::XMVECTOR m_sourceVelocity;
 };

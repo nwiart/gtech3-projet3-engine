@@ -27,9 +27,8 @@ cbuffer cb_objectData : register(b0)
 
 cbuffer cb_materialData : register(b1)
 {
-	float4 albedo;
+    float specularIntensity;
 	float specularPower;
-	float specularIntensity;
 };
 
 cbuffer cb_frameData : register(b2)
@@ -130,24 +129,24 @@ float4 ps_main(PS_INPUT input) : SV_TARGET
 
 	// Directional light specular.
 	float3 R = reflect(dirLightDir.xyz, normal);
-	finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F * dirLightColor.rgb;
+    finalColor.rgb += pow(max(0.0F, dot(R, V)), 10.0F) * 0.5F * dirLightColor.rgb * specularIntensity;
 	
     pl = float3(0, 0, 0);
     for (int i = 0; i < MAX_POINT_LIGHT; i++)
     {
         calcPointLightSpecular(pl, V, input.pixelWorldPos, normal, PointLightPos[i].xyz, PointLightColor[i].xyz);
     }
-    finalColor.rgb += pl;
+    finalColor.rgb += pl * specularIntensity;
 	
 	
 	// Environment mapping.
     float3 camToPixel = normalize(input.pixelWorldPos - cameraPos.xyz);
     float3 ref = reflect(camToPixel, normal);
-    finalColor.rgb += textureSkybox.Sample(samplerLinear, ref).rgb * 0.6F;
+    finalColor.rgb += textureSkybox.Sample(samplerLinear, ref).rgb * 0.6F * specularIntensity;
 	
 	
 	// Fresnel.
-    float3 F = pow(1 - dot(normal, V), 2) * 0.4F;
+    float3 F = pow(1 - dot(normal, V), 2) * 0.25F;
 	finalColor.rgb += F;
 	
 

@@ -5,9 +5,11 @@
 #include "Quantum/Math/Math.h"
 #include "QuEntityPhysicsCollider.h"
 #include "QuWorld.h"
+#include "ResourceLibrary.h"
+#include "Player.h"
 
 
-int im;
+
 
 MeteorCollider::MeteorCollider(float radius)
 	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
@@ -17,7 +19,6 @@ MeteorCollider::MeteorCollider(float radius)
 
 void MeteorCollider::onCollide(QuEntity* e)
 {
-	int i = 0;
 	this->Destroy(true);
 }
 
@@ -29,14 +30,12 @@ MeteorShower::MeteorShower()
 
 void MeteorShower::OnUpdate(const Timer& timer)
 {
-	for (im = 0; im < m_meteors.size(); im++)
-	{
-		//XMFLOAT4 pos; XMStoreFloat4(&pos, m_meteors[im]->getWorldPosition());
-		if (m_meteors[im]->GetTransform().getPosition().z > 1000)
-		{
-			m_meteors.erase(m_meteors.begin() + im);
-			m_axis.erase(m_axis.begin() + im);
-		}
+	time += timer.getDeltaTime();
+	if (time > 10) {
+		im = Quantum::Math::randomInt(0, m_meteors.size() - 1);
+		m_meteors[im]->Destroy(true);
+		m_meteors.erase(m_meteors.begin() + im);
+		time = 0;
 	}
 	if (m_meteors.size() < METEOR_COUNT)
 		SpawnMeteor();
@@ -45,6 +44,9 @@ void MeteorShower::OnUpdate(const Timer& timer)
 
 void MeteorShower::OnSpawn(QuWorld* world)
 {
+	for (int i = 0; i < METEOR_COUNT; i++) {
+		SpawnMeteor();
+	}
 }
 
 void MeteorShower::SpawnMeteor()
@@ -55,11 +57,13 @@ void MeteorShower::SpawnMeteor()
 	m_axis.push_back(axis);
 
 	Model* meteor = new Model();
-	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
+	meteor->setDefaultTexture(&ResourceLibrary::Get().asteroid);
+	meteor->setSpecularIntensity(0.0F);
+	float radius = Quantum::Math::randomFloat(1.F, 5.0F);
 	Quantum::MeteorGenerator::generate(meteor, radius, Quantum::Math::randomInt(5, 20), Quantum::Math::randomInt(5, 20));
 	MeteorCollider* meteorCollider = new MeteorCollider(radius);
 	
-	meteorCollider->applyImpulse(XMLoadFloat3(&axis)/10);
+	meteorCollider->applyImpulse(XMLoadFloat3(&axis));
 	meteorEntity->SetModel(meteor);
 	meteorCollider->AttachToParent(getWorld());
 	meteorEntity->AttachToParent(meteorCollider);
@@ -68,7 +72,3 @@ void MeteorShower::SpawnMeteor()
 	m_meteors.push_back(meteorCollider);
 }
 
-QuEntityPhysicsCollider* MeteorShower::GetCollider()
-{
-	return m_meteors[im];
-}

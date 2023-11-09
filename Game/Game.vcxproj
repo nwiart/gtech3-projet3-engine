@@ -33,6 +33,7 @@
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlanetBackground.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ResourceLibrary.cpp" />
     <ClCompile Include="Shooting.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +49,7 @@
     <ClInclude Include="EntityEnemySwarm.h" />
     <ClInclude Include="PlanetBackground.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="ResourceLibrary.h" />
     <ClInclude Include="Shooting.h" />
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="EntityGravityField.h" />

@@ -2,6 +2,7 @@
 #include "QuEntity.h"
 #include <vector>
 #include "EntityPlanetarySystem.h"
+#include "ResourceLibrary.h"
 
 class PlanetBackground : public QuEntity
 {
@@ -12,6 +13,7 @@ class PlanetBackground : public QuEntity
 	void OnSpawn(QuWorld* world) override;
 
 private:
+	std::vector <Texture2D*> texture;
 	std::vector<EntityPlanetarySystem*> m_planets;
 	float X = 0;
 	float Y = 0;

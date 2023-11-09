@@ -3,7 +3,7 @@
 #include "QuEntityRenderModel.h"
 #include "QuEntityPhysicsCollider.h"
 #include <vector>
-#define METEOR_COUNT 50
+#define METEOR_COUNT 100
 
 
 class MeteorShower;
@@ -25,9 +25,10 @@ public :
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
 	void SpawnMeteor();
-	QuEntityPhysicsCollider* GetCollider();
 
 private:
+	int im = 0;
+	float time = 0;
 	std::vector <QuEntityPhysicsCollider*> m_meteors;
 	std::vector <DirectX::XMFLOAT3> m_axis;
 };
