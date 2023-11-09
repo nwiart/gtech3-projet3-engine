@@ -27,12 +27,9 @@ void Bullet::OnUpdate(const Timer& timer)
 	//MoveBullet(timer.getDeltaTime());
 
 	time += timer.getDeltaTime();
-<<<<<<< Updated upstream
-	if (time > 5) {
-=======
+
 
 	if (time > 50) {
->>>>>>> Stashed changes
 		this->Destroy(true);
 	}
 }

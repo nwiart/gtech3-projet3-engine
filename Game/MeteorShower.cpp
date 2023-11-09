@@ -33,15 +33,10 @@ void MeteorShower::OnUpdate(const Timer& timer)
 	{
 		if (m_meteors[im]->GetTransform().getPosition().z > 1000)
 		{
-<<<<<<< Updated upstream
 
-			m_meteors.erase(m_meteors.begin() + i);
-			m_axis.erase(m_axis.begin() + i);
-=======
 			//m_meteors[i]->DetachFromParent();
 			m_meteors.erase(m_meteors.begin() + im);
 			m_axis.erase(m_axis.begin() + im );
->>>>>>> Stashed changes
 		}
 	}
 	if (m_meteors.size() < METEOR_COUNT)
