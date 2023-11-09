@@ -43,9 +43,12 @@
 #include "MeteorShower.h"
 #include "PlanetBackground.h"
 #include "EntityEnemySwarm.h"
+#include "Texture2D.h"
 #include "Player.h"
 
 #include "EntityParticleSmoke.h"
+
+#include "ResourceLibrary.h"
 
 // Standard lib.
 #include <stdlib.h>
@@ -87,6 +90,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
+	//Texture2D smoke("textures/smoke.dds");
 	Texture2D awesome("textures/awesome.dds");
 	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
