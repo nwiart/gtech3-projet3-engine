@@ -15,6 +15,7 @@
 
 #include "ResourceLibrary.h"
 #include "Timer.h"
+#include "HUDGame.h"
 
 
 DirectX::XMVECTOR m_PlayerPosition;
@@ -28,6 +29,7 @@ ShipCollider::ShipCollider(Enemy* e, float radius)
 
 void ShipCollider::onCollide(QuEntity* e)
 {
+	Player::GetHUD()->setScore(1);
 	this->Destroy(true);
 	m_enemy->Destroy(true);
 }

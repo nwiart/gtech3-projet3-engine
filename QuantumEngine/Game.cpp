@@ -42,42 +42,6 @@ void Game::shutdown()
 	Graphics::shutdown();
 }
 
-void Game::mainMenuLoop()
-{
-	time_t currentTime = time(0);
-	time_t lastTime = currentTime;
-
-	int frames = 0;
-
-	while (!m_window.wantsToClose() || !m_widget)
-	{
-		m_window.pollEvents();
-
-		UIsystem->visitUI(m_widget);
-
-		m_timer.tick();
-
-		Graphics::getInstance().renderFrame();
-
-
-		// Display FPS each second.
-		frames++;
-		currentTime = time(0);
-		if (currentTime != lastTime) {
-
-			std::string title = WINDOW_TITLE;
-			title += " - ";
-			title += std::to_string(frames);
-			title += " FPS";
-
-			m_window.setTitle(title.c_str());
-
-			lastTime = currentTime;
-			frames = 0;
-		}
-	}
-}
-
 void Game::mainLoop()
 {
 	time_t currentTime = time(0);

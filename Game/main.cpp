@@ -61,6 +61,8 @@
 #include "PauseMenu.h"
 #include <Windows.h>
 
+#include "ResourceLibrary.h"
+
 
 namespace qm = Quantum::Math;
 
@@ -91,70 +93,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::CapsuleGenerator::generate(capsule);
 
 	//Texture2D smoke("textures/smoke.dds");
-	Texture2D awesome("textures/awesome.dds");
-	Texture2D font("textures/font.dds");
-	TextureCube skyboxTexture("textures/milkyway.dds");
-	Texture2D buttonTexture("textures/button.dds");
-	Texture2D smoke("textures/smoke.dds");
+	//Texture2D awesome("textures/awesome.dds");
+	//Texture2D font("textures/font.dds");
+	//TextureCube skyboxTexture("textures/milkyway.dds");
+	//Texture2D buttonTexture("textures/button.dds");
+	//Texture2D smoke("textures/smoke.dds");
 
 	MainMenu* mainMenu = new MainMenu();
-	mainMenu->createMainMenu(buttonTexture);
+	mainMenu->createMainMenu(ResourceLibrary::Get().button);
 	game.openWidget(mainMenu);
-
-	// Create the world.
-	QuWorld* world = new QuWorld();
-	{
-		// Global directional light.
-		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
-		dirLight->setAmbientColor(Quantum::Color(10, 26, 40));
-		dirLight->setIntensity(1.0F);
-		world->attachChild(dirLight);
-
-		// Skybox.
-		QuEntityRenderSkybox* entitySkybox = new QuEntityRenderSkybox();
-		entitySkybox->setTexture(&skyboxTexture);
-		world->attachChild(entitySkybox);
-
-		//Spawn asteroid
-		MeteorShower* meteorShower = new MeteorShower();
-		world->attachChild(meteorShower);
-
-		//Spawn multiple enemy
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
-		world->attachChild(EnemySwarm);
-
-		// Planet background.
-		PlanetBackground* planetBackground = new PlanetBackground();
-		world->attachChild(planetBackground);
-	}
-
-	// Player controller.
-	EntityController* c = new EntityController();
-	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
-	world->attachChild(c);
-
-	Player::SetEntityController(c);
-
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(1.0F);
-	c->attachChild(pointLight);
-
 
 
 	
-	//MainMenu* mainMenu = new MainMenu();
-	//mainMenu->createMainMenu(buttonTexture);
 
-	PauseMenu* Pmenu = new PauseMenu();
-	Pmenu->createPauseMenu(buttonTexture);
+
+	
+
+	//PauseMenu* Pmenu = new PauseMenu();
+	//Pmenu->createPauseMenu(ResourceLibrary::Get().button);
 
 
 	//Widget->attachChild(text);
 
 	
-	game.openWidget(Pmenu);
+	//MainMenu* mainMenu = new MainMenu();
+	//mainMenu->createMainMenu(buttonTexture);
+	//game.openWidget(Pmenu);
 
-	game.openWorld(world);
 
 	game.mainLoop();
 
