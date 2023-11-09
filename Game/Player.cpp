@@ -3,6 +3,8 @@
 
 EntityController* Player::m_Controller;
 
+HUDGame* Player::hud;
+
 
 Player::Player()
 {
@@ -20,6 +22,16 @@ EntityController* Player::GetEntityController()
 void Player::SetEntityController(EntityController* controller)
 {
 	m_Controller = controller;
+}
+
+void Player::SetHUD(HUDGame* HUDtoSet)
+{
+	hud = HUDtoSet;
+}
+
+HUDGame* Player::GetHUD()
+{
+	return hud;
 }
 
 

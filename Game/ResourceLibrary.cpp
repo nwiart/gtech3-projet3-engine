@@ -25,5 +25,6 @@ ResourceLibrary::ResourceLibrary()
 
 	skybox.load("textures/milkyway.dds");
 
+	crosshair.load("textures/crosshair.dds");
 
 }

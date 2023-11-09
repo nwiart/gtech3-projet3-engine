@@ -24,6 +24,7 @@ public:
 
 	Texture2D button;
 	Texture2D backgroundMainMenu;
+	Texture2D crosshair;
 
 	TextureCube skybox;
 

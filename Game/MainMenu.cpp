@@ -27,13 +27,13 @@ void MainMenu::createMainMenu(Texture2D& buttonTexture)
 	this->attachChild(test);
 
 	Play->SetSize(DirectX::XMFLOAT2(400.f, 100.f));
-	Play->SetPosition(DirectX::XMFLOAT2(alignCenter(Play->GetSize().x, Game::getInstance().getRenderWidth()), 200.f));
+	Play->SetPosition(DirectX::XMFLOAT2(alignCenter(Play->GetSize().x, Game::getInstance().getRenderWidth()), 300.f));
 	Play->setTexture(&buttonTexture);
 	Play->createText("Play");
 	this->attachChild(Play);
 
 	Exit->SetSize(DirectX::XMFLOAT2(400.f, 100.f));
-	Exit->SetPosition(DirectX::XMFLOAT2(alignCenter(Exit->GetSize().x, Game::getInstance().getRenderWidth()), 400.f));
+	Exit->SetPosition(DirectX::XMFLOAT2(alignCenter(Exit->GetSize().x, Game::getInstance().getRenderWidth()), 500.f));
 	Exit->setTexture(&buttonTexture);
 	Exit->createText("Exit");
 	this->attachChild(Exit);

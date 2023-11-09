@@ -27,6 +27,7 @@
     <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="EntityPlanetarySystem.cpp" />
+    <ClCompile Include="HUDGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CreateWorld.h" />
     <ClInclude Include="EntityController.h" />
+    <ClInclude Include="HUDGame.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />

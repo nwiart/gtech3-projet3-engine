@@ -16,6 +16,10 @@
 
 #include "ResourceLibrary.h"
 
+CreateWorld::CreateWorld()
+{
+}
+
 void CreateWorld::init()
 {
 	
@@ -60,4 +64,10 @@ void CreateWorld::init()
 
 	Game::getInstance().openWorld(world);
 
+	hud = new HUDGame();
+	hud->createHUD();
+
+	Player::SetHUD(hud);
+
+	Game::getInstance().openWidget(hud);
 }

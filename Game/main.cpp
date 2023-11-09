@@ -127,7 +127,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//mainMenu->createMainMenu(buttonTexture);
 
 	//PauseMenu* Pmenu = new PauseMenu();
-	//Pmenu->createPauseMenu(buttonTexture);
+	//Pmenu->createPauseMenu(ResourceLibrary::Get().button);
 
 
 	//Widget->attachChild(text);
