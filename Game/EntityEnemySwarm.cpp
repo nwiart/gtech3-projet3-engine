@@ -9,8 +9,9 @@
 #include "QuWorld.h"
 #include "Timer.h"
 
-EntityEnemySwarm::EntityEnemySwarm()
+EntityEnemySwarm::EntityEnemySwarm(Texture2D* tex)
 {
+	m_texture = tex;
 	m_PlayerPosition = XMVectorSet(0, 0, 0, 0);
 }
 	
@@ -41,12 +42,12 @@ void EntityEnemySwarm::OnSpawn(QuWorld* world)
 
 void EntityEnemySwarm::SpawnEntityEnemySwarm()
 {
-	
 	XMVECTOR pos = XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0);
 	m_Pos.push_back(pos);
 	QuEntityRenderModel* EnemyShipEntity = new QuEntityRenderModel;
 	m_Ship.push_back(EnemyShipEntity);
 	Model* Ship = new Model();
+	Ship->setDefaultTexture(m_texture);
 	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
 	Quantum::BoxGenerator::generate(Ship, radius);
 	QuEntityPhysicsCollider* shipCollider = new QuEntityPhysicsCollider(radius, MOTION_DYNAMIC);

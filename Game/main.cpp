@@ -39,6 +39,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <Windows.h>
+
 
 namespace qm = Quantum::Math;
 
@@ -95,7 +97,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		MeteorShower* meteorShower = new MeteorShower();
 		world->attachChild(meteorShower);
 
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
 		world->attachChild(EnemySwarm);
 	}
 
