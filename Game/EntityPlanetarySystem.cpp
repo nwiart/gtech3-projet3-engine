@@ -7,21 +7,16 @@
 
 using namespace DirectX;
 
-
-
 static Model* unitSphere = 0;
 
-
-
-EntityPlanetarySystem::EntityPlanetarySystem(float parentRadius, float childDistance, int numberofChild)
+EntityPlanetarySystem::EntityPlanetarySystem(float parentRadius, float childDistance, int numberofChild, Texture2D* texture)
 	: m_parentRadius(parentRadius)
 	, m_childRadius(parentRadius / 4)
 	, m_childDistance(childDistance + parentRadius)
 	, m_numberofChild(numberofChild)
+	, m_texture(texture)
 {
 	if (!unitSphere) {
-		unitSphere = new Model();
-		Quantum::SphereGenerator::generate(unitSphere, 1.0F);
 	}
 
 	m_axisRotation = XMQuaternionRotationRollPitchYaw(0.0F, XMConvertToRadians(-30.0F), XMConvertToRadians(36.0F));
@@ -31,6 +26,11 @@ EntityPlanetarySystem::EntityPlanetarySystem(float parentRadius, float childDist
 
 void EntityPlanetarySystem::OnSpawn(QuWorld* world)
 {
+	unitSphere = new Model();
+	Quantum::SphereGenerator::generate(unitSphere, 1.0F);
+	unitSphere->setDefaultTexture(m_texture);
+	unitSphere->setSpecularIntensity(0.0F);
+
 	QuEntityRenderModel* m = new QuEntityRenderModel();
 	m->setScale(DirectX::XMFLOAT3(m_parentRadius, m_parentRadius, m_parentRadius));
 	m->SetModel(unitSphere);
@@ -39,6 +39,7 @@ void EntityPlanetarySystem::OnSpawn(QuWorld* world)
 	for (int i = 0; i < m_numberofChild; i++) {
 		m = new QuEntityRenderModel();
 		m->setScale(DirectX::XMFLOAT3(m_childRadius, m_childRadius, m_childRadius));
+
 
 		m->setPosition(DirectX::XMFLOAT3(m_childDistance * Quantum::Math::randomInt(-1,1), 0, m_childDistance * Quantum::Math::randomInt(-1, 1)));
 		m->SetModel(unitSphere);

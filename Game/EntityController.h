@@ -53,6 +53,7 @@ private:
 class ControllerCollider : public QuEntityPhysicsCollider
 {
 public:
+	int hitCount = 0;
 	ControllerCollider(float radius);
 	virtual void onCollide(QuEntity* e) override;
 };

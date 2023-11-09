@@ -13,10 +13,10 @@ using namespace Quantum;
 using namespace std;
 
 
-void Quantum::BoxGenerator::generate(Model* outModel, float size)
+void Quantum::BoxGenerator::generate(Model* outModel, DirectX::FXMVECTOR halfSize)
 {
     struct Vertex { float pos[3]; float normal[3]; float uv[2]; UINT color; };
-        // create the vertices using the CUSTOMVERTEX struct
+
     vector<Vertex> vertices;
     vector<UINT> indices;
 
@@ -26,6 +26,9 @@ void Quantum::BoxGenerator::generate(Model* outModel, float size)
 
 	vertices.reserve(numVertices);
 	indices.reserve(numFaces * 2 * 3);
+
+
+	XMFLOAT3 size; XMStoreFloat3(&size, halfSize);
 
 
 
@@ -46,40 +49,40 @@ void Quantum::BoxGenerator::generate(Model* outModel, float size)
 
 
 	// Top face
-	vertices.push_back({ { -size,  size, -size }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size,  size,  size }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size,  size,  size }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size,  size, -size }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x,  size.y, -size.z }, { 0,1,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x,  size.y,  size.z }, { 0,1,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x,  size.y,  size.z }, { 0,1,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x,  size.y, -size.z }, { 0,1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 	// Bottom face
-	vertices.push_back({ {  size, -size, -size }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size, -size,  size }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size, -size,  size }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size, -size, -size }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x, -size.y, -size.z }, { 0,-1,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x, -size.y,  size.z }, { 0,-1,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x, -size.y,  size.z }, { 0,-1,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x, -size.y, -size.z }, { 0,-1,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 	// Front face
-	vertices.push_back({ {  size, -size,  size }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size,  size,  size }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size,  size,  size }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size, -size,  size }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x, -size.y,  size.z }, { 0,0,1 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x,  size.y,  size.z }, { 0,0,1 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x,  size.y,  size.z }, { 0,0,1 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x, -size.y,  size.z }, { 0,0,1 }, { 1, 1 }, 0xFFFFFFFF });
 
 	// Back face
-	vertices.push_back({ { -size, -size, -size }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ { -size,  size, -size }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size,  size, -size }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {  size, -size, -size }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x, -size.y, -size.z }, { 0,0,-1 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { -size.x,  size.y, -size.z }, { 0,0,-1 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x,  size.y, -size.z }, { 0,0,-1 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {  size.x, -size.y, -size.z }, { 0,0,-1 }, { 1, 1 }, 0xFFFFFFFF });
 		
 	// Right face
-	vertices.push_back({ { size, -size, -size }, { 1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ { size,  size, -size }, { 1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { size,  size,  size }, { 1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ { size, -size,  size }, { 1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { size.x, -size.y, -size.z }, { 1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ { size.x,  size.y, -size.z }, { 1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { size.x,  size.y,  size.z }, { 1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ { size.x, -size.y,  size.z }, { 1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 	// Left face
-	vertices.push_back({ {-size, -size,  size }, { -1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
-	vertices.push_back({ {-size,  size,  size }, { -1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {-size,  size, -size }, { -1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
-	vertices.push_back({ {-size, -size, -size }, { -1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size.x, -size.y,  size.z }, { -1,0,0 }, { 0, 1 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size.x,  size.y,  size.z }, { -1,0,0 }, { 0, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size.x,  size.y, -size.z }, { -1,0,0 }, { 1, 0 }, 0xFFFFFFFF });
+	vertices.push_back({ {-size.x, -size.y, -size.z }, { -1,0,0 }, { 1, 1 }, 0xFFFFFFFF });
 
 
     outModel->GetVertexBuffer()->setData(vertices.data(), vertices.size() * sizeof(Vertex), sizeof(Vertex));
@@ -89,7 +92,8 @@ void Quantum::BoxGenerator::generate(Model* outModel, float size)
 
 
 	// AABB centered on the origin.
-	XMVECTOR aabbMin = XMVectorReplicate(-size);
-	XMVECTOR aabbMax = XMVectorReplicate(size);
+	XMVECTOR maxDist = XMVector3Length(halfSize);
+	XMVECTOR aabbMin = -maxDist;
+	XMVECTOR aabbMax =  maxDist;
 	outModel->setDimensions(aabbMin, aabbMax);
 }

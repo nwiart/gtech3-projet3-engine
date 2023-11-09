@@ -16,6 +16,7 @@
 #include "Texture2D.h"
 #include "Shooting.h"
 #include "EntityParticleSmoke.h"
+#include "ResourceLibrary.h"
 
 using namespace DirectX;
 
@@ -28,7 +29,11 @@ EntityController::EntityController()
 
 void ControllerCollider::onCollide(QuEntity* e)
 {
-	this->Destroy(true);
+	std::cout << hitCount << std::endl;
+	hitCount++;
+	if (hitCount >= 5) {
+		this->Destroy(true);
+	}
 }
 
 ControllerCollider::ControllerCollider(float radius)
@@ -39,7 +44,6 @@ ControllerCollider::ControllerCollider(float radius)
 
 void EntityController::OnSpawn(QuWorld* world)
 {
-
 	// Create guns.
 	Model* gunModel = new Model();
 	Quantum::CapsuleGenerator::generate(gunModel);
@@ -67,22 +71,23 @@ void EntityController::OnSpawn(QuWorld* world)
 	rightGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
 	controllerCollider->attachChild(rightGunModel);
 
+	gunModel->setDefaultTexture(&ResourceLibrary::Get().metalic);
+
 	shooting = new Shooting();
 	shooting->setRotation(controllerCollider->GetTransform().getRotation());
 	shooting->setPosition(rightGunModel->GetTransform().getPosition());
 	controllerCollider->attachChild(shooting);
 
 	camera = new QuEntityCamera();
-	camera->setFOV(90.F);
 	controllerCollider->attachChild(camera);
 
-	//EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
-	//pe0->setPosition(XMFLOAT3(-3, -1.0F, 3));
-	//controllerCollider->attachChild(pe0);
+	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&ResourceLibrary::Get().smoke);
+	pe0->setPosition(XMFLOAT3(-3, -1.0F, 3));
+	controllerCollider->attachChild(pe0);
 
-	//EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
-	//pe1->setPosition(XMFLOAT3(3, -1.0F, 3));
-	//controllerCollider->attachChild(pe1);
+	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&ResourceLibrary::Get().smoke);
+	pe1->setPosition(XMFLOAT3(3, -1.0F, 3));
+	controllerCollider->attachChild(pe1);
 }
 
 void EntityController::OnUpdate(const Timer& timer)
@@ -121,11 +126,22 @@ void EntityController::UpdateCamera(float dt)
 {
 	// Move camera.
 	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 6.0F : 3.0F;
+	float fov = camera->getFOV();
+
+	if ((InputSystem::Get().isKeyDown(VK_SHIFT) && fov < 80)) {
+		fov += dt * speed;
+		camera->setFOV(fov);
+	}
+	else if(fov >= 70) {
+		fov -= dt * speed;
+		camera->setFOV(fov);
+	}
+
 	speed *= dt;
-	
+
 	XMVECTOR vel = controllerCollider->GetLinearVelocity();
 	XMVECTOR camForward = controllerCollider->GetTransform().getForwardVector();
-	XMVECTOR camRight   = controllerCollider->GetTransform().getRightVector();
+	XMVECTOR camRight = controllerCollider->GetTransform().getRightVector();
 
 	float roll = 0.0F;
 	if (InputSystem::Get().isKeyDown('Z')) vel += camForward * speed;

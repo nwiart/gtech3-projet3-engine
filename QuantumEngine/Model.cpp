@@ -14,6 +14,7 @@ Model::Model()
 	m_numTriangles = 0;
 
 	m_defaultTexture = 0;
+	m_specularIntensity = 1.0F;
 }
 
 Model::~Model()

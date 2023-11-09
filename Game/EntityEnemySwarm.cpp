@@ -1,14 +1,21 @@
 #include "stdafx.h"
 #include "EntityEnemySwarm.h"
-#include "Quantum/Generate/BoxGenerator.h"
-#include "Model.h"
+
 #include "Quantum/Math/Math.h"
+#include "Quantum/Generate/BoxGenerator.h"
+#include "Quantum/Generate/SphereGenerator.h"
+#include "Quantum/Generate/CapsuleGenerator.h"
+#include "Model.h"
+
 #include "QuEntityPhysicsCollider.h"
 #include "EntityController.h"
 #include "Player.h"
 #include "QuWorld.h"
-#include "Timer.h"
 #include "Shooting.h"
+
+#include "ResourceLibrary.h"
+#include "Timer.h"
+
 
 DirectX::XMVECTOR m_PlayerPosition;
 
@@ -78,21 +85,73 @@ void Enemy::OnUpdate(const Timer& timer)
 {
 	if(this->m_State != nullptr)
 	this->m_State->Update(timer, this);
+
+	XMVECTOR q = XMQuaternionRotationAxis(
+		XMVector3Normalize(XMVector3Cross(XMVectorSet(0, 0, 1, 0), m_collider->GetLinearVelocity())),
+		acos(XMVectorGetX(XMVector3Dot(XMVector3Normalize(m_collider->GetLinearVelocity()), XMVectorSet(0, 0, 1, 0))))
+	);
+	XMFLOAT4 fq; XMStoreFloat4(&fq, q);
+	this->m_collider->setRotation(q);
 }
 
 void Enemy::OnSpawn(QuWorld* world)
 {
-	XMVECTOR pos = XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0);
-	QuEntityRenderModel* EnemyShipEntity = new QuEntityRenderModel;
-	Model* Ship = new Model();
-	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
-	Quantum::BoxGenerator::generate(Ship, radius);
-	m_collider = new ShipCollider(this, radius);
-	EnemyShipEntity->SetModel(Ship);
-	m_collider->AttachToParent(getWorld());
-	EnemyShipEntity->AttachToParent(m_collider);
-	m_collider->setPosition(pos);
-	
+	Model* shipBody    = new Model();
+	Model* shipShooter = new Model();
+	Model* shipCockpit = new Model();
+	Model* shipWing    = new Model();
+
+	Quantum::CapsuleGenerator::generate(shipBody);
+	Quantum::CapsuleGenerator::generate(shipShooter);
+	Quantum::SphereGenerator::generate(shipCockpit, 2.4F);
+	Quantum::BoxGenerator::generate(shipWing, XMVectorSet(0.2F, 1.0F, 2.4F, 0.0F));
+
+	shipBody->setDefaultTexture(&ResourceLibrary::Get().alien);
+	shipShooter->setDefaultTexture(&ResourceLibrary::Get().mars);
+	shipCockpit->setDefaultTexture(&ResourceLibrary::Get().neptune);
+	shipWing->setDefaultTexture(&ResourceLibrary::Get().alien);
+
+
+
+	m_collider = new ShipCollider(this, 3.0F);
+	m_collider->setPosition(XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0));
+	world->attachChild(m_collider);
+
+	QuEntityRenderModel* modelShipBody = new QuEntityRenderModel;
+	modelShipBody->SetModel(shipBody);
+	modelShipBody->setScale(XMFLOAT3(4.0F, 4.0F, 4.0F));
+	modelShipBody->setRotation(XMFLOAT4(0.707F, 0, 0, 0.707F));
+	modelShipBody->setPosition(XMFLOAT3(0, 0, -4.0F));
+	m_collider->attachChild(modelShipBody);
+
+	QuEntityRenderModel* modelShipCockpit = new QuEntityRenderModel;
+	modelShipCockpit->SetModel(shipCockpit);
+	modelShipCockpit->setPosition(XMFLOAT3(0.0F, 2.0F, -4.0F + 3.0F));
+	m_collider->attachChild(modelShipCockpit);
+
+	QuEntityRenderModel* modelShipShooterL = new QuEntityRenderModel;
+	modelShipShooterL->SetModel(shipShooter);
+	modelShipShooterL->setScale(XMFLOAT3(2.0F, 8.0F, 2.0F));
+	modelShipShooterL->setRotation(XMFLOAT4(0.707F, 0, 0, 0.707F));
+	modelShipShooterL->setPosition(XMFLOAT3(-3.0F, 0.0F, -4.0F));
+	m_collider->attachChild(modelShipShooterL);
+
+	QuEntityRenderModel* modelShipShooterR = new QuEntityRenderModel;
+	modelShipShooterR->SetModel(shipShooter);
+	modelShipShooterR->setScale(XMFLOAT3(2.0F, 8.0F, 2.0F));
+	modelShipShooterR->setRotation(XMFLOAT4(0.707F, 0, 0, 0.707F));
+	modelShipShooterR->setPosition(XMFLOAT3(3.0F, 0.0F, -4.0F));
+	m_collider->attachChild(modelShipShooterR);
+
+	QuEntityRenderModel* modelShipWingL = new QuEntityRenderModel;
+	modelShipWingL->SetModel(shipWing);
+	modelShipWingL->setPosition(XMFLOAT3(-3.0F, 2.0F, -4.0F));
+	m_collider->attachChild(modelShipWingL);
+
+	QuEntityRenderModel* modelShipWingR = new QuEntityRenderModel;
+	modelShipWingR->SetModel(shipWing);
+	modelShipWingR->setPosition(XMFLOAT3(3.0F, 2.0F, -4.0F));
+	m_collider->attachChild(modelShipWingR);
 }
 
 void EnemyState::Update(const Timer& timer, Enemy* e)

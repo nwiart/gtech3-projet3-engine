@@ -32,7 +32,6 @@ void Shooting::OnUpdate(const Timer& timer)
 	CoolDown(timer.getDeltaTime());
 }
 
-#include "EntityController.h"
 void Shooting::OnSpawn(QuWorld* world)
 {
 	

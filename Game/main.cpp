@@ -43,9 +43,12 @@
 #include "MeteorShower.h"
 #include "PlanetBackground.h"
 #include "EntityEnemySwarm.h"
+#include "Texture2D.h"
 #include "Player.h"
 
 #include "EntityParticleSmoke.h"
+
+#include "ResourceLibrary.h"
 
 // Standard lib.
 #include <stdlib.h>
@@ -84,9 +87,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Model* capsule = new Model();
 
 	Quantum::SphereGenerator::generate(sphere, 0.5);
-	Quantum::BoxGenerator::generate(box, 0.5f);
+	//Quantum::BoxGenerator::generate(box, DirectX0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
+	//Texture2D smoke("textures/smoke.dds");
 	Texture2D awesome("textures/awesome.dds");
 	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
@@ -102,8 +106,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		// Global directional light.
 		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
-		dirLight->setAmbientColor(Quantum::Color(0, 10, 20));
-		dirLight->setIntensity(0.5F);
+		dirLight->setAmbientColor(Quantum::Color(10, 26, 40));
+		dirLight->setIntensity(1.0F);
 		world->attachChild(dirLight);
 
 		// Skybox.
