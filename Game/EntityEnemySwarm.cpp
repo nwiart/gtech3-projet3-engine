@@ -86,12 +86,16 @@ void Enemy::OnUpdate(const Timer& timer)
 	if(this->m_State != nullptr)
 	this->m_State->Update(timer, this);
 
-	XMVECTOR q = XMQuaternionRotationAxis(
-		XMVector3Normalize(XMVector3Cross(XMVectorSet(0, 0, 1, 0), m_collider->GetLinearVelocity())),
-		acos(XMVectorGetX(XMVector3Dot(XMVector3Normalize(m_collider->GetLinearVelocity()), XMVectorSet(0, 0, 1, 0))))
-	);
-	XMFLOAT4 fq; XMStoreFloat4(&fq, q);
-	this->m_collider->setRotation(q);
+	XMVECTOR axis = XMVector3Cross(XMVectorSet(0, 0, 1, 0), m_collider->GetLinearVelocity());
+	if (!XMVector3Equal(axis, XMVectorZero()))
+	{
+		XMVECTOR q = XMQuaternionRotationAxis(
+			XMVector3Normalize(axis),
+			acos(XMVectorGetX(XMVector3Dot(XMVector3Normalize(m_collider->GetLinearVelocity()), XMVectorSet(0, 0, 1, 0))))
+		);
+		XMFLOAT4 fq; XMStoreFloat4(&fq, q);
+		this->m_collider->setRotation(q);
+	}
 }
 
 void Enemy::OnSpawn(QuWorld* world)
@@ -211,8 +215,11 @@ StateCharge::~StateCharge()
 
 void StateCharge::Update(const Timer& timer, Enemy* e)
 {
-	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
-	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
+	XMVECTOR playerPos = Player::GetEntityController()->controllerCollider->getWorldPosition();
+	XMVECTOR enemyPos = e->m_collider->getWorldPosition();
+
+	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(playerPos, enemyPos));
+	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime() * 10.0F)));
 
 	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 100)
 	{
@@ -222,5 +229,5 @@ void StateCharge::Update(const Timer& timer, Enemy* e)
 	{
 		delete  e->m_State;
 		e->m_State = (EnemyState*) new StateShoot();
-	}
+	}*/
 }

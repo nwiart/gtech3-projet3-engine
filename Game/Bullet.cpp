@@ -27,7 +27,7 @@ void BulletCollider::onCollide(QuEntity* e)
 void Bullet::OnUpdate(const Timer& timer)
 {
 	time += timer.getDeltaTime();
-	if (time > 50) {
+	if (time > 5) {
 		this->Destroy(true);
 	}
 }
@@ -46,7 +46,7 @@ void Bullet::Shoot() {
 
 	BulletCollider* collider = new BulletCollider(this);
 	collider->setPosition(this->getWorldPosition());
-	collider->applyImpulse(this->getForwardVector() * 500 + m_sourceVelocity);
+	collider->applyImpulse(this->getForwardVector() * 600 + m_sourceVelocity);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);
@@ -55,4 +55,3 @@ void Bullet::Shoot() {
 	getWorld()->attachChild(collider);
 	collider->attachChild(sphereEntity);
 }
-
