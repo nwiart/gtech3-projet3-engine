@@ -16,8 +16,8 @@ Shooting::Shooting()
 void Shooting::DetectShooting()
 {
 	if (InputSystem::Get().isMouseDown(1) && !alreadyShooting) {
-		alreadyShooting = true;
 		InstantiateBullet();
+		alreadyShooting = true;
 	}
 }
 
@@ -27,7 +27,6 @@ void Shooting::OnUpdate(const Timer& timer)
 	CoolDown(timer.getDeltaTime());
 }
 
-#include "EntityController.h"
 void Shooting::OnSpawn(QuWorld* world)
 {
 	

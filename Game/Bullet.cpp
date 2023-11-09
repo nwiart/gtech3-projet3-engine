@@ -6,6 +6,7 @@
 #include "Model.h"
 
 #include "QuWorld.h"
+#include "EntityController.h"
 
 #include "QuEntityRenderModel.h"
 
@@ -24,11 +25,7 @@ void BulletCollider::onCollide(QuEntity* e)
 
 void Bullet::OnUpdate(const Timer& timer)
 {
-	//MoveBullet(timer.getDeltaTime());
-
 	time += timer.getDeltaTime();
-
-
 	if (time > 50) {
 		this->Destroy(true);
 	}
@@ -47,11 +44,11 @@ void Bullet::Shoot() {
 
 	BulletCollider* collider = new BulletCollider(this);
 	collider->setPosition(this->getWorldPosition());
-	collider->applyImpulse(this->getForwardVector() * 100);
+	collider->applyImpulse(this->getForwardVector() * 300);
 
 	QuEntityRenderModel* sphereEntity = new QuEntityRenderModel;
 	sphereEntity->SetModel(sphere);
-	sphereEntity->setScale(XMFLOAT3(0.25f, 0.25f, 0.25f));
+	sphereEntity->setScale(XMFLOAT3(0.5f, 0.5f, 0.5f));
 
 	getWorld()->attachChild(collider);
 	collider->attachChild(sphereEntity);

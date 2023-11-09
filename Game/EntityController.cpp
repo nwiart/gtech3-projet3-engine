@@ -73,7 +73,6 @@ void EntityController::OnSpawn(QuWorld* world)
 	controllerCollider->attachChild(shooting);
 
 	camera = new QuEntityCamera();
-	camera->setFOV(90.F);
 	controllerCollider->attachChild(camera);
 
 	//EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
@@ -119,11 +118,22 @@ void EntityController::UpdateCamera(float dt)
 {
 	// Move camera.
 	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 6.0F : 3.0F;
+	float fov = camera->getFOV();
+
+	if ((InputSystem::Get().isKeyDown(VK_SHIFT) && fov < 80)) {
+		fov += dt * speed;
+		camera->setFOV(fov);
+	}
+	else if(fov >= 70) {
+		fov -= dt * speed;
+		camera->setFOV(fov);
+	}
+
 	speed *= dt;
-	
+
 	XMVECTOR vel = controllerCollider->GetLinearVelocity();
 	XMVECTOR camForward = controllerCollider->GetTransform().getForwardVector();
-	XMVECTOR camRight   = controllerCollider->GetTransform().getRightVector();
+	XMVECTOR camRight = controllerCollider->GetTransform().getRightVector();
 
 	float roll = 0.0F;
 	if (InputSystem::Get().isKeyDown('Z')) vel += camForward * speed;
