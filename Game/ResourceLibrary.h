@@ -20,5 +20,6 @@ public:
 	Texture2D neptune;
 	Texture2D mercure;
 	Texture2D mars;
+	Texture2D alien;
 };
 

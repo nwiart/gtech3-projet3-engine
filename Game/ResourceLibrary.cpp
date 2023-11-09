@@ -16,4 +16,6 @@ ResourceLibrary::ResourceLibrary()
 	mercure.load("textures/mercure.dds");
 
 	mars.load("textures/mars.dds");
+
+	alien.load("textures/alien.dds");
 }

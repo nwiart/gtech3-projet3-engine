@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "QuWorld.h"
 #include "Timer.h"
+#include "ResourceLibrary.h"
 #include "Shooting.h"
 
 DirectX::XMVECTOR m_PlayerPosition;
@@ -85,6 +86,7 @@ void Enemy::OnSpawn(QuWorld* world)
 	XMVECTOR pos = XMVectorSet(Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), Quantum::Math::randomFloat(-400, 400), 0);
 	QuEntityRenderModel* EnemyShipEntity = new QuEntityRenderModel;
 	Model* Ship = new Model();
+	Ship->setDefaultTexture(&ResourceLibrary::Get().alien);
 	float radius = Quantum::Math::randomFloat(0.5F, 3.0F);
 	Quantum::BoxGenerator::generate(Ship, radius);
 	m_collider = new ShipCollider(this, radius);
