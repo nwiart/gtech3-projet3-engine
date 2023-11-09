@@ -6,6 +6,7 @@ class Shooting : public QuEntity
 public:
 	Shooting();
 	void DetectShooting();
+	void EnemyShooting();
 
 private:
 

@@ -7,7 +7,7 @@
 #include "QuWorld.h"
 
 
-int im;
+
 
 MeteorCollider::MeteorCollider(float radius)
 	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
@@ -17,7 +17,6 @@ MeteorCollider::MeteorCollider(float radius)
 
 void MeteorCollider::onCollide(QuEntity* e)
 {
-	int i = 0;
 	this->Destroy(true);
 }
 
@@ -29,7 +28,7 @@ MeteorShower::MeteorShower()
 
 void MeteorShower::OnUpdate(const Timer& timer)
 {
-	for (im = 0; im < m_meteors.size(); im++)
+	for ( int im = 0; im < m_meteors.size(); im++)
 	{
 		if (m_meteors[im]->GetTransform().getPosition().z > 1000)
 		{
@@ -60,7 +59,7 @@ void MeteorShower::SpawnMeteor()
 	Quantum::MeteorGenerator::generate(meteor, radius, Quantum::Math::randomInt(5, 20), Quantum::Math::randomInt(5, 20));
 	MeteorCollider* meteorCollider = new MeteorCollider(radius);
 	
-	meteorCollider->applyImpulse(XMLoadFloat3(&axis)/10);
+	meteorCollider->applyImpulse(XMLoadFloat3(&axis));
 	meteorEntity->SetModel(meteor);
 	meteorCollider->AttachToParent(getWorld());
 	meteorEntity->AttachToParent(meteorCollider);
@@ -69,7 +68,3 @@ void MeteorShower::SpawnMeteor()
 	m_meteors.push_back(meteorCollider);
 }
 
-QuEntityPhysicsCollider* MeteorShower::GetCollider()
-{
-	return m_meteors[im];
-}

@@ -20,6 +20,12 @@ void Shooting::DetectShooting()
 		InstantiateBullet();
 	}
 }
+void Shooting::EnemyShooting()
+{
+		alreadyShooting = true;
+		InstantiateBullet();
+	
+}
 
 void Shooting::OnUpdate(const Timer& timer)
 {
