@@ -21,5 +21,11 @@ public:
 	Texture2D mercure;
 	Texture2D mars;
 	Texture2D alien;
+
+	Texture2D button;
+	Texture2D backgroundMainMenu;
+
+	TextureCube skybox;
+
 };
 

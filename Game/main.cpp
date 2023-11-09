@@ -61,6 +61,8 @@
 #include "PauseMenu.h"
 #include <Windows.h>
 
+#include "ResourceLibrary.h"
+
 
 namespace qm = Quantum::Math;
 
@@ -91,14 +93,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Quantum::CapsuleGenerator::generate(capsule);
 
 	//Texture2D smoke("textures/smoke.dds");
-	Texture2D awesome("textures/awesome.dds");
-	Texture2D font("textures/font.dds");
-	TextureCube skyboxTexture("textures/milkyway.dds");
-	Texture2D buttonTexture("textures/button.dds");
-	Texture2D smoke("textures/smoke.dds");
+	//Texture2D awesome("textures/awesome.dds");
+	//Texture2D font("textures/font.dds");
+	//TextureCube skyboxTexture("textures/milkyway.dds");
+	//Texture2D buttonTexture("textures/button.dds");
+	//Texture2D smoke("textures/smoke.dds");
 
 	MainMenu* mainMenu = new MainMenu();
-	mainMenu->createMainMenu(buttonTexture);
+	mainMenu->createMainMenu(ResourceLibrary::Get().button);
 	game.openWidget(mainMenu);
 
 

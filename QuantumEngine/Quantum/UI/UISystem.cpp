@@ -30,7 +30,7 @@ bool UISystem::OnLeftClick(int mouseX, int mouseY, QuWidget* widget)
 		&& mouseY >= widget->GetPosition().y && mouseY <= widget->GetPosition().y + widget->GetSize().y) 
 	{
 		QuWidgetButton* button = dynamic_cast<QuWidgetButton*>(widget);
-		if (button) 
+		if (button && button->GetCallBack()) 
 		{
 			((button)->*(button->GetCallBack()))(mouseX, mouseY);
 			return true;

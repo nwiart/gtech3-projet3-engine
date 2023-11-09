@@ -1,5 +1,7 @@
 #include "MainMenu.h"
 #include "Game.h"
+#include "CreateWorld.h"
+#include "ResourceLibrary.h"
 
 MainMenu::MainMenu()
 {
@@ -12,6 +14,7 @@ MainMenu::MainMenu()
 
 void MainMenu::createMainMenu(Texture2D& buttonTexture)
 {
+
 	std::string textTilte = "A Game Made By Quantum Engine";
 	Title->SetPosition(DirectX::XMFLOAT2(alignCenter(textTilte.size() * 32, Game::getInstance().getRenderWidth()), 100.f));
 	Title->SetText(textTilte);
@@ -34,12 +37,21 @@ void MainMenu::createMainMenu(Texture2D& buttonTexture)
 	Exit->setTexture(&buttonTexture);
 	Exit->createText("Exit");
 	this->attachChild(Exit);
+
+	QuWidgetButton* bg = new QuWidgetButton();
+	bg->SetPosition(DirectX::XMFLOAT2(0, 0));
+	bg->SetSize(DirectX::XMFLOAT2(Game::getInstance().getRenderWidth(), Game::getInstance().getRenderHeight()));
+	bg->setTexture(&ResourceLibrary::Get().backgroundMainMenu);
+	this->attachChild(bg);
 }
 
 void MainMenu::onButtonPlay(int x, int y)
 {
 	delete(this);
 	Game::getInstance().openWidget(0);
+	CreateWorld* w = new CreateWorld();
+	w->init();
+
 }
 
 void MainMenu::onButtonExit(int x, int y)

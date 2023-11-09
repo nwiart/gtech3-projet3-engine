@@ -17,6 +17,7 @@
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlanetBackground.cpp" />
     <ClCompile Include="ResourceLibrary.cpp" />
+    <ClCompile Include="CreateWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -36,5 +37,6 @@
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PlanetBackground.h" />
     <ClInclude Include="ResourceLibrary.h" />
+    <ClInclude Include="CreateWorld.h" />
   </ItemGroup>
 </Project>

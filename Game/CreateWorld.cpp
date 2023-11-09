@@ -7,9 +7,19 @@
 #include "QuEntityPhysicsCollider.h"
 
 #include "EntityEnemySwarm.h"
+#include "MeteorShower.h"
+#include "PlanetBackground.h"
+#include "EntityController.h"
+#include "Player.h"
+
+#include "Game.h"
+
+#include "ResourceLibrary.h"
 
 void CreateWorld::init()
 {
+	
+
 	// Create the world.
 	QuWorld* world = new QuWorld();
 	{
@@ -21,7 +31,7 @@ void CreateWorld::init()
 
 		// Skybox.
 		QuEntityRenderSkybox* entitySkybox = new QuEntityRenderSkybox();
-		entitySkybox->setTexture(&skyboxTexture);
+		entitySkybox->setTexture(&ResourceLibrary::Get().skybox);
 		world->attachChild(entitySkybox);
 
 		//Spawn asteroid
@@ -29,7 +39,7 @@ void CreateWorld::init()
 		world->attachChild(meteorShower);
 
 		//Spawn multiple enemy
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
 		world->attachChild(EnemySwarm);
 
 		// Planet background.
@@ -48,6 +58,6 @@ void CreateWorld::init()
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
 
-	game.openWorld(world);
+	Game::getInstance().openWorld(world);
 
 }

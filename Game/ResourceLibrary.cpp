@@ -18,4 +18,12 @@ ResourceLibrary::ResourceLibrary()
 	mars.load("textures/mars.dds");
 
 	alien.load("textures/alien.dds");
+
+	button.load("textures/button.dds");
+
+	backgroundMainMenu.load("textures/backgroud.dds");
+
+	skybox.load("textures/milkyway.dds");
+
+
 }
