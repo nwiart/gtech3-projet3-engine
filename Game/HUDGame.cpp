@@ -33,6 +33,6 @@ float HUDGame::alignCenter(float objectTo, float objectIn)
 void HUDGame::setScore(int scoreValue)
 {
 	m_scoreValue += scoreValue;
-	scoreText = std::to_string(scoreValue);
+	scoreText = std::to_string(m_scoreValue);
 	score->SetText(scoreText);
 }

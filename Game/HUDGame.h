@@ -16,7 +16,7 @@ private :
 	std::string scoreText;
 	QuWidgetText* score;
 
-	int m_scoreValue;
+	int* m_scoreValue;
 
 };
 
