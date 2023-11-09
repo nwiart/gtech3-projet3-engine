@@ -12,6 +12,8 @@ Model::Model()
 	VB = new VertexBuffer();
 	IB = new IndexBuffer();
 	m_numTriangles = 0;
+
+	m_defaultTexture = 0;
 }
 
 Model::~Model()

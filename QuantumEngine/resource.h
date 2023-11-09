@@ -9,6 +9,8 @@
 
 #define IDS_FONT_TEXTURE		     105
 
+#define ID_SHADER_PP_SUN             104
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

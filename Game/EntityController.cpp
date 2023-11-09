@@ -9,10 +9,15 @@
 #include "QuEntityRenderModel.h"
 #include "Quantum/Generate/CapsuleGenerator.h"
 #include "Model.h"
+#include "Player.h"
+#include "QuEntityPhysicsCollider.h"
+#include "QuWorld.h"
+#include "QuEntityCamera.h"
+#include "Texture2D.h"
+#include "Shooting.h"
+#include "EntityParticleSmoke.h"
 
 using namespace DirectX;
-
-
 
 EntityController::EntityController()
 	: leftGunModel(0)
@@ -21,34 +26,93 @@ EntityController::EntityController()
 	
 }
 
+void ControllerCollider::onCollide(QuEntity* e)
+{
+	this->Destroy(true);
+}
+
+ControllerCollider::ControllerCollider(float radius)
+	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
+{
+
+}
+
 void EntityController::OnSpawn(QuWorld* world)
 {
+
 	// Create guns.
 	Model* gunModel = new Model();
 	Quantum::CapsuleGenerator::generate(gunModel);
+
+	// Register callback (slowdown).
+	m_inputCallback = new ControllerInputCallback();
+	InputSystem::Get().RegisterCallback(m_inputCallback);
+
+	// Create collider.
+	controllerCollider = new ControllerCollider(1.0F);
+	getWorld()->attachChild(controllerCollider);
+	controllerCollider->setPosition(this->GetPosition());
 
 	leftGunModel = new QuEntityRenderModel();
 	leftGunModel->SetModel(gunModel);
 	leftGunModel->setPosition(XMFLOAT3(-2.5f, -1.0f, 1.7f));
 	leftGunModel->setRotation(XMFLOAT4(0.707, 0, 0, 0.707));
 	leftGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
-	this->attachChild(leftGunModel);
+	controllerCollider->attachChild(leftGunModel);
 
 	rightGunModel = new QuEntityRenderModel();
 	rightGunModel->SetModel(gunModel);
 	rightGunModel->setPosition(XMFLOAT3(2.5f, -1.0f, 1.7f));
 	rightGunModel->setRotation(XMFLOAT4(-0.707, 0, 0, -0.707));
 	rightGunModel->setScale(XMFLOAT3(1.f, 0.5f, 1.f));
-	this->attachChild(rightGunModel);
+	controllerCollider->attachChild(rightGunModel);
 
-	// Register callback (slowdown).
-	m_inputCallback = new ControllerInputCallback();
-	InputSystem::Get().RegisterCallback(m_inputCallback);
+	shooting = new Shooting();
+	shooting->setRotation(controllerCollider->GetTransform().getRotation());
+	shooting->setPosition(rightGunModel->GetTransform().getPosition());
+	controllerCollider->attachChild(shooting);
+
+	camera = new QuEntityCamera();
+	camera->setFOV(90.F);
+	controllerCollider->attachChild(camera);
+
+	//EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
+	//pe0->setPosition(XMFLOAT3(-3, -1.0F, 3));
+	//controllerCollider->attachChild(pe0);
+
+	//EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
+	//pe1->setPosition(XMFLOAT3(3, -1.0F, 3));
+	//controllerCollider->attachChild(pe1);
 }
 
 void EntityController::OnUpdate(const Timer& timer)
 {
+	if (InputSystem::Get().isMouseDown(1) && !shooting->alreadyShooting) {
+		if (LeftRight) {
+			shooting->setPosition(rightGunModel->GetTransform().getPosition());
+			LeftRight = false;
+		}
+		else if (!LeftRight) {
+			shooting->setPosition(leftGunModel->GetTransform().getPosition());
+			LeftRight = true;
+		}
+	}
 	UpdateCamera(timer.getDeltaTime());
+}
+
+QuEntityPhysicsCollider* EntityController::GetCollider()
+{
+	return nullptr;
+}
+
+void EntityController::SetPosition(DirectX::XMVECTOR Position)
+{
+	m_Position = Position;
+}
+
+DirectX::XMVECTOR EntityController::GetPosition()
+{
+	return m_Position;
 }
 
 void EntityController::UpdateCamera(float dt)
@@ -57,20 +121,19 @@ void EntityController::UpdateCamera(float dt)
 	float speed = InputSystem::Get().isKeyDown(VK_SHIFT) ? 6.0F : 3.0F;
 	speed *= dt;
 	
-	XMVECTOR pos = XMLoadFloat3(&this->GetTransform().getPosition());
-	XMVECTOR camForward = this->GetTransform().getForwardVector();
-	XMVECTOR camRight   = this->GetTransform().getRightVector();
+	XMVECTOR vel = controllerCollider->GetLinearVelocity();
+	XMVECTOR camForward = controllerCollider->GetTransform().getForwardVector();
+	XMVECTOR camRight   = controllerCollider->GetTransform().getRightVector();
 
 	float roll = 0.0F;
-	if (InputSystem::Get().isKeyDown('Z')) pos += camForward * speed;
-	if (InputSystem::Get().isKeyDown('S')) pos -= camForward * speed;
-	if (InputSystem::Get().isKeyDown('D')) pos += camRight * speed;
-	if (InputSystem::Get().isKeyDown('Q')) pos -= camRight * speed;
+	if (InputSystem::Get().isKeyDown('Z')) vel += camForward * speed;
+	if (InputSystem::Get().isKeyDown('S')) vel -= camForward * speed;
+	if (InputSystem::Get().isKeyDown('D')) vel += camRight * speed;
+	if (InputSystem::Get().isKeyDown('Q')) vel -= camRight * speed;
 	if (InputSystem::Get().isKeyDown('A')) roll = 0.3 * speed;
 	if (InputSystem::Get().isKeyDown('E')) roll = -0.3 * speed;
 
-	XMFLOAT3 fpos; XMStoreFloat3(&fpos, pos);
-	this->setPosition(fpos);
+	controllerCollider->setLinearVelocity(vel);
 
 	// Rotate camera.
 	int mouseX = InputSystem::Get().getMouseX() - Game::getInstance().getRenderWidth() / 2;
@@ -80,33 +143,32 @@ void EntityController::UpdateCamera(float dt)
 	int deadZoneY = (Game::getInstance().getRenderHeight() * 5) / 100;
 	bool inDeadZone = (mouseX > -deadZoneX && mouseX < deadZoneX && mouseY > -deadZoneY && mouseY < deadZoneY);
 
-	XMVECTOR quat = XMLoadFloat4(&this->GetTransform().getRotation());
+	XMVECTOR quat = XMLoadFloat4(&controllerCollider->GetTransform().getRotation());
 
 	if (!inDeadZone)
 	{
 		float yaw = mouseX * dt * 0.005F;
 		float pitch = mouseY * dt * 0.005F;
 
-		quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(this->GetTransform().getUpVector(), yaw));
-		quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(this->GetTransform().getRightVector(), pitch));
+		quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(controllerCollider->GetTransform().getUpVector(), yaw));
+		quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(controllerCollider->GetTransform().getRightVector(), pitch));
 	}
 
-	quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(this->GetTransform().getForwardVector(), roll));
+	quat = XMQuaternionMultiply(quat, XMQuaternionRotationAxis(controllerCollider->GetTransform().getForwardVector(), roll));
 
-	XMFLOAT4 rot; XMStoreFloat4(&rot, quat);
-	this->setRotation(rot);
+	controllerCollider->setRotation(quat);
 }
-
-
 
 void EntityController::ControllerInputCallback::OnMouseDown(unsigned short btn)
 {
-	if (btn == 2)
+	if (btn == 2) {
 		Game::getInstance().getTimer().setTimeDilation(0.2);
+	}
 }
 
 void EntityController::ControllerInputCallback::OnMouseUp(unsigned short btn)
 {
-	if (btn == 2)
+	if (btn == 2) {
 		Game::getInstance().getTimer().setTimeDilation(1.0);
+	}
 }

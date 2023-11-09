@@ -40,14 +40,13 @@ void Shooting::InstantiateBullet() {
 	XMFLOAT4 rot; XMStoreFloat4(&rot, getWorldRotation());
 	bullet->setRotation(rot);
 	getWorld()->attachChild(bullet);
-	bullet->Shoot();
 }
 
 void Shooting::CoolDown(float dt) {
 	if (alreadyShooting) {
 		m_coolDown -= dt;
 		if (m_coolDown <= 0) {
-			m_coolDown = 0.5f;
+			m_coolDown = 0.2f;
 			alreadyShooting = false;
 		}
 	}

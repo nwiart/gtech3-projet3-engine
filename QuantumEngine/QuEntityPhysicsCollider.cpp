@@ -5,8 +5,25 @@
 #include "Quantum/Physics/PhysicsWorld.h"
 #include "Quantum/Physics/RigidBody.h"
 #include "Quantum/Physics/Collide/PhysicsShapeSphere.h"
+#include "Quantum/Physics/Collide/PhysicsContactListener.h"
 
 using namespace DirectX;
+
+
+
+class MyCollideListener : public PhysicsContactListener
+{
+public:
+
+	virtual void onCollisionAdded(const CollisionEvent& event) override
+	{
+		QuEntityPhysicsCollider* myRb = reinterpret_cast<QuEntityPhysicsCollider*>(event.m_rigidBodyA->getUserData());
+		if (myRb) {
+
+			myRb->onCollide(reinterpret_cast<QuEntity*>(event.m_rigidBodyB->getUserData()));
+		}
+	}
+};
 
 
 
@@ -39,6 +56,16 @@ void QuEntityPhysicsCollider::setPosition(FXMVECTOR f)
 	}
 }
 
+void QuEntityPhysicsCollider::setRotation(FXMVECTOR f)
+{
+	XMFLOAT4 rot; XMStoreFloat4(&rot, f);
+	QuEntity::setRotation(rot);
+
+	if (m_rigidBody) {
+		m_rigidBody->setRotation(f);
+	}
+}
+
 
 void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 {
@@ -50,7 +77,9 @@ void QuEntityPhysicsCollider::OnSpawn(QuWorld* world)
 	XMStoreFloat4(&info.m_position, XMLoadFloat3(&this->GetTransform().getPosition()));
 	m_rigidBody = new RigidBody(info);
 
+	m_listener = new MyCollideListener();
 	m_rigidBody->setUserData(this);
+	m_rigidBody->addContactListener(m_listener);
 
 	m_rigidBody->applyImpulse(XMLoadFloat4(&m_linearVelocity));
 
@@ -73,8 +102,20 @@ void QuEntityPhysicsCollider::OnDestroy(QuWorld* world)
 
 		delete m_rigidBody;
 		delete m_shape;
+		delete m_listener;
 
 		m_rigidBody = 0;
 		m_shape = 0;
+		m_listener = 0;
 	}
+}
+
+XMVECTOR QuEntityPhysicsCollider::GetLinearVelocity()
+{
+	return XMLoadFloat4(&m_rigidBody->getLinearVelocity());
+}
+
+void QuEntityPhysicsCollider::setLinearVelocity(DirectX::FXMVECTOR p)
+{
+	m_rigidBody->setLinearVelocity(p);
 }

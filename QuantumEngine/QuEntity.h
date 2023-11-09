@@ -83,6 +83,7 @@ class QuEntity
 		Quantum::Transform m_Transform;
 
 		bool m_Static;
+		bool m_markedForDeletion;
 		bool m_dirtyWorldMatrix;
 
 		virtual void ExecuteProcedure(){}

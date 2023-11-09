@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EntityController.cpp" />
+    <ClCompile Include="EntityEnemySwarm.cpp" />
     <ClCompile Include="EntityGravityAffected.cpp" />
     <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityParticleSmoke.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="MyProgram.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PlanetBackground.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shooting.cpp" />
   </ItemGroup>
@@ -43,6 +45,10 @@
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="EntityEnemySwarm.h" />
+    <ClInclude Include="MeteorShower.h" />
+    <ClInclude Include="EntityParticleSmoke.h" />
+    <ClInclude Include="PlanetBackground.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shooting.h" />
     <ClInclude Include="EntityGravityAffected.h" />
@@ -54,7 +60,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{35beef10-b56a-428e-9078-a68633cb4187}</ProjectGuid>
     <RootNamespace>Game</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -11,9 +11,11 @@
     <ClCompile Include="EntityGravityField.cpp" />
     <ClCompile Include="EntityGravityAffected.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
+    <ClCompile Include="EntityEnemySwarm.cpp" />
     <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PlanetBackground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
@@ -27,8 +29,10 @@
     <ClInclude Include="EntityGravityField.h" />
     <ClInclude Include="EntityGravityAffected.h" />
     <ClInclude Include="MeteorShower.h" />
+    <ClInclude Include="EntityEnemySwarm.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="PlanetBackground.h" />
   </ItemGroup>
 </Project>

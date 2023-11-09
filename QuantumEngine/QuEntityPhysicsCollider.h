@@ -18,7 +18,13 @@ public:
 	void applyImpulse(DirectX::FXMVECTOR f);
 
 	void setPosition(DirectX::FXMVECTOR f);
+	void setRotation(DirectX::FXMVECTOR f);
 
+	virtual void onCollide(QuEntity* e) { }
+
+
+	DirectX::XMVECTOR GetLinearVelocity();
+	void setLinearVelocity(DirectX::FXMVECTOR p);
 
 	virtual void OnSpawn(QuWorld* world) final override;
 	virtual void OnUpdate(const Timer& timer) final override;
@@ -29,6 +35,7 @@ private:
 
 	RigidBody* m_rigidBody;
 	PhysicsShape* m_shape;
+	class MyCollideListener* m_listener;
 
 	DirectX::XMFLOAT4 m_linearVelocity;
 

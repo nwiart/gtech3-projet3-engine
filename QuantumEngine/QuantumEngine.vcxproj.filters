@@ -74,6 +74,8 @@
     <ClCompile Include="Quantum\Generate\MeteorGenerator.cpp" />
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Quantum\Render\SunPass.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderSun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -165,6 +167,8 @@
     <ClInclude Include="Quantum\Generate\MeteorGenerator.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="TextureBase.h" />
+    <ClInclude Include="Quantum\Render\SunPass.h" />
+    <ClInclude Include="Quantum\Render\ShaderSun.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">
