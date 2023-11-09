@@ -97,44 +97,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	mainMenu->createMainMenu(buttonTexture);
 	game.openWidget(mainMenu);
 
-	// Create the world.
-	QuWorld* world = new QuWorld();
-	{
-		// Global directional light.
-		QuEntityLightDirectional* dirLight = new QuEntityLightDirectional();
-		dirLight->setAmbientColor(Quantum::Color(0, 10, 20));
-		dirLight->setIntensity(0.5F);
-		world->attachChild(dirLight);
 
-		// Skybox.
-		QuEntityRenderSkybox* entitySkybox = new QuEntityRenderSkybox();
-		entitySkybox->setTexture(&skyboxTexture);
-		world->attachChild(entitySkybox);
 
-		//Spawn asteroid
-		MeteorShower* meteorShower = new MeteorShower();
-		world->attachChild(meteorShower);
-
-		//Spawn multiple enemy
-		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
-		world->attachChild(EnemySwarm);
-
-		// Planet background.
-		PlanetBackground* planetBackground = new PlanetBackground();
-		world->attachChild(planetBackground);
-	}
-
-	// Player controller.
-	EntityController* c = new EntityController();
-	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
-	world->attachChild(c);
-
-	Player::SetEntityController(c);
-
-	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
-	pointLight->setIntensity(1.0F);
-	c->attachChild(pointLight);
-
+	
 
 	/*
 	QuWidget* Widget = new QuWidget();
@@ -156,16 +121,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//MainMenu* mainMenu = new MainMenu();
 	//mainMenu->createMainMenu(buttonTexture);
 
-	PauseMenu* Pmenu = new PauseMenu();
-	Pmenu->createPauseMenu(buttonTexture);
+	//PauseMenu* Pmenu = new PauseMenu();
+	//Pmenu->createPauseMenu(buttonTexture);
 
 
 	//Widget->attachChild(text);
 
 	
-	game.openWidget(Pmenu);
+	//game.openWidget(Pmenu);
 
-	game.openWorld(world);
 
 	game.mainLoop();
 
