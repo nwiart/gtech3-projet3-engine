@@ -206,7 +206,7 @@ void StateShoot::Update(const Timer& timer, Enemy* e)
 
 	}
 
-	e->m_Shoot->EnemyShooting(e->m_collider->GetLinearVelocity());
+	//e->m_Shoot->EnemyShooting(e->m_collider->GetLinearVelocity());
 
 }
 

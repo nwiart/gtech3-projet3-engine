@@ -87,8 +87,10 @@ void PhysicsWorld::step(float deltaTime)
 	XMVECTOR deltaVec = XMVectorReplicate(deltaTime);
 	XMVECTOR gravity = XMVectorMultiply(XMLoadFloat3(&m_gravity), deltaVec);
 
-	for (RigidBody* rb : m_dynamicRigidBodies)
+	for (int i = 0; i < m_dynamicRigidBodies.size(); ++i)
 	{
+		RigidBody* rb = m_dynamicRigidBodies[i];
+
 		// Gravity.
 		rb->applyImpulse(gravity);
 
@@ -101,8 +103,10 @@ void PhysicsWorld::step(float deltaTime)
 
 
 		// Test against other dynamic bodies.
-		for (RigidBody* drb : m_dynamicRigidBodies)
+		for (int j = i + 1; j < m_dynamicRigidBodies.size(); ++j)
 		{
+			RigidBody* drb = m_dynamicRigidBodies[j];
+
 			if (rb == drb) continue;
 
 			CollisionAgent* agent = this->getCollisionAgent(rb->getShape(), drb->getShape());

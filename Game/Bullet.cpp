@@ -27,7 +27,7 @@ void BulletCollider::onCollide(QuEntity* e)
 void Bullet::OnUpdate(const Timer& timer)
 {
 	time += timer.getDeltaTime();
-	if (time > 5) {
+	if (time > 5.0F) {
 		this->Destroy(true);
 	}
 }

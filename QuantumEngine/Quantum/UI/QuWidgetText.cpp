@@ -17,6 +17,8 @@ QuWidgetText::~QuWidgetText()
 
 void QuWidgetText::SetText(std::string text)
 {
+	numbOfVertices = 0;
+
 	m_text = text;
 	if (m_vBuffer) m_vBuffer->destroy();
 	std::vector<textVertex> m_data;
