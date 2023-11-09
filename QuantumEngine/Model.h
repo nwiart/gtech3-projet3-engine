@@ -5,6 +5,8 @@
 class VertexBuffer;
 class IndexBuffer;
 
+class Texture2D;
+
 
 class Model
 {
@@ -19,6 +21,9 @@ public:
 
 	void SetNumTriangle(unsigned int numTriangle);
 
+	inline Texture2D* getDefaultTexture() const { return m_defaultTexture; }
+	inline void setDefaultTexture(Texture2D* t) { m_defaultTexture = t; }
+
 	inline const DirectX::XMFLOAT3& getDimensionsMin() const { return m_dimensionsMin; }
 	inline const DirectX::XMFLOAT3& getDimensionsMax() const { return m_dimensionsMax; }
 
@@ -32,6 +37,8 @@ private:
 
 	VertexBuffer* VB;
 	IndexBuffer* IB;
+
+	Texture2D* m_defaultTexture;
 
 		/// Object-space AABB describing a rough bounding volume.
 		/// Used for culling and collisions.

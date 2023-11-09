@@ -35,9 +35,6 @@ void ScenePass::renderAll(ID3D12GraphicsCommandList* cmdList, const std::vector<
 	// Set tables.
 	m_shader.setConstantBuffer(2, frameData);
 
-	g.setGlobalDescriptor(matData + 1, m_texture.getShaderResourceView());
-	m_shader.setTexture2D(0, matData);
-
 	// Render object.
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -47,6 +44,7 @@ void ScenePass::renderAll(ID3D12GraphicsCommandList* cmdList, const std::vector<
 		cmdList->IASetVertexBuffers(0, 1, &renderList[i].model->GetVertexBuffer()->getVertexBufferView());
 		cmdList->IASetIndexBuffer(&renderList[i].model->GetIndexBuffer()->getIndexBufferView());
 
+		m_shader.setTexture2D(0, matData + i * 3);
 		m_shader.setConstantBuffer(0, objectBase + i);
 
 		cmdList->DrawIndexedInstanced(renderList[i].model->GetNumberTriangle() * 3, 1, 0, 0, 0);

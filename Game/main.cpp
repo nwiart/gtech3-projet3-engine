@@ -40,6 +40,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <Windows.h>
+
 
 namespace qm = Quantum::Math;
 
@@ -87,23 +89,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		QuEntityRenderSkybox* entitySkybox = new QuEntityRenderSkybox();
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
+
+		//Spawn asteroid
+		MeteorShower* meteorShower = new MeteorShower();
+		world->attachChild(meteorShower);
+
+		//Spawn multiple enemy
+		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm(&smoke);
+		world->attachChild(EnemySwarm);
+
+		// Planet background.
+		PlanetBackground* planetBackground = new PlanetBackground();
+		world->attachChild(planetBackground);
 	}
-
-	//Meteor shower.
-	MeteorShower* meteorShower = new MeteorShower();
-	world->attachChild(meteorShower);
-
-	EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
-	world->attachChild(EnemySwarm);
 
 	// Player controller.
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
-
-	// Planet background.
-	PlanetBackground* planetBackground = new PlanetBackground();
-	world->attachChild(planetBackground);
 
 	Player::SetEntityController(c);
 
@@ -112,7 +115,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	c->attachChild(pointLight);
 
 	game.openWorld(world);
-
 
 	game.mainLoop();
 

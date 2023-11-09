@@ -4,6 +4,7 @@
 #include "Graphics.h"
 
 #include "Model.h"
+#include "Texture2D.h"
 #include "TextureCube.h"
 
 #include "QuEntityRenderModel.h"
@@ -30,6 +31,8 @@ void RenderScene::init()
 	m_passScene.init();
 	m_passSkybox.init();
 	m_passParticles.init();
+
+	m_passSun.init();
 }
 
 void RenderScene::destroy()
@@ -56,17 +59,25 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	UINT cb_frameData_ID = g.allocateDescriptorTable(1);
 	g.setGlobalDescriptor(cb_frameData_ID, m_cbFrameData.getDescriptor());
 
-	// Material data.
-	UINT cb_materialData_ID = g.allocateDescriptorTable(3);
-	if (m_passSkybox.getTexture()) {
-		g.setGlobalDescriptor(cb_materialData_ID + 2, m_passSkybox.getTexture()->getShaderResourceView());
-	}
-
-	// Object world matrices.
+	// Material data & Object world matrices.
+	UINT cb_materialData_ID = g.allocateDescriptorTable(3 * renderList.size());
 	UINT cb_objectData_IDbase = g.allocateDescriptorTable(renderList.size());
+
 	for (int i = 0; i < renderList.size(); i++)
 	{
 		g.setGlobalDescriptor(cb_objectData_IDbase + i, m_cbObjectData.getDescriptor(i));
+
+		// Set texture.
+		D3D12Texture* tex = &m_passScene.m_texture;
+		if (renderList[i].texture && renderList[i].texture->getTexture()) {
+			tex = renderList[i].texture->getTexture();
+		}
+		g.setGlobalDescriptor(cb_materialData_ID + i * 3 + 1, tex->getShaderResourceView());
+
+		// Set environment reflection map.
+		if (m_passSkybox.getTexture()) {
+			g.setGlobalDescriptor(cb_materialData_ID + i * 3 + 2, m_passSkybox.getTexture()->getShaderResourceView());
+		}
 	}
 
 
@@ -75,6 +86,8 @@ void RenderScene::renderAll(ID3D12GraphicsCommandList* cmdList)
 	m_passSkybox.render(cmdList, cb_frameData_ID);
 
 	m_passParticles.render(cmdList);
+
+	m_passSun.render(cmdList);
 
 
 	// Clear model list.
@@ -102,6 +115,7 @@ void RenderScene::addRenderModel(QuEntityRenderModel* model)
 	RenderModel renderModel =
 	{
 		model->GetModel(),
+		model->GetModel()->getDefaultTexture(),
 		renderList.size(),
 	};
 

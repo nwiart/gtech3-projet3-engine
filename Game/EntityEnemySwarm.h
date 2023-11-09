@@ -5,10 +5,12 @@
 #include <vector>
 #define ENEMY_COUNT 5
 
+class Texture2D;
+
 class EntityEnemySwarm : public QuEntity
 {
 public:
-	EntityEnemySwarm();
+	EntityEnemySwarm(Texture2D* tex);
 
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
@@ -23,5 +25,7 @@ private:
 	std::vector<QuEntityRenderModel*> m_Ship;
 	std::vector<DirectX::XMVECTOR> m_axis;
 	DirectX::XMVECTOR m_PlayerPosition;
+
+	Texture2D* m_texture;
 };
 
