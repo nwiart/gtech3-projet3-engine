@@ -9,7 +9,7 @@
 #include "Player.h"
 
 
-int im;
+
 
 MeteorCollider::MeteorCollider(float radius)
 	: QuEntityPhysicsCollider(radius, MOTION_DYNAMIC)
@@ -19,7 +19,6 @@ MeteorCollider::MeteorCollider(float radius)
 
 void MeteorCollider::onCollide(QuEntity* e)
 {
-	int i = 0;
 	this->Destroy(true);
 }
 
@@ -64,7 +63,7 @@ void MeteorShower::SpawnMeteor()
 	Quantum::MeteorGenerator::generate(meteor, radius, Quantum::Math::randomInt(5, 20), Quantum::Math::randomInt(5, 20));
 	MeteorCollider* meteorCollider = new MeteorCollider(radius);
 	
-	meteorCollider->applyImpulse(XMLoadFloat3(&axis)/3);
+	meteorCollider->applyImpulse(XMLoadFloat3(&axis));
 	meteorEntity->SetModel(meteor);
 	meteorCollider->AttachToParent(getWorld());
 	meteorEntity->AttachToParent(meteorCollider);
@@ -73,7 +72,3 @@ void MeteorShower::SpawnMeteor()
 	m_meteors.push_back(meteorCollider);
 }
 
-QuEntityPhysicsCollider* MeteorShower::GetCollider()
-{
-	return m_meteors[im];
-}

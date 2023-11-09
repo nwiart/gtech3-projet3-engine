@@ -27,8 +27,10 @@
     <ClCompile Include="EntityParticleSmoke.cpp" />
     <ClCompile Include="EntityPlanetarySystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MeteorShower.cpp" />
     <ClCompile Include="MyProgram.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlanetBackground.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResourceLibrary.cpp" />
@@ -40,9 +42,11 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EntityController.h" />
-    <ClInclude Include="EntityEnemySwarm.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MeteorShower.h" />
     <ClInclude Include="EntityParticleSmoke.h" />
+    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="EntityEnemySwarm.h" />
     <ClInclude Include="PlanetBackground.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ResourceLibrary.h" />

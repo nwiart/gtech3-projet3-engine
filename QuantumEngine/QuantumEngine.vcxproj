@@ -62,15 +62,23 @@
     <ClCompile Include="QuEntityPhysicsCollider.cpp" />
     <ClCompile Include="QuEntityPhysicsTriggerSphere.cpp" />
     <ClCompile Include="QuEntityRenderModel.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidget.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetText.cpp" />
     <ClCompile Include="QuEntityRenderSkybox.cpp" />
+    <ClCompile Include="Quantum\UI\QuMainWidget.cpp" />
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Quantum\UI\ShaderUI.cpp" />
     <ClCompile Include="Quantum\Render\ShaderDefault.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Quantum\UI\UIRenderer.cpp" />
+    <ClCompile Include="Quantum\UI\UISystem.cpp" />
+    <ClCompile Include="Quantum\UI\UIpass.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetButton.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +93,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DDS\DDSTextureLoader.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Quantum\UI\QuMainWidget.h" />
     <ClInclude Include="Quantum\Render\ParticlesPass.h" />
     <ClInclude Include="Quantum\Math\AABB.h" />
     <ClInclude Include="Quantum\Physics\Collide\CollisionAgent.h" />
@@ -124,10 +133,13 @@
     <ClInclude Include="QuEntityPhysicsCollider.h" />
     <ClInclude Include="QuEntityPhysicsTriggerSphere.h" />
     <ClInclude Include="QuEntityRenderModel.h" />
+    <ClInclude Include="Quantum\UI\QuWidget.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetText.h" />
     <ClInclude Include="QuEntityRenderSkybox.h" />
     <ClInclude Include="QuWorld.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Quantum\UI\ShaderUI.h" />
     <ClInclude Include="Quantum\Render\ShaderDefault.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TestConstantBuffer.h" />
@@ -135,7 +147,11 @@
     <ClInclude Include="TextureBase.h" />
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Quantum\UI\UIRenderer.h" />
+    <ClInclude Include="Quantum\UI\UISystem.h" />
+    <ClInclude Include="Quantum\UI\UIpass.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetButton.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

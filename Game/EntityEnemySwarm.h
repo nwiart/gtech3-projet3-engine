@@ -2,30 +2,102 @@
 #include "QuEntity.h"
 #include "QuEntityRenderModel.h"
 #include "QuEntityPhysicsCollider.h"
-#include <vector>
-#define ENEMY_COUNT 5
+#include "Shooting.h"
 
-class Texture2D;
+#include <vector>
+
+#define ENEMY_COUNT 50
+
+
+class EntityEntitySwarm;
+class EnemyState;
+class Enemy;
+
+
+class EnemyState
+{
+public:
+
+	EnemyState() {};
+	virtual ~EnemyState() {};
+
+	virtual void Update(const Timer& timer, Enemy* e);
+};
+
+class StatePatrol :public EnemyState
+{
+public:
+	StatePatrol();
+	~StatePatrol();
+	virtual void Update(const Timer& timer, Enemy* e) override;
+
+private:
+
+};
+
+class StateShoot : public EnemyState
+{
+public:
+	StateShoot();
+	~StateShoot();
+	virtual void Update(const Timer& timer, Enemy* e) override;
+
+
+private:
+
+};
+
+class StateCharge : public EnemyState
+{
+public:
+	StateCharge();
+	~StateCharge();
+	virtual void Update(const Timer& timer, Enemy* e) override;
+
+
+private:
+
+};
+
+
+
+class ShipCollider : public QuEntityPhysicsCollider
+{
+public:
+	ShipCollider(Enemy* e, float r);
+
+	virtual void onCollide(QuEntity* e) override;
+	
+private:
+
+	Enemy* m_enemy;
+};
+
 
 class EntityEnemySwarm : public QuEntity
 {
 public:
-	EntityEnemySwarm(Texture2D* tex);
+	EntityEnemySwarm();
 
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
-	void SpawnEntityEnemySwarm();
-	void UpdateDirection(DirectX::XMVECTOR axis, int i, const Timer& timer);
+	void SpawnEntityEnemySwarm(const Timer& timer);
+	void UpdateDirection(DirectX::XMVECTOR axis, const Timer& timer, ShipCollider* shipCollider);
 	
-
-private:
-
-	std::vector<QuEntityPhysicsCollider*> m_Collider;
-	std::vector<DirectX::XMVECTOR> m_Pos;
-	std::vector<QuEntityRenderModel*> m_Ship;
-	std::vector<DirectX::XMVECTOR> m_axis;
+	std::vector<Enemy*> m_Enemy;
 	DirectX::XMVECTOR m_PlayerPosition;
-
-	Texture2D* m_texture;
 };
 
+
+class Enemy : public QuEntity
+{
+public:
+	Enemy();
+	~Enemy();
+	
+	void OnUpdate(const Timer& timer) override;
+	void OnSpawn(QuWorld* world) override;
+	EnemyState* m_State;
+	ShipCollider* m_collider;
+	Shooting* m_Shoot;
+};

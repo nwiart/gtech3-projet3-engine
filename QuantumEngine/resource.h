@@ -4,9 +4,12 @@
 //
 #define ID_SHADER_DEFAULT            101
 #define ID_SHADER_SKYBOX             102
-#define ID_SHADER_PARTICLES          103
+#define ID_SHADER_UI				 103
+#define ID_SHADER_PARTICLES          104
 
-#define ID_SHADER_PP_SUN             104
+#define IDS_FONT_TEXTURE		     105
+
+#define ID_SHADER_PP_SUN             106
 
 // Next default values for new objects
 // 

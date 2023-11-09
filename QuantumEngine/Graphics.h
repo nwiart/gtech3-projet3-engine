@@ -3,6 +3,7 @@
 #include "D3D12ResourceTransferUtility.h"
 
 #include "Quantum/Render/RenderScene.h"
+#include "Quantum/UI/UIrenderer.h"
 
 
 
@@ -96,6 +97,8 @@ public:
 	inline int getRenderWidth() const { return m_renderWidth; }
 	inline int getRenderHeight() const { return m_renderHeight; }
 
+	inline UIRenderer* getUIRenderer() { return m_renderUI; }
+
 
 
 
@@ -146,4 +149,6 @@ private:
 	int nEntries = 0;
 
 	RenderScene m_renderScene;
+
+	UIRenderer* m_renderUI;
 };

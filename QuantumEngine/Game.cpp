@@ -32,12 +32,50 @@ int Game::init()
 
 	status = Graphics::initialize(&m_window);
 
+	UIsystem = new UISystem;
+
 	return status;
 }
 
 void Game::shutdown()
 {
 	Graphics::shutdown();
+}
+
+void Game::mainMenuLoop()
+{
+	time_t currentTime = time(0);
+	time_t lastTime = currentTime;
+
+	int frames = 0;
+
+	while (!m_window.wantsToClose() || !m_widget)
+	{
+		m_window.pollEvents();
+
+		UIsystem->visitUI(m_widget);
+
+		m_timer.tick();
+
+		Graphics::getInstance().renderFrame();
+
+
+		// Display FPS each second.
+		frames++;
+		currentTime = time(0);
+		if (currentTime != lastTime) {
+
+			std::string title = WINDOW_TITLE;
+			title += " - ";
+			title += std::to_string(frames);
+			title += " FPS";
+
+			m_window.setTitle(title.c_str());
+
+			lastTime = currentTime;
+			frames = 0;
+		}
+	}
 }
 
 void Game::mainLoop()
@@ -49,16 +87,18 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
+		m_window.pollEvents();
+
 		if (m_world) {
 			m_world->deletePendingEntities();
-
+			
 			// TODO : fixed time step.
 			m_world->getPhysicsWorld()->step(m_timer.getDeltaTime());
 
 			visitEntity(m_world);
 		}
 
-		m_window.pollEvents();
+		UIsystem->visitUI(m_widget);
 
 		m_timer.tick();
 
@@ -102,6 +142,11 @@ void Game::openWorld(QuWorld* world)
 
 	this->openWorld_triggerSpawn(world, world);
 }
+void Game::openWidget(QuWidget* widget)
+{
+	m_widget = widget;
+}
+
 
 int Game::getRenderWidth() const
 {
@@ -112,8 +157,6 @@ int Game::getRenderHeight() const
 {
 	return Graphics::getInstance().getRenderHeight();
 }
-
-
 
 void Game::visitEntity(QuEntity* entity)
 {

@@ -25,7 +25,6 @@ public :
 	void OnUpdate(const Timer& timer) override;
 	void OnSpawn(QuWorld* world) override;
 	void SpawnMeteor();
-	QuEntityPhysicsCollider* GetCollider();
 
 private:
 	float time = 0;
