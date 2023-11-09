@@ -100,4 +100,5 @@ public:
 	EnemyState* m_State;
 	ShipCollider* m_collider;
 	Shooting* m_Shoot;
+	DirectX::XMVECTOR m_dir;
 };

@@ -110,7 +110,7 @@ void Enemy::OnSpawn(QuWorld* world)
 	shipShooter->setDefaultTexture(&ResourceLibrary::Get().mars);
 	shipCockpit->setDefaultTexture(&ResourceLibrary::Get().neptune);
 	shipWing->setDefaultTexture(&ResourceLibrary::Get().alien);
-
+	m_dir = XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0);
 
 
 	m_collider = new ShipCollider(this, 3.0F);
@@ -169,8 +169,12 @@ StatePatrol::~StatePatrol()
 
 void StatePatrol::Update(const Timer& timer, Enemy* e)
 {
-	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
-	if ( XMVectorGetX(XMVector3Length( XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) > 10000)
+	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) < 20)
+	{
+		e->m_collider->applyImpulse(e->m_dir);
+
+	}
+	if ( XMVectorGetX(XMVector3Length( XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) < 50)
 	{
 		delete  e->m_State;
 		e->m_State = (EnemyState*) new StateCharge();
@@ -187,9 +191,11 @@ StateShoot::~StateShoot()
 
 void StateShoot::Update(const Timer& timer, Enemy* e)
 {
-	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
-	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
+	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) < 20)
+	{
+		e->m_collider->applyImpulse(e->m_dir);
 
+	}
 
 	e->m_Shoot->EnemyShooting(e->m_collider->GetLinearVelocity());
 
@@ -208,11 +214,11 @@ void StateCharge::Update(const Timer& timer, Enemy* e)
 	XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(m_PlayerPosition, e->m_collider->getWorldPosition()));
 	e->m_collider->applyImpulse(XMVectorMultiply(dir, XMVectorReplicate(timer.getDeltaTime())));
 
-	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 1000)
+	if (XMVectorGetX(XMVector3Length(e->m_collider->GetLinearVelocity())) > 100)
 	{
-		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 10);
-	}	e->m_collider->applyImpulse(XMVectorSet(Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), Quantum::Math::randomFloat(-1, 1), 0));
-	if (XMVectorGetX(XMVector3Length(XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) > 50)
+		e->m_collider->setLinearVelocity(XMVector3Normalize(e->m_collider->GetLinearVelocity()) * 15);
+	}	
+	if (XMVectorGetX(XMVector3Length(XMVectorSubtract(e->getWorldPosition(), m_PlayerPosition))) < 50)
 	{
 		delete  e->m_State;
 		e->m_State = (EnemyState*) new StateShoot();
