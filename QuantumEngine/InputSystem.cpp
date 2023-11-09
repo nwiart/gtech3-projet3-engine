@@ -42,9 +42,15 @@ void InputSystem::FireMouseMove(int newX, int newY)
 	m_cursorY = newY;
 }
 
+#include "Game.h"
+
 void InputSystem::FireMouseDown(int vkCode)
 {
 	m_keyState[vkCode] = true;
+
+	if (Game::getInstance().getUISystem().OnLeftClick(m_cursorX, m_cursorY, Game::getInstance().getOpenWidget())) {
+		return;
+	}
 
 	for (auto& callback : m_callbacklist) callback->OnMouseDown(vkCode);
 }

@@ -3,9 +3,11 @@
 #include "Timer.h"
 #include "Window.h"
 
+#include "Quantum/UI/QuMainWidget.h"
+#include "Quantum/UI/UISystem.h"
+
 class QuEntity;
 class QuWorld;
-
 
 
 class Game
@@ -19,9 +21,12 @@ public:
 	int init();
 	void shutdown();
 
+	void mainMenuLoop();
+
 	void mainLoop();
 
 	void openWorld(QuWorld* world);
+	void openWidget(QuWidget* widget);
 
 	int getRenderWidth() const;
 	int getRenderHeight() const;
@@ -32,6 +37,11 @@ public:
 	inline const Timer& getTimer() const { return m_timer; }
 	inline       Timer& getTimer()       { return m_timer; }
 
+	inline QuWidget* getOpenWidget() const { return m_widget; }
+
+	inline UISystem& getUISystem() const { return *UIsystem; }
+
+	inline Window& getWindow() { return m_window; }
 
 private:
 
@@ -45,4 +55,7 @@ private:
 	Window m_window;
 
 	QuWorld* m_world;
+	QuWidget* m_widget;
+
+	UISystem* UIsystem;
 };

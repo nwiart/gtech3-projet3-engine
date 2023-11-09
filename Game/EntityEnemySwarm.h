@@ -5,6 +5,7 @@
 #include "Shooting.h"
 
 #include <vector>
+
 #define ENEMY_COUNT 50
 
 
@@ -70,6 +71,7 @@ public:
 private:
 };
 
+
 class EntityEnemySwarm : public QuEntity
 {
 public:
@@ -82,9 +84,6 @@ public:
 	
 	std::vector<Enemy*> m_Enemy;
 	DirectX::XMVECTOR m_PlayerPosition;
-
-private:
-
 };
 
 

@@ -25,6 +25,9 @@
     <ClCompile Include="QuWorld.cpp" />
     <ClCompile Include="Quantum\Generate\BoxGenerator.cpp" />
     <ClCompile Include="Quantum\Math\Math.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidget.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetButton.cpp" />
+    <ClCompile Include="Quantum\UI\QuWidgetText.cpp" />
     <ClCompile Include="InputCallback.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Quantum\Generate\CapsuleGenerator.cpp" />
@@ -38,6 +41,11 @@
     <ClCompile Include="Quantum\Types\Color.cpp" />
     <ClCompile Include="QuEntity.cpp" />
     <ClCompile Include="QuEntityCamera.cpp" />
+    <ClCompile Include="Quantum\UI\ShaderUI.cpp" />
+    <ClCompile Include="Quantum\UI\QuMainWidget.cpp" />
+    <ClCompile Include="Quantum\UI\UIRenderer.cpp" />
+    <ClCompile Include="Quantum\UI\UISystem.cpp" />
+    <ClCompile Include="Quantum\UI\UIpass.cpp" />
     <ClCompile Include="Quantum\Render\ParticlesPass.cpp" />
     <ClCompile Include="QuEntityParticleEmitter.cpp" />
     <ClCompile Include="Quantum\Render\FrustumTest.cpp" />
@@ -66,6 +74,8 @@
     <ClCompile Include="Quantum\Generate\MeteorGenerator.cpp" />
     <ClCompile Include="TextureBase.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Quantum\Render\SunPass.cpp" />
+    <ClCompile Include="Quantum\Render\ShaderSun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h" />
@@ -115,6 +125,13 @@
     <ClInclude Include="Quantum\Physics\Collide\PhysicsShapeSphere.h" />
     <ClInclude Include="Quantum\Generate\BoxGenerator.h" />
     <ClInclude Include="Quantum\Math\Math.h" />
+    <ClInclude Include="Quantum\UI\QuWidget.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetButton.h" />
+    <ClInclude Include="Quantum\UI\QuWidgetText.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="InputCallback.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Quantum\UI\ShaderUI.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Quantum\Generate\CapsuleGenerator.h" />
@@ -133,6 +150,10 @@
     <ClInclude Include="Quantum\Render\RenderScene.h" />
     <ClInclude Include="Quantum\Render\RenderModel.h" />
     <ClInclude Include="QuEntityCamera.h" />
+    <ClInclude Include="Quantum\UI\QuMainWidget.h" />
+    <ClInclude Include="Quantum\UI\UIRenderer.h" />
+    <ClInclude Include="Quantum\UI\UISystem.h" />
+    <ClInclude Include="Quantum\UI\UIpass.h" />
     <ClInclude Include="Quantum\Render\ParticlesPass.h" />
     <ClInclude Include="QuEntityParticleEmitter.h" />
     <ClInclude Include="Quantum\Render\FrustumTest.h" />
@@ -146,6 +167,8 @@
     <ClInclude Include="Quantum\Generate\MeteorGenerator.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="TextureBase.h" />
+    <ClInclude Include="Quantum\Render\SunPass.h" />
+    <ClInclude Include="Quantum\Render\ShaderSun.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D12ConstantBuffer.h">

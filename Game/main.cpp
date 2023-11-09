@@ -22,6 +22,17 @@
 #include "QuEntityLightPoint.h"
 #include "QuEntityPhysicsCollider.h"
 
+#include "Quantum/UI/QuWidgetButton.h"
+#include "Quantum/UI/QuWidgetText.h"
+#include "Quantum/UI/UIRenderer.h"
+
+#include "Quantum/Math/Math.h"
+
+#include "resource.h"
+
+#include <stdlib.h>
+#include <time.h>
+
 // Game entities.
 #include "EntityController.h"
 #include "Shooting.h"
@@ -30,6 +41,7 @@
 #include "EntityGravityField.h"
 #include "EntityGravityAffected.h"
 #include "MeteorShower.h"
+#include "PlanetBackground.h"
 #include "EntityEnemySwarm.h"
 #include "Player.h"
 
@@ -38,6 +50,13 @@
 // Standard lib.
 #include <stdlib.h>
 #include <time.h>
+
+#include "stdafx.h"
+#include "Graphics.h"
+
+#include "MainMenu.h"
+#include "PauseMenu.h"
+#include <Windows.h>
 
 
 namespace qm = Quantum::Math;
@@ -55,24 +74,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Game& game = Game::getInstance();
 
 	int res = game.init();
-	if ( res != 0 ) {
+	if (res != 0) {
 		return res;
 	}
-
 
 	// Load resources.
 	Model* sphere = new Model();
 	Model* box = new Model();
 	Model* capsule = new Model();
 
-	Quantum::SphereGenerator::generate(sphere);
+	Quantum::SphereGenerator::generate(sphere, 0.5);
 	Quantum::BoxGenerator::generate(box, 0.5f);
 	Quantum::CapsuleGenerator::generate(capsule);
 
 	Texture2D awesome("textures/awesome.dds");
-	Texture2D smoke("textures/smoke.dds");
+	Texture2D font("textures/font.dds");
 	TextureCube skyboxTexture("textures/milkyway.dds");
-	
+	Texture2D buttonTexture("textures/button.dds");
+	Texture2D smoke("textures/smoke.dds");
+
+	MainMenu* mainMenu = new MainMenu();
+	mainMenu->createMainMenu(buttonTexture);
+	game.openWidget(mainMenu);
 
 	// Create the world.
 	QuWorld* world = new QuWorld();
@@ -88,44 +111,61 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		entitySkybox->setTexture(&skyboxTexture);
 		world->attachChild(entitySkybox);
 
-		EntityPlanetarySystem* ps = new EntityPlanetarySystem(2.0F, 8.0F);
-		ps->setPosition(DirectX::XMFLOAT3(20.0F, 12.0F, 24.0F));
-		world->attachChild(ps);
-
+		//Spawn asteroid
 		MeteorShower* meteorShower = new MeteorShower();
 		world->attachChild(meteorShower);
 
+		//Spawn multiple enemy
 		EntityEnemySwarm* EnemySwarm = new EntityEnemySwarm();
 		world->attachChild(EnemySwarm);
+
+		// Planet background.
+		PlanetBackground* planetBackground = new PlanetBackground();
+		world->attachChild(planetBackground);
 	}
-
-
-
 
 	// Player controller.
 	EntityController* c = new EntityController();
 	c->setPosition(DirectX::XMFLOAT3(0, 0, -8));
 	world->attachChild(c);
 
-	// TODO : remove later
-	EntityParticleSmoke* pe0 = new EntityParticleSmoke(&smoke);
-	pe0->setPosition(DirectX::XMFLOAT3(-3, -1.0F, 3));
-	c->attachChild(pe0);
-	EntityParticleSmoke* pe1 = new EntityParticleSmoke(&smoke);
-	pe1->setPosition(DirectX::XMFLOAT3(3, -1.0F, 3));
-	c->attachChild(pe1);
-
 	Player::SetEntityController(c);
-
-	Shooting* s = new Shooting();
-	c->attachChild(s);
 
 	QuEntityLightPoint* pointLight = new QuEntityLightPoint();
 	pointLight->setIntensity(1.0F);
 	c->attachChild(pointLight);
 
-	game.openWorld(world);
 
+	/*
+	QuWidget* Widget = new QuWidget();
+	Widget->SetSize(DirectX::XMFLOAT2(10, 10));
+	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
+
+	QuWidgetButton* button = new QuWidgetButton();
+	button->SetSize(DirectX::XMFLOAT2(500.f, 500.f/4));
+	button->SetPosition(DirectX::XMFLOAT2(100.f, 100.f));
+	button->setTexture(&buttonTexture);
+	button->createText("option");
+
+	QuWidgetText* text = new QuWidgetText();
+	text->SetSize(DirectX::XMFLOAT2(1, 1));
+	text->SetPosition(DirectX::XMFLOAT2(50.f, 450.f));
+	text->SetText("QuantumEngine : made by you for you with you");
+	*/
+	
+	//MainMenu* mainMenu = new MainMenu();
+	//mainMenu->createMainMenu(buttonTexture);
+
+	PauseMenu* Pmenu = new PauseMenu();
+	Pmenu->createPauseMenu(buttonTexture);
+
+
+	//Widget->attachChild(text);
+
+	
+	game.openWidget(Pmenu);
+
+	game.openWorld(world);
 
 	game.mainLoop();
 

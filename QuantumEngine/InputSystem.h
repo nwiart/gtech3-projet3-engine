@@ -12,8 +12,6 @@ public:
 
 	static inline InputSystem& Get() { static InputSystem m_inputSys; return m_inputSys; }
 
-	bool mouseUp;
-
 	InputSystem();
 	~InputSystem();
 
@@ -34,12 +32,13 @@ public:
 
 	void RegisterCallback(InputCallback* callback);
 
-	int lMouseEvent;
-	int rMouseEvent;
+	void RegisterUICallback(InputCallback* callback) { m_callbackUI = callback; }
+
+
 
 private:
-	bool m_mouseState[3];
 
+	InputCallback* m_callbackUI;
 	std::vector<InputCallback*> m_callbacklist;
 
 	int m_cursorX;

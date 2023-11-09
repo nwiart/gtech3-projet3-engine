@@ -25,10 +25,6 @@ void ShipCollider::onCollide(QuEntity* e)
 }
 
 
-
-
-
-
 EntityEnemySwarm::EntityEnemySwarm()
 {
 	m_PlayerPosition = XMVectorSet(0, 0, 0, 0);
