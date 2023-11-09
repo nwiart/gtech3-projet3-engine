@@ -52,9 +52,6 @@ void UIRenderer::render(ID3D12GraphicsCommandList* cmdList)
 		if(dynamic_cast<QuWidgetButton*>(allWidget[i]))
 			g.setGlobalDescriptor(cb_textureData_ID + i, dynamic_cast<QuWidgetButton*>(allWidget[i])->GetTexture()->getTexture()->getShaderResourceView());
 	}
-
-	
-
 	m_pass.renderRectangles(cmdList, allWidget, cb_objectData_IDbase, cb_matrix_IDbase, cb_textureData_ID);
 
 
@@ -81,19 +78,12 @@ void UIRenderer::freeList()
 
 void UIRenderer::addWidget(QuWidget* widget)
 {
-	RectanglesBuffer rect;
-	rect.position = widget->GetPosition();
-	rect.size = widget->GetSize();
-
 	if (dynamic_cast<QuWidgetText*>(widget))
 	{
-		rect.size = XMFLOAT2(1, 1);
-		renderRectangles.push_back(rect);
 		allWidgetText.push_back(dynamic_cast<QuWidgetText*>(widget));
 	}
 	else
 	{
-		renderRectangles.push_back(rect);
 		allWidget.push_back(widget);
 	}
 
@@ -101,6 +91,22 @@ void UIRenderer::addWidget(QuWidget* widget)
 
 void UIRenderer::updateObjectCB()
 {
+	RectanglesBuffer rect;
+
+	for (QuWidget* widget : allWidget) 
+	{
+		rect.position = widget->GetPosition();
+		rect.size = widget->GetSize();
+		renderRectangles.push_back(rect);
+	}
+
+	for (QuWidgetText* t : allWidgetText) 
+	{
+		rect.position = t->GetPosition();
+		rect.size = XMFLOAT2(1, 1);
+		renderRectangles.push_back(rect);
+	}
+
 	m_cbCanvasData.update(0, m_matrix);
 
 	m_cbRectangleData.updateRange(0, renderRectangles.size(),renderRectangles.data());

@@ -2,12 +2,21 @@
 
 QuWidget::QuWidget()
 {
+	m_Parent = nullptr;
+	m_FirstChild = nullptr;
+	m_Sibling = nullptr;
 	m_position = DirectX::XMFLOAT2(0, 0);
 	m_size = DirectX::XMFLOAT2(0, 0);
 }
 
 QuWidget::~QuWidget()
 {
+	QuWidget* next = 0;
+	for (QuWidget* child = this->m_FirstChild; child != nullptr; child = next)
+	{
+		next = child->m_Sibling;
+		delete(child);
+	}
 }
 
 void QuWidget::attachChild(QuWidget* child)

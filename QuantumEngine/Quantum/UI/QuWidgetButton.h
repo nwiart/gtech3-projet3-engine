@@ -11,7 +11,7 @@ class QuWidgetButton : public QuWidget
 public:
 	QuWidgetButton();
 
-	typedef void (QuWidget::* OnButtonClickCallback)(int, int);
+	typedef void (QuWidget::*OnButtonClickCallback)(int, int);
 
 	inline OnButtonClickCallback GetCallBack() { return m_callback; }
 	inline void SetCallBack(OnButtonClickCallback callback) { m_callback = callback; }
@@ -19,7 +19,7 @@ public:
 	inline void setTexture(Texture2D* texture) { m_texture = texture; }
 	inline Texture2D* GetTexture() { return m_texture; }
 
-	void createText(const char* text);
+	void createText(std::string text);
 
 private:
 	OnButtonClickCallback m_callback;

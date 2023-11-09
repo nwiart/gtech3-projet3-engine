@@ -39,6 +39,7 @@ public:
 
 	inline UISystem& getUISystem() const { return *UIsystem; }
 
+	inline Window& getWindow() { return m_window; }
 
 private:
 

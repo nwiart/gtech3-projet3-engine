@@ -51,6 +51,8 @@
 #include "stdafx.h"
 #include "Graphics.h"
 
+#include "MainMenu.h"
+
 namespace qm = Quantum::Math;
 
 
@@ -184,6 +186,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 
+	/*
 	QuWidget* Widget = new QuWidget();
 	Widget->SetSize(DirectX::XMFLOAT2(10, 10));
 	Widget->SetPosition(DirectX::XMFLOAT2(0.f, 0.f));
@@ -198,15 +201,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	text->SetSize(DirectX::XMFLOAT2(1, 1));
 	text->SetPosition(DirectX::XMFLOAT2(50.f, 450.f));
 	text->SetText("QuantumEngine : made by you for you with you");
+	*/
+	
+	MainMenu* mainMenu = new MainMenu();
+	mainMenu->createMainMenu(buttonTexture);
 
-	 
 
-
-	Widget->attachChild(button);
 	//Widget->attachChild(text);
 
 	
-	game.openWidget(Widget);
+	game.openWidget(mainMenu);
 
 	game.openWorld(world);
 

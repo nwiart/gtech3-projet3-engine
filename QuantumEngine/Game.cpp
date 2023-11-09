@@ -51,6 +51,8 @@ void Game::mainLoop()
 
 	while (!m_window.wantsToClose())
 	{
+		m_window.pollEvents();
+
 		if (m_world) {
 			m_world->deletePendingEntities();
 			
@@ -61,8 +63,6 @@ void Game::mainLoop()
 		}
 
 		UIsystem->visitUI(m_widget);
-
-		m_window.pollEvents();
 
 		m_timer.tick();
 
